@@ -12,7 +12,7 @@ app.use(fileUpload({}))
 app.use(express.static(path.resolve(__dirname, 'static')))
 app.use('/api', router)
 dotenv.config();
-app.use(cors())
+app.options('*', cors())
 const PORT = process.env.PORT || 3000
 
 
