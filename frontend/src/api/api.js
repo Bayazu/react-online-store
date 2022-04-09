@@ -9,7 +9,7 @@ export const itemsAPI = {
         return(
             instance.get('product/listing', {})
                 .then(function (response) {
-                   return response.data
+                   return response
                 })
                 .catch(function (error) {
                     console.log(error);

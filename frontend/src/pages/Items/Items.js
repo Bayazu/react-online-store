@@ -1,20 +1,43 @@
 import styled from 'styled-components/macro'
 
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 import ItemCard from "./ItemPanels/ItemCard";
-import axios from "axios";
-import {itemsAPI} from "../../api/api";
+
+import {useDispatch, useSelector} from "react-redux";
+import {getData, getData1} from "../../redux/reducers/itemsReducer";
+
 
 const arr = [1, 2, 3, 4, 5, 6, 7, 8]
 
 const Items = () => {
 
-    useEffect(() => {
-        itemsAPI.getItems().then(data => {
-            console.log(data)
-        });
-    }, [])
+    const Items = useSelector((state) => state)
+    const dispatch = useDispatch()
+
+    console.log(Items)
+
+    useEffect(()=>{
+        console.log('fuck')
+        dispatch(getData1())
+    },[])
+
+
+
+    // const data = () => {
+    //     dispatch(getData)
+    // }
+
+    //const getData = useCallback(() => dispatch({ type: 'increase-counter' }), [])
+
+
+    //console.log(Items)
+
+    // useEffect(() => {
+    //     itemsAPI.getItems().then(data => {
+    //         console.log(data)
+    //     });
+    // }, [])
 
     return (
 
@@ -23,7 +46,7 @@ const Items = () => {
                 {arr.map(el => {
                     return (
                         <ItemCardWrapper>
-                            <ItemCard/>
+                            <ItemCard />
                         </ItemCardWrapper>
                     )
                 })}
