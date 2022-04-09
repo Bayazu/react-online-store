@@ -4,7 +4,12 @@ const path = require('path');
 
 class productController{
     async listing(req, res){
-
+        try{
+            const product = await Product.find({})
+            res.status(200).json(product)
+        }catch (e) {
+            res.status(500).json(e)
+        }
     }
 
     async product(req, res){
