@@ -16,7 +16,6 @@ import {useState} from "react";
 import adminAvatarSrc from '../../imgs/admin.jpg'
 import userAvatarSrc from '../../imgs/user.jpg'
 
-
 const NavBar = () => {
 
     const isAuth = true
