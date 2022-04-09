@@ -22,7 +22,7 @@ const Items = () => {
         instance.get('product/listing',{
             headers: {
                 "Accept": "application/json",
-                "Access-Control-Allow-Origin": "localhost:8080"
+                "Access-Control-Allow-Origin": "*"
             },
         })
             .then(function (response) {
