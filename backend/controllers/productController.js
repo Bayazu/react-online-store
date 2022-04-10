@@ -36,7 +36,13 @@ class productController{
     }
 
     async delete(req, res){
-
+        try{
+            const product = await Product.findById(req.params.id);
+            await product.remove()
+            res.status(200).json({data: true})
+        }catch (e) {
+            res.status(500).json(e)
+        }
     }
 }
 
