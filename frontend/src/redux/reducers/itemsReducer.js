@@ -28,7 +28,7 @@ const itemsReducer = (state = initialState, action) => {
 export const setItemsData = (data) => ({type: SET_ITEMS_DATA, data: data})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching: isFetching})
 
-export const getData1 = () => {
+export const getItems = () => {
     return (dispatch) => {
         dispatch(toggleIsFetching(true));
         itemsAPI.getItems()

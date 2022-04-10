@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Routes = () => {
+const Dashboard = () => {
     return (
         <div>
-            
+            DASHBOARD
         </div>
     );
 };
 
-export default Routes;
+export default Dashboard;

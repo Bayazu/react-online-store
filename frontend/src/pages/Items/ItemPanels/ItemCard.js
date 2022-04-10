@@ -5,30 +5,43 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import {CardActionArea} from '@mui/material';
 import adminAvatarSrc from '../../../imgs/admin.jpg'
+import styled from 'styled-components/macro'
 
-const ItemCard = () => {
+const ItemCard = (props) => {
+
+    const {item} = props
+
+    console.log()
 
     return (
-        <Card sx={{maxWidth: 345}}>
-            <CardActionArea>
-                <CardMedia
-                    component="img"
-                    height="280"
-                    image={adminAvatarSrc}
-                    alt="green iguana"
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        Lizard
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                        species, ranging across all continents except Antarctica
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Card>
+        <ItemCardWrapper>
+            <Card>
+                <CardActionArea>
+                    <CardMedia
+                        component="img"
+                        height="280"
+                        image={item.img ? item.img : adminAvatarSrc}
+                        alt="green iguana"
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                            {item.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                           {item.price} руб.
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        </ItemCardWrapper>
+
     );
 }
+
+const ItemCardWrapper = styled.div`
+  min-width: 250px;
+  max-width: 300px;
+  max-height: 400px;
+`;
 
 export default ItemCard
