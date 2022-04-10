@@ -11,7 +11,7 @@ const generateAccessToken = (id, roles, username, email) => {
         username,
         email
     }
-    return jwt.sign(payload, secret, {expiresIn: "24h"})
+    return jwt.sign(payload, secret, {expiresIn: "31d"})
 }
 class userController{
 
@@ -27,7 +27,7 @@ class userController{
                 return res.status(400).json({message: "Пользователь с таким именем уже существует"})
             }
             const hashPassword = bcrypt.hashSync(password, 7)
-            const user = new User({username, firstName, secondName, email, password: hashPassword, country, city, street, building, apartment, role})
+            const user = new User({username, firstName, secondName, email, password: hashPassword, country, city, street, building, apartment})
             user.save()
             return res.status(200).json({message: "Пользователь успешно зарегестрирован"})
         }catch (e) {
@@ -52,11 +52,11 @@ class userController{
             res.status(500).json(e)
         }
     }
-
+    //TODO доделать изменение
     async modify(req, res){
 
     }
-
+    //TODO доделать удаление
     async delete(req, res){
 
     }
