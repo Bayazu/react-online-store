@@ -7,11 +7,17 @@ import {CardActionArea} from '@mui/material';
 import adminAvatarSrc from '../../../imgs/admin.jpg'
 import styled from 'styled-components/macro'
 
+
 const ItemCard = (props) => {
+
+    const backEndUrl = 'http://localhost:8080/'
 
     const {item} = props
 
-    console.log()
+    console.log(item.image)
+
+   // http://localhost:8080/c079aaa2-7c48-4234-81fa-7fdeb31e509c.jpg
+
 
     return (
         <ItemCardWrapper>
@@ -20,7 +26,8 @@ const ItemCard = (props) => {
                     <CardMedia
                         component="img"
                         height="280"
-                        image={item.img ? item.img : adminAvatarSrc}
+                        //image={item.image ? item.image : adminAvatarSrc}
+                        image={ backEndUrl + item.image }
                         alt="green iguana"
                     />
                     <CardContent>

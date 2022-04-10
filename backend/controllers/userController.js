@@ -22,6 +22,7 @@ class userController{
                 return res.status(400).json({message: "Ошибка при регистрации", errors})
             }
             const {username, firstName, secondName, email, password, country, city, street, building, apartment} = req.body
+
             const candidate = await User.findOne({username})
             if (candidate){
                 return res.status(400).json({message: "Пользователь с таким именем уже существует"})

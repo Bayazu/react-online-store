@@ -23,8 +23,8 @@ const NavBar = () => {
 
     let navigate = useNavigate();
 
-    const isAuth = true
-    const isAdmin = true
+    const isAuth = false
+    const isAdmin = false
 
     const adminSettings = ['Профиль', 'Выйти']
     const adminPages = ['Дашборд', 'Продукты']
@@ -39,8 +39,8 @@ const NavBar = () => {
         {label : 'Профиль', value: 'profile'},
         {label : 'Корзина', value: 'basket'},
         {label : 'Выйти', value: 'logoff'},
-        {label : 'войти', value: 'login'},
-        {label: 'зарегестрироваться', value: 'register'}
+        {label : 'Войти', value: 'login'},
+        {label: 'Зарегестрироваться', value: 'register'}
     ]
 
     const settings = isAdmin ? adminSettings : userSettings
@@ -70,7 +70,7 @@ const NavBar = () => {
 
     const linkToPage = (page) => {
         const foundedPage = data.find(el => el.label === page)
-        return navigate(foundedPage.value)
+        return navigate(foundedPage?.value)
     }
 
 
