@@ -19,23 +19,32 @@ const Register = () => {
         mode: "onBlur"
     })
 
-    const onSubmit = (data) => {
+    const instance = axios.create({
+        baseURL: 'http://localhost:8080/api/',
+        headers: { 'content-type': 'application/json', }
+    });
 
-        instance.post('user/registration', {data})
+    const onSubmit = (data) => {
+        instance.post('user/registration', {
+                "username": data.username,
+                "firstName" : data.firstName,
+                "secondName": data.secondName,
+                "email": data.email,
+                "password": data.password,
+                "country": data.country,
+                "city": data.city,
+                "street": data.street,
+                "building": data.building,
+                "apartment": data.apartment,
+        })
             .then(function (response) {
                 return response
             })
             .catch(function (error) {
                 console.log(error);
             })
-
        // reset()
-
     }
-    const instance = axios.create({
-        baseURL: 'http://localhost:8080/api/',
-    });
-
 
 
 
@@ -43,8 +52,12 @@ const Register = () => {
     return (
         <AnotherCont>
         <ContainerForm>
-            {/*<h1>React Hook Form</h1>*/}
+
             <form onSubmit={handleSubmit(onSubmit)}>
+                {/*<div> TODO обернуть в норм див и разместить по центру + медия запрос*/}
+                {/*    <h1>Регистрация</h1>*/}
+                {/*</div>*/}
+
                 <FormWrapper>
                     <InputWrapper>
                         <label>
