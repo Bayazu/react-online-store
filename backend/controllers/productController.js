@@ -1,6 +1,7 @@
 const Product = require("../models/product");
 const uuid = require("uuid");
 const path = require('path');
+const fs = require("fs");
 
 class productController{
     async listing(req, res){
@@ -24,7 +25,6 @@ class productController{
             await image.mv(path.resolve(__dirname, '..', 'static', fileName))
             const product = new Product({name, description, price, amount, image: fileName})
             const savedProduct = await product.save()
-            console.log(savedProduct)
             return res.json(savedProduct)
         } catch (e) {
             res.status(500).json(e)
@@ -38,6 +38,14 @@ class productController{
     async delete(req, res){
         try{
             const product = await Product.findById(req.params.id);
+            const img = product.image
+            fs.unlink("static/" + img , (err)=>{
+                if (err){
+                    console.log(err)
+                } else{
+                    console.log("Файл удален")
+                }
+            })
             await product.remove()
             res.status(200).json({data: true})
         }catch (e) {
