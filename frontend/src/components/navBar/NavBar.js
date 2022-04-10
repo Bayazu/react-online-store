@@ -12,11 +12,16 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import {useState} from "react";
+import { useNavigate } from "react-router-dom";
+
+
 
 import adminAvatarSrc from '../../imgs/admin.jpg'
 import userAvatarSrc from '../../imgs/user.jpg'
 
 const NavBar = () => {
+
+    let navigate = useNavigate();
 
     const isAuth = true
     const isAdmin = true
@@ -26,6 +31,17 @@ const NavBar = () => {
 
     const userSettings = isAuth ? ['Профиль', 'Корзина', 'Выйти'] : ['Войти', 'Зарегестрироваться',];
     const userPages = ['Продукты']
+
+    //TODO Дописать все пути
+    const data = [
+        {label: 'Продукты', value: 'items'},
+        {label: 'Дашборд', value: 'dashboard'},
+        {label : 'Профиль', value: 'profile'},
+        {label : 'Корзина', value: 'basket'},
+        {label : 'Выйти', value: 'logoff'},
+        {label : 'войти', value: 'login'},
+        {label: 'зарегестрироваться', value: 'register'}
+    ]
 
     const settings = isAdmin ? adminSettings : userSettings
     const pages = isAdmin ? adminPages : userPages;
@@ -43,14 +59,19 @@ const NavBar = () => {
     };
 
     const handleCloseNavMenu = (page) => {
-        console.log(page)
+        linkToPage(page)
         setAnchorElNav(null);
     };
 
     const handleCloseUserMenu = (setting) => {
-        console.log(setting)
+        linkToPage(setting)
         setAnchorElUser(null);
     };
+
+    const linkToPage = (page) => {
+        const foundedPage = data.find(el => el.label === page)
+        return navigate(foundedPage.value)
+    }
 
 
     return (
