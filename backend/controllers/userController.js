@@ -59,7 +59,18 @@ class userController{
     }
     //TODO доделать удаление
     async delete(req, res){
-
+        try {
+            const token = req.headers.authorization.split(' ')[1]
+            if(!token){
+                return res.status(400).json({message: "Вы не авторизованы"})
+            }
+            const decodedEmail = jwt.verify(token, secret)
+            const emailValidation = await User.findOne({email: decodedEmail.email})
+            await emailValidation.remove()
+            res.status(200).json({message: "Пользователь был удален"})
+        }catch (e) {
+            res.status(500).json(e)
+        }
     }
 
     async profile(req, res){
