@@ -18,18 +18,24 @@ import { useNavigate } from "react-router-dom";
 
 import adminAvatarSrc from '../../imgs/admin.jpg'
 import userAvatarSrc from '../../imgs/user.jpg'
+import {useDispatch, useSelector} from "react-redux";
 
 const NavBar = () => {
 
+    const user = useSelector((state) => state.userPage)
+
+    const isUserAuth = user.isUserAuth
+
+    console.log(isUserAuth)
+
     let navigate = useNavigate();
 
-    const isAuth = false
     const isAdmin = false
 
     const adminSettings = ['Профиль', 'Выйти']
     const adminPages = ['Дашборд', 'Продукты']
 
-    const userSettings = isAuth ? ['Профиль', 'Корзина', 'Выйти'] : ['Войти', 'Зарегестрироваться',];
+    const userSettings = isUserAuth ? ['Профиль', 'Корзина', 'Выйти'] : ['Войти', 'Зарегестрироваться',];
     const userPages = ['Продукты']
 
     //TODO Дописать все пути

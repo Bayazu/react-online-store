@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styled from "styled-components/macro";
-import {TextField} from "@mui/material";
-import Box from "@mui/material/Box";
+import {Alert, Stack,} from "@mui/material";
 import {useForm} from 'react-hook-form'
 import "./styleRegister.css"
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {usersAPI} from "../../api/api";
+
+
 
 const Register = () => {
 
@@ -18,175 +21,170 @@ const Register = () => {
     } = useForm({
         mode: "onBlur"
     })
+    const navigate = useNavigate();
 
-    const instance = axios.create({
-        baseURL: 'http://localhost:8080/api/',
-        headers: { 'content-type': 'application/json', }
-    });
 
-    const onSubmit = (data) => {
-        instance.post('user/registration', {
-                "username": data.username,
-                "firstName" : data.firstName,
-                "secondName": data.secondName,
-                "email": data.email,
-                "password": data.password,
-                "country": data.country,
-                "city": data.city,
-                "street": data.street,
-                "building": data.building,
-                "apartment": data.apartment,
-        })
-            .then(function (response) {
-                return response
+
+    const onSubmit = async (data) => {
+        usersAPI.createUser(data)
+            .then(response => {
+               if(response.status === 200){
+                   alert('Всё, ок, зарегался')
+                   navigate("/login");
+               }
             })
-            .catch(function (error) {
-                console.log(error);
-            })
-       // reset()
     }
 
 
-
-
     return (
+
         <AnotherCont>
-        <ContainerForm>
+            <ContainerForm>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Stack sx={{width: '100%'}} spacing={2}>
+                        {errors?.username && <Alert severity="error">{errors?.username.message}</Alert>}
+                        {errors?.password && <Alert severity="error">Пароль должен иметь от 4 до 10 символов</Alert>}
+                        {errors?.firstName && <Alert severity="error">{errors?.firstName.message}</Alert>}
+                        {errors?.secondName && <Alert severity="error">{errors?.secondName.message}</Alert>}
+                        {errors?.country && <Alert severity="error">{errors?.country.message}</Alert>}
+                        {errors?.apartment && <Alert severity="error">{errors?.apartment.message}</Alert>}
+                        {errors?.building && <Alert severity="error">{errors?.building.message}</Alert>}
+                        {errors?.street && <Alert severity="error">{errors?.street.message}</Alert>}
+                        {errors?.city && <Alert severity="error">{errors?.city.message}</Alert>}
+                    </Stack>
+                    <FormWrapper>
+                        <InputWrapper>
+                            <label>
+                                {/*Валидацие не пустая*/}
+                                Имя пользователя:
+                                <input
+                                    {...register('username', {
+                                            required: "Поле `Имя пользователя` обязательно к заполнению"
+                                        }
+                                    )}
+                                />
+                            </label>
+                        </InputWrapper>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-                {/*<div> TODO обернуть в норм див и разместить по центру + медия запрос*/}
-                {/*    <h1>Регистрация</h1>*/}
-                {/*</div>*/}
+                        <InputWrapper>
+                            <label>
+                                Имя:
+                                <input
+                                    {...register('firstName', {
+                                            required: "Поле обязательно к заполнению"
+                                        }
+                                    )}
+                                />
+                            </label>
+                        </InputWrapper>
 
-                <FormWrapper>
-                    <InputWrapper>
-                        <label>
-                            Имя пользователя:
-                            <input
-                                {...register('username', {
-                                        required: "Поле обязательно к заполнению"
-                                    }
-                                )}
-                            />
-                        </label>
-                        {/*TODO вывести в алерт*/}
-                        {/*<div>*/}
-                        {/*    {errors?.firstName && <p>{errors?.firstName?.message || "Error!"}</p>}*/}
-                        {/*</div>*/}
-                    </InputWrapper>
+                        <InputWrapper>
+                            <label>
+                                Фамилия:
+                                <input
+                                    {...register('secondName', {
+                                            required: "Поле обязательно к заполнению"
+                                        }
+                                    )}
+                                />
+                            </label>
+                        </InputWrapper>
 
-                    <InputWrapper>
-                        <label>
-                            Имя:
-                            <input
-                                {...register('firstName', {
-                                        required: "Поле обязательно к заполнению"
-                                    }
-                                )}
-                            />
-                        </label>
-                    </InputWrapper>
+                        <InputWrapper>
+                            <label>
+                                E-mail:
+                                <input
+                                    type="email"
+                                    {...register('email', {
+                                            required: "Поле обязательно к заполнению",
+                                        // pattern: /^\S+@\S+$/i
+                                        }
+                                    )}
+                                />
+                            </label>
+                        </InputWrapper>
 
-                    <InputWrapper>
-                        <label>
-                            Фамилия:
-                            <input
-                                {...register('secondName', {
-                                        required: "Поле обязательно к заполнению"
-                                    }
-                                )}
-                            />
-                        </label>
-                    </InputWrapper>
+                        <InputWrapper>
+                            {/*Пароль минимум 4 максимум 10*/}
+                            <label>
+                                Пароль:
+                                <input
+                                    {...register('password', {
+                                            required: true,
+                                            minLength: 4, maxLength: 10
+                                        }
+                                    )}
+                                />
+                            </label>
+                        </InputWrapper>
 
-                    <InputWrapper>
-                        <label>
-                            E-mail:
-                            <input
-                                {...register('email', {
-                                        required: "Поле обязательно к заполнению"
-                                    }
-                                )}
-                            />
-                        </label>
-                    </InputWrapper>
+                        <InputWrapper>
+                            <label>
+                                Страна:
+                                <input
+                                    {...register('country', {
+                                            required: "Поле обязательно к заполнению"
+                                        }
+                                    )}
+                                />
+                            </label>
+                        </InputWrapper>
 
-                    <InputWrapper>
-                        <label>
-                            Пароль:
-                            <input
-                                {...register('password', {
-                                        required: "Поле обязательно к заполнению"
-                                    }
-                                )}
-                            />
-                        </label>
-                    </InputWrapper>
+                        <InputWrapper>
+                            <label>
+                                Город:
+                                <input
+                                    {...register('city', {
+                                            required: "Поле обязательно к заполнению"
+                                        }
+                                    )}
+                                />
+                            </label>
+                        </InputWrapper>
 
-                    <InputWrapper>
-                        <label>
-                            Страна:
-                            <input
-                                {...register('country', {
-                                        required: "Поле обязательно к заполнению"
-                                    }
-                                )}
-                            />
-                        </label>
-                                          </InputWrapper>
+                        <InputWrapper>
+                            <label>
+                                Улица:
+                                <input
+                                    type="street"
+                                    {...register('street', {
+                                            required: "Поле обязательно к заполнению"
+                                        }
+                                    )}
+                                />
+                            </label>
+                        </InputWrapper>
 
-                    <InputWrapper>
-                        <label>
-                            Город:
-                            <input
-                                {...register('city', {
-                                        required: "Поле обязательно к заполнению"
-                                    }
-                                )}
-                            />
-                        </label>
-                    </InputWrapper>
+                        <InputWrapper>
+                            <label>
+                                Дом:
+                                <input
+                                    type="building"
+                                    {...register('building', {
+                                            required: "Поле обязательно к заполнению"
+                                        }
+                                    )}
+                                />
+                            </label>
+                        </InputWrapper>
 
-                    <InputWrapper>
-                        <label>
-                           Улица:
-                            <input
-                                {...register('street', {
-                                        required: "Поле обязательно к заполнению"
-                                    }
-                                )}
-                            />
-                        </label>
-                    </InputWrapper>
+                        <InputWrapper>
+                            <label>
+                                Квартира:
+                                <input
+                                    {...register('apartment', {
+                                            required: "Поле обязательно к заполнению"
+                                        }
+                                    )}
+                                />
+                            </label>
+                        </InputWrapper>
+                    </FormWrapper>
+                    <input type="submit"/>
 
-                    <InputWrapper>
-                        <label>
-                            Дом:
-                            <input
-                                {...register('building', {
-                                        required: "Поле обязательно к заполнению"
-                                    }
-                                )}
-                            />
-                        </label>
-                    </InputWrapper>
+                </form>
 
-                    <InputWrapper>
-                        <label>
-                            Квартира:
-                            <input
-                                {...register('apartment', {
-                                        required: "Поле обязательно к заполнению"
-                                    }
-                                )}
-                            />
-                        </label>
-                    </InputWrapper>
-                </FormWrapper>
-                <input type="submit"/>
-            </form>
-
-        </ContainerForm>
+            </ContainerForm>
         </AnotherCont>
 
     );
@@ -198,9 +196,13 @@ const InputWrapper = styled.div`
 const AnotherCont = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: 25px;
 `;
 
 const FormWrapper = styled.div`
+  border-radius: 1%;
+  background: #ecf2f5;
+  box-shadow: 0 0 3px rgb(0 0 0 / 50%);
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
