@@ -8,6 +8,7 @@ import axios from "axios";
 import {usersAPI} from "../../api/api";
 import {useDispatch} from "react-redux";
 import {loginUser} from "../../redux/reducers/userReducer";
+import {useNavigate} from "react-router-dom";
 
 const LoginForm = () => {
     const {
@@ -22,6 +23,7 @@ const LoginForm = () => {
     })
 
     const dispatch = useDispatch()
+    const navigate = useNavigate();
 
     // const onSubmit = async (data) => {
     //     usersAPI.createUser(data)
@@ -40,7 +42,8 @@ const LoginForm = () => {
                     const token = response.data.token
                     dispatch(loginUser(token))
                     window.localStorage.setItem('token', token)
-
+                    alert('Всё, ок, зарегался')
+                    navigate("/items");
                 }
             })
             // .catch(function (error) {

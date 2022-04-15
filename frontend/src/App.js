@@ -1,11 +1,15 @@
 import styled from 'styled-components/macro'
 import Items from "./pages/Items/Items";
 import NavBar from "./components/navBar/NavBar";
+import {useEffect, useState} from "react";
+import {loginUser} from "./redux/reducers/userReducer";
+import {useDispatch} from "react-redux";
 
-function App() {
+const App = () => {
+
+
   return (
-    <AppMain>
-    </AppMain>
+    <AppMain/>
   );
 }
 

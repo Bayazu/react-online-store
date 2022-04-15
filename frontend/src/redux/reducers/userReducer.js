@@ -3,6 +3,7 @@ import {usersAPI} from "../../api/api";
 const LOGIN_USER = 'LOGIN_USER'
 const CREATE_USER = 'CREATE_USER'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
+const LOGOUT_USER = 'LOGOUT_USER'
 
 let initialState = {
     token: null,
@@ -13,11 +14,18 @@ let initialState = {
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOGIN_USER:
-            console.log(action)
             return {
                 ...state,
                 token: action.data,
                 isUserAuth: true,
+            }
+        case LOGOUT_USER:
+            console.log('LOGINSSS')
+            window.localStorage.removeItem(state.token);
+            return {
+                ...state,
+                token: null,
+                isUserAuth: false,
             }
         case TOGGLE_IS_FETCHING:
             return {
@@ -30,6 +38,7 @@ const userReducer = (state = initialState, action) => {
 }
 
 export const loginUserAC = (data) => ({type: LOGIN_USER, data: data})
+export const logoutUserAC = () => ({type: LOGOUT_USER})
 export const createNewUser = (data) => ({type: CREATE_USER, data: data})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching: isFetching})
 
@@ -38,6 +47,12 @@ export const loginUser = (token) =>{
     return (dispatch) => {
         console.log(token)
         dispatch(loginUserAC(token))
+    }
+}
+export const logoutUser = () =>{
+    return (dispatch) => {
+        console.log('sssss1')
+        dispatch(logoutUserAC())
     }
 }
 
