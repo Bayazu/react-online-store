@@ -13,8 +13,13 @@ class productController{
         }
     }
 
-    async product(req, res){
-
+    async current(req, res){
+        try{
+            const product = await Product.findById(req.params.id)
+            res.status(200).json(product)
+        }catch (e) {
+            res.status(500).json(e)
+        }
     }
 
     async new(req, res) {
@@ -32,7 +37,14 @@ class productController{
     }
 
     async modify(req, res){
-
+        try{
+            const product = await Product.findById(req.params.id)
+            Object.assign(product, req.body);
+            product.save()
+            res.status(200).json(product)
+        }catch (e) {
+            res.status(500).json(e)
+        }
     }
 
     async delete(req, res){
