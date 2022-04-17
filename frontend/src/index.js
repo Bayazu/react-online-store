@@ -15,6 +15,7 @@ import Items from "./pages/Items/Items";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import InitialAuth from "./components/InitialAuth";
+import VerticalTabs from "./components/verticalTabs/verticalTabs";
 
 
 ReactDOM.render(
@@ -24,10 +25,10 @@ ReactDOM.render(
             <NavBar/>
             <Routes>
                 <Route path="/" element={<App/>}/>
-                <Route path="dashboard" element={<Dashboard/>}/>
-                <Route path="items" element={<Items/>}/>
-                <Route path="register" element={<Register/>}/>
-                <Route path="login" element={<Login/>}/>
+                <Route path="/dashboard/*" element={<VerticalTabs/>}/>
+                <Route path="/items/" element={<Items/>}/>
+                <Route path="/register/" element={<Register/>}/>
+                <Route path="/login/" element={<Login/>}/>
                 {/*<Route path="admin" element={<AdminLogin/>}/>*/}
             </Routes>
         </BrowserRouter>
