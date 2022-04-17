@@ -23,14 +23,13 @@ import {logoutUser} from "../../redux/reducers/userReducer";
 
 const NavBar = () => {
 
-    const user = useSelector((state) => state.userPage)
+    const user = useSelector((state) => state.user)
     const isUserAuth = user.isUserAuth
     let navigate = useNavigate();
     const dispatch = useDispatch()
 
-    const [mainData, setData] = useState(null)
 
-    console.log(isUserAuth);
+    console.log("юзер ауф? " + isUserAuth);
 
     const isAdmin = false
 
@@ -81,6 +80,7 @@ const NavBar = () => {
         const foundedPage = data.find(el => el.label === page)
         if(foundedPage?.value === 'logoff'){
             dispatch(logoutUser())
+            return
         }
         return navigate(foundedPage?.value)
     }

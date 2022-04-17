@@ -26,23 +26,26 @@ export const usersAPI = {
                 .then(function (response) {
                     return response
                 })
-                .catch(function (error) {
-                    console.log(error);
+                .catch(err=>{
+                    if(err.response){
+                        return err.response
+                    }
                 })
         )
     },
     loginUser(data){
         return(
-            instance.post('user/login',{...data})
+            instance.post('user/login',{email: data.email, password: data.password, token: data.token})
                 .then(function (response) {
                     return response
                 })
-                .catch(function (error) {
-                    console.log(error);
+                .catch(err=>{
+                    if(err.response){
+                       return err.response
+                    }
                 })
         )
     },
-
 
 }
 

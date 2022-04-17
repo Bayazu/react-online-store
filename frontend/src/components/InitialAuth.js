@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch} from "react-redux";
-import {loginUser} from "../redux/reducers/userReducer";
+import {loginUser, loginUserByToken} from "../redux/reducers/userReducer";
 import axios from "axios";
 
 const InitialAuth = () => {
@@ -12,7 +12,7 @@ const InitialAuth = () => {
     useEffect(() => {
         if (token) {
             axios.defaults.headers.Authorization = `Bearer ${token}`;
-            dispatch(loginUser(token))
+            dispatch(loginUserByToken(token))
         }
     },[token])
 

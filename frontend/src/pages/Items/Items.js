@@ -22,7 +22,7 @@ const Items = () => {
             <Block>
                 {items?.map(item => {
                     return (
-                        <ItemCardWrapper>
+                        <ItemCardWrapper key={item._id}>
                             <ItemCard
                                 item={item}
                             />

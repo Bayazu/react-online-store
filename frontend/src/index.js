@@ -28,6 +28,7 @@ ReactDOM.render(
                 <Route path="items" element={<Items/>}/>
                 <Route path="register" element={<Register/>}/>
                 <Route path="login" element={<Login/>}/>
+                {/*<Route path="admin" element={<AdminLogin/>}/>*/}
             </Routes>
         </BrowserRouter>
     </Provider>,

@@ -14,7 +14,8 @@ const ItemCard = (props) => {
 
     const {item} = props
 
-    console.log(item.image)
+
+    // console.log(item.image)
 
    // http://localhost:8080/c079aaa2-7c48-4234-81fa-7fdeb31e509c.jpg
 
