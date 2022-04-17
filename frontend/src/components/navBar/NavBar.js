@@ -66,18 +66,28 @@ const NavBar = () => {
     };
 
     const handleCloseNavMenu = (page) => {
-        linkToPage(page)
         setAnchorElNav(null);
+        linkToPage(page)
     };
-
+    //
     const handleCloseUserMenu = (setting) => {
-        linkToPage(setting)
         setAnchorElUser(null);
+        linkToPage(setting)
     };
 
+    // const handleCloseNavMenu = () => {
+    //     setAnchorElNav(null);
+    // };
+
+    // const handleCloseUserMenu = () => {
+    //     setAnchorElUser(null);
+    // };
 
     const linkToPage = (page) => {
         const foundedPage = data.find(el => el.label === page)
+        if(page?.view?.defaultStatus === ''){
+            return
+        }
         if(foundedPage?.value === 'logoff'){
             dispatch(logoutUser())
             return
