@@ -7,7 +7,7 @@ import userReducer from "./reducers/userReducer";
 
 let reducers = combineReducers({
     itemsPage : itemsReducer,
-    userPage : userReducer,
+    user : userReducer,
 })
 
 let store = createStore(reducers, composeWithDevTools(applyMiddleware(thunkMiddleware)))

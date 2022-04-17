@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import styled from "styled-components/macro";
-import {Alert, AlertTitle, Stack, TextField} from "@mui/material";
-import Box from "@mui/material/Box";
+import {Alert, Stack} from "@mui/material";
 import {useForm} from 'react-hook-form'
 import "./styleRegister.css"
-import axios from "axios";
-import {usersAPI} from "../../api/api";
 import {useDispatch} from "react-redux";
 import {loginUser} from "../../redux/reducers/userReducer";
+import {useNavigate} from "react-router-dom";
+
+import Button from "@mui/material/Button";
+import Modal from "../../components/modal/Modal";
 
 const LoginForm = () => {
     const {
@@ -22,31 +23,18 @@ const LoginForm = () => {
     })
 
     const dispatch = useDispatch()
+    const navigate = useNavigate();
+    const [modalActive, setModalActive] = useState(false)
 
-    // const onSubmit = async (data) => {
-    //     usersAPI.createUser(data)
-    //         .then(response => {
-    //             if(response.status === 200){
-    //                 alert('Всё, ок, зарегался')
-    //                 navigate("/login");
-    //             }
-    //         })
-    // }
 
     const onSubmit = (data) => {
-        usersAPI.loginUser(data)
-            .then(function (response) {
-                if(response.status === 200){
-                    const token = response.data.token
-                    dispatch(loginUser(token))
-                    window.localStorage.setItem('token', token)
-
-                }
-            })
-            // .catch(function (error) {
-            //     console.log(error.response.data.errors.errors[0].msg);
-            // })
-
+        dispatch(loginUser(data)).then((response) => {
+            if (response.status === 400) {
+                setModalActive(true)
+            }else{
+                navigate("/items");
+            }
+        })
     }
 
     return (
@@ -64,7 +52,6 @@ const LoginForm = () => {
                                     type="email"
                                     {...register('email', {
                                             required: "Поле обязательно к заполнению",
-                                            // pattern: /^\S+@\S+$/i
                                         }
                                     )}
                                 />
@@ -92,10 +79,40 @@ const LoginForm = () => {
                 </form>
 
             </ContainerForm>
+
+            <Modal active={modalActive} setActive={setModalActive}>
+                    <WrapperContentText>
+                        <Text>
+                            Вы неверно ввели логин или пароль
+                        </Text>
+                    </WrapperContentText>
+                    <ButtonWrapper>
+                        <Button
+                            variant="contained"
+                            onClick={() => (setModalActive(false))}>Ок
+                        </Button>
+                    </ButtonWrapper>
+
+            </Modal>
         </AnotherCont>
 
     );
 };
+
+const ButtonWrapper = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+`;
+
+const WrapperContentText = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const Text = styled.div`
+
+`;
 
 const InputWrapper = styled.div`
   display: flex;

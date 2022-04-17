@@ -11,7 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 
 
@@ -19,16 +19,17 @@ import { useNavigate } from "react-router-dom";
 import adminAvatarSrc from '../../imgs/admin.jpg'
 import userAvatarSrc from '../../imgs/user.jpg'
 import {useDispatch, useSelector} from "react-redux";
+import {logoutUser} from "../../redux/reducers/userReducer";
 
 const NavBar = () => {
 
-    const user = useSelector((state) => state.userPage)
-
+    const user = useSelector((state) => state.user)
     const isUserAuth = user.isUserAuth
-
-    console.log(isUserAuth)
-
     let navigate = useNavigate();
+    const dispatch = useDispatch()
+
+
+    console.log("юзер ауф? " + isUserAuth);
 
     const isAdmin = false
 
@@ -74,8 +75,13 @@ const NavBar = () => {
         setAnchorElUser(null);
     };
 
+
     const linkToPage = (page) => {
         const foundedPage = data.find(el => el.label === page)
+        if(foundedPage?.value === 'logoff'){
+            dispatch(logoutUser())
+            return
+        }
         return navigate(foundedPage?.value)
     }
 

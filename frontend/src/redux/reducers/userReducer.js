@@ -3,6 +3,7 @@ import {usersAPI} from "../../api/api";
 const LOGIN_USER = 'LOGIN_USER'
 const CREATE_USER = 'CREATE_USER'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
+const LOGOUT_USER = 'LOGOUT_USER'
 
 let initialState = {
     token: null,
@@ -13,11 +14,16 @@ let initialState = {
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOGIN_USER:
-            console.log(action)
             return {
                 ...state,
-                token: action.data,
+                token: action.token,
                 isUserAuth: true,
+            }
+        case LOGOUT_USER:
+            return {
+                ...state,
+                token: null,
+                isUserAuth: false,
             }
         case TOGGLE_IS_FETCHING:
             return {
@@ -29,15 +35,37 @@ const userReducer = (state = initialState, action) => {
     }
 }
 
-export const loginUserAC = (data) => ({type: LOGIN_USER, data: data})
+export const loginUserAC = (token) => ({type: LOGIN_USER, token: token})
+export const logoutUserAC = () => ({type: LOGOUT_USER})
 export const createNewUser = (data) => ({type: CREATE_USER, data: data})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching: isFetching})
 
 
-export const loginUser = (token) =>{
+export const loginUser = (data) =>{
     return (dispatch) => {
-        console.log(token)
+        dispatch(toggleIsFetching(true));
+        return usersAPI.loginUser(data).then((response)=>{
+                if(response?.status === 200){
+                    const token = response.data.token;
+                    dispatch(loginUserAC(token))
+                    window.localStorage.setItem('token', token)
+                    dispatch(toggleIsFetching(false));
+                    return response
+                }
+                return response
+        })
+    }
+}
+export const loginUserByToken = (token) =>{
+    return (dispatch) => {
         dispatch(loginUserAC(token))
+    }
+}
+
+export const logoutUser = () =>{
+    return (dispatch) => {
+        window.localStorage.removeItem('token');
+        dispatch(logoutUserAC())
     }
 }
 

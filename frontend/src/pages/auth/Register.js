@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components/macro";
 import {Alert, Stack,} from "@mui/material";
 import {useForm} from 'react-hook-form'
 import "./styleRegister.css"
 import { useNavigate } from "react-router-dom";
-import {useDispatch} from "react-redux";
 import {usersAPI} from "../../api/api";
+import Modal from "../../components/modal/Modal";
+import Button from "@mui/material/Button";
 
 
 
@@ -21,18 +22,34 @@ const Register = () => {
     } = useForm({
         mode: "onBlur"
     })
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
+    const [modalActive, setModalActive] = useState(false)
+    const [badRequest, setBadRequest] = useState(false)
 
 
     const onSubmit = async (data) => {
         usersAPI.createUser(data)
             .then(response => {
                if(response.status === 200){
-                   alert('Всё, ок, зарегался')
-                   navigate("/login");
+                   setModalActive(true)
+               }
+               if(response.status === 400){
+                   setModalActive(true)
+                   setBadRequest(true)
                }
             })
+    }
+
+    const onSubmitModal = () => {
+        if(!badRequest){
+            navigate("/login");
+            setModalActive(false)
+            setBadRequest(false)
+        }else{
+            setModalActive(false)
+            setBadRequest(false)
+        }
     }
 
 
@@ -185,10 +202,41 @@ const Register = () => {
                 </form>
 
             </ContainerForm>
+
+            <Modal active={modalActive} setActive={setModalActive}>
+                <WrapperContentText>
+                    <Text>
+                        {badRequest ? "Пользователь с таким именем уже существует" : "Вы успешно зарегестрировались"}
+                    </Text>
+                </WrapperContentText>
+                <ButtonWrapper>
+                    <Button
+                        variant="contained"
+                        onClick={() => (onSubmitModal())}>
+                        Ок
+                    </Button>
+                </ButtonWrapper>
+
+            </Modal>
         </AnotherCont>
 
     );
 };
+
+const ButtonWrapper = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+`;
+
+const WrapperContentText = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const Text = styled.div`
+
+`;
 
 const InputWrapper = styled.div`
   display: flex;
