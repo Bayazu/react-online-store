@@ -24,11 +24,11 @@ class productController{
 
     async new(req, res) {
         try {
-            const {name, description, price, amount} = req.body
+            const {name, description, price, amount, tag} = req.body
             const {image} = req.files
             const fileName = uuid.v4() + ".jpg"
             await image.mv(path.resolve(__dirname, '..', 'static', fileName))
-            const product = new Product({name, description, price, amount, image: fileName})
+            const product = new Product({name, description, price, amount, tag, image: fileName})
             const savedProduct = await product.save()
             return res.json(savedProduct)
         } catch (e) {
@@ -60,6 +60,16 @@ class productController{
             })
             await product.remove()
             res.status(200).json({data: true})
+        }catch (e) {
+            res.status(500).json(e)
+        }
+    }
+
+    async listingWithTag(req,res){
+        try{
+            const tags = req.query.tag;
+            const products = await Product.find({"tag": tags})
+            res.status(200).json(products)
         }catch (e) {
             res.status(500).json(e)
         }
