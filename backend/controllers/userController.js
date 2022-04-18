@@ -53,11 +53,23 @@ class userController{
             res.status(500).json(e)
         }
     }
-    //TODO доделать изменение
-    async modify(req, res){
 
+    async modify(req, res){
+        try{
+            const token = req.headers.authorization.split(' ')[1]
+            if(!token){
+                return res.status(400).json({message: "Вы не авторизованы"})
+            }
+            const decodedEmail = jwt.verify(token, secret)
+            const emailFind = await User.findOne({email: decodedEmail.email})
+            Object.assign(emailFind, req.body)
+            emailFind.save()
+            res.status(200).json(emailFind)
+        }catch (e) {
+            res.status(500).json(e)
+        }
     }
-    //TODO доделать удаление
+
     async delete(req, res){
         try {
             const token = req.headers.authorization.split(' ')[1]
