@@ -1,4 +1,5 @@
 const User = require('../models/client');
+const Admin = require('../models/admin')
 const bcrypt = require('bcryptjs');
 const {secret} = require("../config")
 const {validationResult} = require("express-validator")
@@ -94,10 +95,11 @@ class userController{
             }
             const decodedInfo = jwt.verify(token, secret)
             const emailValidation = await User.findOne({email: decodedInfo.email})
-            if(!emailValidation){
+            const usernameValidation = await Admin.findOne({username: decodedInfo.username})
+            if(!emailValidation && !usernameValidation){
                 return res.status(400).json({message: "Не удалось найти такого пользователя"})
             }
-            res.status(200).json(emailValidation)
+            res.status(200).json({emailValidation, usernameValidation})
         }catch (e) {
             res.status(500).json(e)
         }
