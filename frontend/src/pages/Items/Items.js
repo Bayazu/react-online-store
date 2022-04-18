@@ -3,12 +3,15 @@ import React, {useEffect} from 'react';
 import ItemCard from "./ItemPanels/ItemCard";
 import {useDispatch, useSelector} from "react-redux";
 import {getItems} from "../../redux/reducers/itemsReducer";
+import MuiTable from "../dashboard/clients/ClientsTable";
 
 
 const Items = () => {
 
     const items = useSelector((state) => state.itemsPage.items)
     const dispatch = useDispatch()
+
+    console.log(items)
 
 
     useEffect(() => {

@@ -46,6 +46,19 @@ export const usersAPI = {
                 })
         )
     },
+    getAllUsers(){
+        return(
+            instance.get('admin/users/',{})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err=>{
+                    if(err.response){
+                        return err.response
+                    }
+                })
+        )
+    }
 
 }
 
