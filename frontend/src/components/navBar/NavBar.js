@@ -20,6 +20,7 @@ import adminAvatarSrc from '../../imgs/admin.jpg'
 import userAvatarSrc from '../../imgs/user.jpg'
 import {useDispatch, useSelector} from "react-redux";
 import {logoutUser} from "../../redux/reducers/userReducer";
+import {navigationBarRoutes} from "../../constants";
 
 const NavBar = () => {
 
@@ -29,9 +30,9 @@ const NavBar = () => {
     const dispatch = useDispatch()
 
 
-    console.log("юзер ауф? " + isUserAuth);
+    //console.log("юзер ауф? " + isUserAuth);
 
-    const isAdmin = false
+    const isAdmin = true
 
     const adminSettings = ['Профиль', 'Выйти']
     const adminPages = ['Дашборд', 'Продукты']
@@ -40,15 +41,15 @@ const NavBar = () => {
     const userPages = ['Продукты']
 
     //TODO Дописать все пути
-    const data = [
-        {label: 'Продукты', value: 'items'},
-        {label: 'Дашборд', value: 'dashboard'},
-        {label : 'Профиль', value: 'profile'},
-        {label : 'Корзина', value: 'basket'},
-        {label : 'Выйти', value: 'logoff'},
-        {label : 'Войти', value: 'login'},
-        {label: 'Зарегестрироваться', value: 'register'}
-    ]
+    // const data = [
+    //     {label: 'Продукты', value: 'clients'},
+    //     {label: 'Дашборд', value: 'dashboard'},
+    //     {label : 'Профиль', value: 'profile'},
+    //     {label : 'Корзина', value: 'basket'},
+    //     {label : 'Выйти', value: 'logoff'},
+    //     {label : 'Войти', value: 'login'},
+    //     {label: 'Зарегестрироваться', value: 'register'}
+    // ]
 
     const settings = isAdmin ? adminSettings : userSettings
     const pages = isAdmin ? adminPages : userPages;
@@ -84,7 +85,7 @@ const NavBar = () => {
     // };
 
     const linkToPage = (page) => {
-        const foundedPage = data.find(el => el.label === page)
+        const foundedPage = navigationBarRoutes.find(el => el.label === page)
         if(page?.view?.defaultStatus === ''){
             return
         }

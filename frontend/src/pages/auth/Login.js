@@ -32,7 +32,7 @@ const LoginForm = () => {
             if (response.status === 400) {
                 setModalActive(true)
             }else{
-                navigate("/items");
+                navigate("/clients");
             }
         })
     }
