@@ -26,7 +26,8 @@ class adminController{
                     return res.status(400).json({message: "Введен неверный пароль"})
                 }
                 const token = generateAdminToken(admin._id, admin.role, admin.username)
-                return res.json({token})
+                const role = admin.role
+                return res.json({token, role})
             }catch (e) {
                 res.status(500).json(e)
         }
