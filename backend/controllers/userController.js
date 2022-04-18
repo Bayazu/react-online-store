@@ -38,8 +38,8 @@ class userController{
 
     async login(req, res){
         try {
-            const {email, password} = req.body
-            const user = await User.findOne({email})
+            const {username, password} = req.body
+            const user = await User.findOne({username})
             if(!user){
                 return res.status(400).json({message: "Пользователь не найден"})
             }
