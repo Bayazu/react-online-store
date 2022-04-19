@@ -91,6 +91,19 @@ export const usersAPI = {
                     }
                 })
         )
+    },
+    deleteUserByAdmin(id){
+        return (
+            instance.delete(`admin/delete/${id}`, {})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
     }
 
 }

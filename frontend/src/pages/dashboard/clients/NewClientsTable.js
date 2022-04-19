@@ -12,6 +12,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
+import {usersAPI} from "../../../api/api";
+import ActionAlert from "../../../components/alert/ActionAlert";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -34,22 +36,28 @@ const headCells = [
     {id: 'email', label: 'email'},
     {id: 'country', label: 'Страна'},
     {id: 'city', label: 'Город'},
-    {id: 'street', label : 'Улица'},
-    {id: 'building', label : 'Дом'},
-    {id: 'apartment', label : 'Квартира'},
-    {id: 'actions', label : 'Действия'},
+    {id: 'street', label: 'Улица'},
+    {id: 'building', label: 'Дом'},
+    {id: 'apartment', label: 'Квартира'},
+    {id: 'actions', label: 'Действия'},
 ]
 
 const NewClientsTable = () => {
 
     const dispatch = useDispatch()
 
-     const classes = useStyles();
+    const classes = useStyles();
 
-    useEffect(() => {
-        dispatch(getUsers()).then((response)=>{
+    const [openAlert, setOpenAlert] = useState(false)
+
+    const getData = () => {
+        dispatch(getUsers()).then((response) => {
             setRecords(response.data)
         })
+    }
+
+    useEffect(() => {
+        getData()
     }, [])
 
     const [records, setRecords] = useState(null)
@@ -59,7 +67,15 @@ const NewClientsTable = () => {
         }
     })
 
+    const deleteUserByAdmin = (id) => {
+        usersAPI.deleteUserByAdmin(id).then(response =>{
+            if(response.status === 200){
+                setOpenAlert(true)
+                getData()
+            }
+        })
 
+    }
 
 
     const {
@@ -84,35 +100,39 @@ const NewClientsTable = () => {
 
 
     return (
-        <Paper sx={{width: '1'}}>
-            <Toolbar sx={{marginTop: '10px'}}>
-                <Input
-                    label='Поиск клиента по фамилии'
-                    className={classes.searchInput}
-                    InputProps={{
-                        startAdornment: (<InputAdornment position="start">
-                            <Search/>
-                        </InputAdornment>)
-                    }}
-                    onChange={handleSearch}
-                />
-                <Button
-                    startIcon={<AddIcon/>}
-                    variant = 'outlined'
-                    sx={{ margin: 'spacing(0.5)',
-                        color : "#1976d2",
-                        position: 'absolute',
-                        right: '10px',}}
-                >
-                    Добавить пользователя
-                </Button>
+        <>
+            <Paper sx={{width: '1'}}>
+                <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert}/>
+                <Toolbar sx={{marginTop: '10px'}}>
+                    <Input
+                        label='Поиск клиента по фамилии'
+                        className={classes.searchInput}
+                        InputProps={{
+                            startAdornment: (<InputAdornment position="start">
+                                <Search/>
+                            </InputAdornment>)
+                        }}
+                        onChange={handleSearch}
+                    />
+                    <Button
+                        startIcon={<AddIcon/>}
+                        variant='outlined'
+                        sx={{
+                            margin: 'spacing(0.5)',
+                            color: "#1976d2",
+                            position: 'absolute',
+                            right: '10px',
+                        }}
+                    >
+                        Добавить пользователя
+                    </Button>
 
-            </Toolbar>
-            <TblContainer>
-                <Table>
-                    <TblHead/>
-                    <TableBody>
-                        {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
+                </Toolbar>
+                <TblContainer>
+                    <Table>
+                        <TblHead/>
+                        <TableBody>
+                            {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
                                     <TableRow key={item._id} sx={{cursor: 'pointer'}}>
                                         <TableCell>{item._id}</TableCell>
                                         <TableCell>{item.firstName}</TableCell>
@@ -124,23 +144,26 @@ const NewClientsTable = () => {
                                         <TableCell>{item.building}</TableCell>
                                         <TableCell>{item.apartment}</TableCell>
                                         <TableCell>
-                                            <Button sx={{color: '#4caf50',  minWidth: 0,}}>
+                                            <Button sx={{color: '#4caf50', minWidth: 0,}}>
                                                 <EditOutlinedIcon fontSize='small'/>
                                             </Button>
-                                            <Button  sx={{color: '#ef5350',  minWidth: 0}}>
+                                            <Button
+                                                onClick={() => deleteUserByAdmin(item._id)}
+                                                sx={{color: '#ef5350', minWidth: 0}}
+                                            >
                                                 <CloseIcon fontSize='small'/>
                                             </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))
-                            : null
-                        }
-                    </TableBody>
-                </Table>
-                <TblPagination/>
-            </TblContainer>
-        </Paper>
-
+                                : null
+                            }
+                        </TableBody>
+                    </Table>
+                    <TblPagination/>
+                </TblContainer>
+            </Paper>
+        </>
 
     );
 };
