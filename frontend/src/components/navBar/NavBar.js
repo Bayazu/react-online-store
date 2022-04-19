@@ -25,14 +25,12 @@ import {navigationBarRoutes} from "../../constants";
 const NavBar = () => {
 
     const user = useSelector((state) => state.user)
+
     const isUserAuth = user.isUserAuth
     let navigate = useNavigate();
     const dispatch = useDispatch()
 
-
-    //console.log("юзер ауф? " + isUserAuth);
-
-    const isAdmin = true
+    const isAdmin = user.userRole === 'ADMIN'
 
     const adminSettings = ['Профиль', 'Выйти']
     const adminPages = ['Дашборд', 'Продукты']
@@ -40,16 +38,6 @@ const NavBar = () => {
     const userSettings = isUserAuth ? ['Профиль', 'Корзина', 'Выйти'] : ['Войти', 'Зарегестрироваться',];
     const userPages = ['Продукты']
 
-    //TODO Дописать все пути
-    // const data = [
-    //     {label: 'Продукты', value: 'clients'},
-    //     {label: 'Дашборд', value: 'dashboard'},
-    //     {label : 'Профиль', value: 'profile'},
-    //     {label : 'Корзина', value: 'basket'},
-    //     {label : 'Выйти', value: 'logoff'},
-    //     {label : 'Войти', value: 'login'},
-    //     {label: 'Зарегестрироваться', value: 'register'}
-    // ]
 
     const settings = isAdmin ? adminSettings : userSettings
     const pages = isAdmin ? adminPages : userPages;

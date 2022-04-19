@@ -9,33 +9,6 @@ import allUsersReducer, {getUsers} from "../../../redux/reducers/allUsersReducer
 
 const NewClientsTable = () => {
 
-    const tableData = [
-        {
-            'id': 200,
-            'first_name': 'alex',
-            'last_name': 'llllllllll',
-            'email': '123@mail.ru',
-            'gender': 'Male',
-            'id_addres': '182.12312.3122'
-        },
-        {
-            'id': 222,
-            'first_name': 'dasdasdas',
-            'last_name': 'jjjjjjjjjjj',
-            'email': '222@mail.ru',
-            'gender': 'Male',
-            'id_addres': '182.12312.3122'
-        },
-        {
-            'id': 312,
-            'first_name': 'bbbbbbbbbbbbbbbbbbb',
-            'last_name': 'aaaaaaaaaaaaaa',
-            'email': '333@mail.ru',
-            'gender': 'Male',
-            'id_addres': '182.12312.3122'
-        },
-    ]
-
     const dispatch = useDispatch()
 
     useEffect(() => {
