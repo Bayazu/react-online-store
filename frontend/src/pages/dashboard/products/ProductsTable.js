@@ -12,6 +12,9 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
+import {getItems} from "../../../redux/reducers/itemsReducer";
+import CardMedia from "@mui/material/CardMedia";
+import {backEndUrl} from "../../../constants";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -29,28 +32,35 @@ const useStyles = makeStyles(theme => ({
 
 const headCells = [
     {id: '_id', label: '_id'},
-    {id: 'firstName', label: 'Имя'},
-    {id: 'secondName', label: 'Фамилия'},
-    {id: 'email', label: 'email'},
-    {id: 'country', label: 'Страна'},
-    {id: 'city', label: 'Город'},
-    {id: 'street', label : 'Улица'},
-    {id: 'building', label : 'Дом'},
-    {id: 'apartment', label : 'Квартира'},
+    {id: 'name', label: 'Наименование'},
+    {id: 'description', label: 'Описание'},
+    {id: 'price', label: 'Цена'},
+    {id: 'amount', label: 'Остаток'},
+    {id: 'tag', label: 'Тэг'},
+    {id: 'image', label: 'Картинка'},
     {id: 'actions', label : 'Действия'},
 ]
 
-const NewClientsTable = () => {
+const ProductsTable = () => {
 
     const dispatch = useDispatch()
 
-     const classes = useStyles();
+    const classes = useStyles();
 
     useEffect(() => {
-        dispatch(getUsers()).then((response)=>{
+        dispatch(getItems()).then((response)=>{
             setRecords(response.data)
+            console.log(response)
         })
     }, [])
+
+    const items = useSelector((state) => state.itemsPage.items)
+
+
+    console.log(items)
+
+
+
 
     const [records, setRecords] = useState(null)
     const [filterFn, setFilterFn] = useState({
@@ -58,9 +68,6 @@ const NewClientsTable = () => {
             return items;
         }
     })
-
-
-
 
     const {
         TblContainer,
@@ -87,7 +94,7 @@ const NewClientsTable = () => {
         <Paper sx={{width: '1'}}>
             <Toolbar sx={{marginTop: '10px'}}>
                 <Input
-                    label='Поиск клиента по фамилии'
+                    label='Поиск товара'
                     className={classes.searchInput}
                     InputProps={{
                         startAdornment: (<InputAdornment position="start">
@@ -104,7 +111,7 @@ const NewClientsTable = () => {
                         position: 'absolute',
                         right: '10px',}}
                 >
-                    Добавить пользователя
+                    Добавить товар
                 </Button>
 
             </Toolbar>
@@ -113,26 +120,33 @@ const NewClientsTable = () => {
                     <TblHead/>
                     <TableBody>
                         {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
-                                    <TableRow key={item._id} sx={{cursor: 'pointer'}}>
-                                        <TableCell>{item._id}</TableCell>
-                                        <TableCell>{item.firstName}</TableCell>
-                                        <TableCell>{item.secondName}</TableCell>
-                                        <TableCell>{item.email}</TableCell>
-                                        <TableCell>{item.country}</TableCell>
-                                        <TableCell>{item.city}</TableCell>
-                                        <TableCell>{item.street}</TableCell>
-                                        <TableCell>{item.building}</TableCell>
-                                        <TableCell>{item.apartment}</TableCell>
-                                        <TableCell>
-                                            <Button sx={{color: '#4caf50',  minWidth: 0,}}>
-                                                <EditOutlinedIcon fontSize='small'/>
-                                            </Button>
-                                            <Button  sx={{color: '#ef5350',  minWidth: 0}}>
-                                                <CloseIcon fontSize='small'/>
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
+                                <TableRow key={item._id} sx={{cursor: 'pointer'}}>
+                                    <TableCell>{item._id}</TableCell>
+                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>{item.description}</TableCell>
+                                    <TableCell>{item.price}</TableCell>
+                                    <TableCell>{item.amount}</TableCell>
+                                    <TableCell>{item.tag}</TableCell>
+                                    {/*<TableCell>{item.image}</TableCell>*/}
+                                    <TableCell>
+                                        <CardMedia
+                                            component="img"
+                                            height="60"
+                                            //image={item.image ? item.image : adminAvatarSrc}
+                                            image={ backEndUrl + item.image }
+                                            alt="green iguana"
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button sx={{color: '#4caf50',  minWidth: 0,}}>
+                                            <EditOutlinedIcon fontSize='small'/>
+                                        </Button>
+                                        <Button  sx={{color: '#ef5350',  minWidth: 0}}>
+                                            <CloseIcon fontSize='small'/>
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
                             : null
                         }
                     </TableBody>
@@ -145,4 +159,4 @@ const NewClientsTable = () => {
     );
 };
 
-export default NewClientsTable;
+export default ProductsTable;

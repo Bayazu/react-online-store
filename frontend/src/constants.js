@@ -22,3 +22,5 @@ export const navigationBarRoutes = [
     {label : 'Войти', value: 'login'},
     {label: 'Зарегестрироваться', value: 'register'}
 ]
+
+export const backEndUrl = 'http://localhost:8080/'

@@ -1,4 +1,5 @@
-import {itemsAPI} from "../../api/api";
+import {itemsAPI, usersAPI} from "../../api/api";
+import {getUsersAC, toggleIsFetchingAC} from "./allUsersReducer";
 
 const SET_ITEMS_DATA = 'SET_ITEMS_DATA'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -31,12 +32,13 @@ export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFe
 export const getItems = () => {
     return (dispatch) => {
         dispatch(toggleIsFetching(true));
-        itemsAPI.getItems()
-            .then(response => {
+        return itemsAPI.getItems().then(response => {
                 if(response.status === 200 ){
                     dispatch(setItemsData(response.data))
                     dispatch(toggleIsFetching(false))
+                    return response
                 }
+                return  response
             });
     }
 }

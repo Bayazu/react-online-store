@@ -1,8 +1,28 @@
 import React, {useState} from 'react';
 import {Paper, Table, TableCell, TableHead, TablePagination, TableRow, TableSortLabel} from "@mui/material";
+import {makeStyles} from "@material-ui/core/styles";
 
+const useStyles = makeStyles(theme => ({
+    table: {
+        marginTop: theme.spacing(3),
+        '& thead th': {
+            fontWeight: '600',
+            color: theme.palette.primary.main,
+            backgroundColor: '#eff5f8',
+        },
+        '& tbody td': {
+            fontWeight: '300',
+        },
+        '& tbody tr:hover': {
+            backgroundColor: '#e2e9ed',
+            cursor: 'pointer',
+        },
+    },
+}))
 
 export default function useTable(records, headCells, filterFn) {
+
+    const classes = useStyles();
 
     const pages = [5, 10, 25]
     const [page, setPage] = useState(0)
@@ -12,7 +32,7 @@ export default function useTable(records, headCells, filterFn) {
 
 
     const TblContainer = props => (
-        <Table>
+        <Table className={classes.table}>
             {props.children}
         </Table>
     )
