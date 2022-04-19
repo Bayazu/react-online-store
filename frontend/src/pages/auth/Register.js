@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import styled from "styled-components/macro";
 import {Alert, Stack,} from "@mui/material";
 import {useForm} from 'react-hook-form'
-import "./styleRegister.css"
 import { useNavigate } from "react-router-dom";
 import {usersAPI} from "../../api/api";
 import Modal from "../../components/modal/Modal";

@@ -1,16 +1,21 @@
 import axios from "axios";
 
+const token = localStorage.getItem('token');
+
 const instance = axios.create({
     baseURL: 'http://localhost:8080/api/',
-    headers: {'content-type': 'application/json',}
+    headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`
+    }
 });
 
 export const itemsAPI = {
-    getItems(){
-        return(
+    getItems() {
+        return (
             instance.get('product/listing', {})
                 .then(function (response) {
-                   return response
+                    return response
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -20,40 +25,66 @@ export const itemsAPI = {
 }
 
 export const usersAPI = {
-    createUser(data){
-        return(
-            instance.post('user/registration',{...data})
+    createUser(data) {
+        return (
+            instance.post('user/registration', {...data})
                 .then(function (response) {
                     return response
                 })
-                .catch(err=>{
-                    if(err.response){
+                .catch(err => {
+                    if (err.response) {
                         return err.response
                     }
                 })
         )
     },
-    loginUser(data){
-        return(
-            instance.post('user/login',{email: data.email, password: data.password, token: data.token})
+    loginUser(data) {
+        return (
+            instance.post('user/login', {username: data.username, password: data.password, token: data.token})
                 .then(function (response) {
                     return response
                 })
-                .catch(err=>{
-                    if(err.response){
-                       return err.response
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
                     }
                 })
         )
     },
-    getAllUsers(){
-        return(
-            instance.get('admin/users/',{})
+    loginAdmin(data) {
+        return (
+            instance.post('admin/login', {username: data.username, password: data.password, token: data.token})
                 .then(function (response) {
                     return response
                 })
-                .catch(err=>{
-                    if(err.response){
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+    loginByToken(token) {
+        return (
+            instance.get('user/profile',)
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+    getAllUsers() {
+        return (
+            instance.get('admin/users/', {})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
                         return err.response
                     }
                 })

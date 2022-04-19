@@ -4,18 +4,18 @@ export const defaultTabs = [
     //     value : 0,
     // },
     {
-        label : 'clients',
+        label : '/clients/',
         value : 0,
     },
     {
-        label : 'products',
+        label : '/products/',
         value : 1,
     }
 ]
 
 export const navigationBarRoutes = [
     {label: 'Продукты', value: 'items'},
-    {label: 'Дашборд', value: 'dashboard/clients'},
+    {label: 'Дашборд', value: 'clients'},
     {label : 'Профиль', value: 'profile'},
     {label : 'Корзина', value: 'basket'},
     {label : 'Выйти', value: 'logoff'},

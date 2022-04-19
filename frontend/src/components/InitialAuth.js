@@ -11,17 +11,12 @@ const InitialAuth = () => {
 
     useEffect(() => {
         if (token) {
-            axios.defaults.headers.Authorization = `Bearer ${token}`;
+            // axios.defaults.headers.Authorization = `Bearer ${token}`;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             dispatch(loginUserByToken(token))
         }
     },[token])
 
-
-    return (
-        <div>
-
-        </div>
-    );
 };
 
 export default InitialAuth;

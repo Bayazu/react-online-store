@@ -3,7 +3,7 @@ import styled from "styled-components/macro";
 import {Alert, Stack} from "@mui/material";
 import {useForm} from 'react-hook-form'
 import {useDispatch} from "react-redux";
-import {loginUser} from "../../redux/reducers/userReducer";
+import {loginAdmin, loginUser} from "../../redux/reducers/userReducer";
 import {useNavigate} from "react-router-dom";
 
 import Button from "@mui/material/Button";
@@ -27,11 +27,11 @@ const LoginForm = () => {
 
 
     const onSubmit = (data) => {
-        dispatch(loginUser(data)).then((response) => {
+        dispatch(loginAdmin(data)).then((response) => {
             if (response.status === 400) {
                 setModalActive(true)
             }else{
-                navigate("/items");
+                navigate("/clients/");
             }
         })
     }
@@ -80,17 +80,17 @@ const LoginForm = () => {
             </ContainerForm>
 
             <Modal active={modalActive} setActive={setModalActive}>
-                    <WrapperContentText>
-                        <Text>
-                            Вы неверно ввели логин или пароль
-                        </Text>
-                    </WrapperContentText>
-                    <ButtonWrapper>
-                        <Button
-                            variant="contained"
-                            onClick={() => (setModalActive(false))}>Ок
-                        </Button>
-                    </ButtonWrapper>
+                <WrapperContentText>
+                    <Text>
+                        Вы неверно ввели логин или пароль
+                    </Text>
+                </WrapperContentText>
+                <ButtonWrapper>
+                    <Button
+                        variant="contained"
+                        onClick={() => (setModalActive(false))}>Ок
+                    </Button>
+                </ButtonWrapper>
 
             </Modal>
         </AnotherCont>
