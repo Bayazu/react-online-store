@@ -1,11 +1,11 @@
 import React from 'react';
-import NewClientsTable from "./clients/NewClientsTable";
+import ProductsTable from "./products/ProductsTable";
 
 
 const ClientsPage = () => {
 
     return (
-        <NewClientsTable/>
+        <ProductsTable/>
     );
 };
 

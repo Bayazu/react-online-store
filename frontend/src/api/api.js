@@ -17,8 +17,10 @@ export const itemsAPI = {
                 .then(function (response) {
                     return response
                 })
-                .catch(function (error) {
-                    console.log(error);
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
                 })
         )
     }
