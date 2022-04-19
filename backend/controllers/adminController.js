@@ -67,6 +67,17 @@ class adminController{
             res.status(500).json(e)
         }
     }
+
+    async userModify(req, res){
+        try{
+            const user = await User.findById(req.params.id)
+            Object.assign(user, req.body)
+            user.save()
+            res.status(200).json(user)
+        } catch (e) {
+            res.status(500).json(e)
+        }
+    }
 }
 
 module.exports = new adminController()
