@@ -4,7 +4,7 @@ const adminController = require('../controllers/adminController')
 
 router.post('/login', adminController.login)
 router.post('/addAdmin', adminController.addAdmin)
-router.post('/userModify/:id', adminController.userModify)
+router.patch('/userModify/:id', adminController.userModify)
 router.delete('/delete/:id', adminController.delete)
 router.get('/users', adminController.users)
 
