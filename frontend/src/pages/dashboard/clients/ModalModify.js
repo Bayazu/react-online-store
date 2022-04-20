@@ -1,16 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import styled from "styled-components/macro";
 import {Alert, Stack,} from "@mui/material";
 import {useForm} from 'react-hook-form'
-import { useNavigate } from "react-router-dom";
-import {usersAPI} from "../../api/api";
-import Modal from "../../components/modal/Modal";
-import Button from "@mui/material/Button";
-
-
 
 const Register = (props) => {
-
     const {
         register,
         formState: {
@@ -22,51 +15,29 @@ const Register = (props) => {
         mode: "onBlur"
     })
 
-    const navigate = useNavigate();
-    const [modalActive, setModalActive] = useState(false)
-    const [badRequest, setBadRequest] = useState(false)
-
-
     const onSubmit = async (data) => {
-        usersAPI.createUser(data)
-            .then(response => {
-               if(response.status === 200){
-                   setModalActive(true)
-               }
-               if(response.status === 400){
-                   setModalActive(true)
-                   setBadRequest(true)
-               }
-            })
+        props.modifyUserSubmit(data).then((response) => {
+            if (response.status === 200) {
+                reset()
+            }
+        })
     }
 
-    const onSubmitModal = () => {
-        if(!badRequest){
-            navigate("/login");
-            setModalActive(false)
-            setBadRequest(false)
-        }else{
-            setModalActive(false)
-            setBadRequest(false)
+    useEffect(()=>{
+        const data = {
+            ...props.userDataModify,
+            // password: null
         }
-    }
-
-    // useEffect(()=>{
-    //     const data = {
-    //         apartment: "312"
-    //     }
-    //
-    //     reset(data)
-    // },[])
+        reset(data)
+    },[props.userDataModify])
 
 
 
     return (
-
         <AnotherCont>
             <Stack sx={{width: '100%', position: 'absolute'}} spacing={2}>
                 {errors?.username && <Alert severity="error">{errors?.username.message}</Alert>}
-                {errors?.password && <Alert severity="error">Пароль должен иметь от 4 до 10 символов</Alert>}
+                {/*{errors?.password && <Alert severity="error">Пароль должен иметь от 4 до 10 символов</Alert>}*/}
                 {errors?.firstName && <Alert severity="error">{errors?.firstName.message}</Alert>}
                 {errors?.secondName && <Alert severity="error">{errors?.secondName.message}</Alert>}
                 {errors?.country && <Alert severity="error">{errors?.country.message}</Alert>}
@@ -123,7 +94,7 @@ const Register = (props) => {
                                     type="email"
                                     {...register('email', {
                                             required: "Поле обязательно к заполнению",
-                                        // pattern: /^\S+@\S+$/i
+                                            // pattern: /^\S+@\S+$/i
                                         }
                                     )}
                                 />
@@ -136,7 +107,7 @@ const Register = (props) => {
                                 Пароль:
                                 <input
                                     {...register('password', {
-                                            required: true,
+                                            required: false,
                                             minLength: 4, maxLength: 10
                                         }
                                     )}
@@ -207,26 +178,8 @@ const Register = (props) => {
                         </InputWrapper>
                     </FormWrapper>
                     <input type="submit"/>
-
                 </form>
-
             </ContainerForm>
-
-            <Modal active={modalActive} setActive={setModalActive}>
-                <WrapperContentText>
-                    <Text>
-                        {badRequest ? "Пользователь с таким именем уже существует" : "Вы успешно зарегестрировались"}
-                    </Text>
-                </WrapperContentText>
-                <ButtonWrapper>
-                    <Button
-                        variant="contained"
-                        onClick={() => (onSubmitModal())}>
-                        Ок
-                    </Button>
-                </ButtonWrapper>
-
-            </Modal>
         </AnotherCont>
 
     );
@@ -251,8 +204,8 @@ const InputWrapper = styled.div`
   display: flex;
 `;
 const AnotherCont = styled.div`
-  display: flex;
-  justify-content: center;
+  //display: flex;
+  //justify-content: center;
   //margin-top: 25px;
 `;
 

@@ -15,6 +15,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import {getItems} from "../../../redux/reducers/itemsReducer";
 import CardMedia from "@mui/material/CardMedia";
 import {backEndUrl} from "../../../constants";
+import ActionAlert from "../../../components/alert/ActionAlert";
+import {itemsAPI, usersAPI} from "../../../api/api";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -38,29 +40,28 @@ const headCells = [
     {id: 'amount', label: 'Остаток'},
     {id: 'tag', label: 'Тэг'},
     {id: 'image', label: 'Картинка'},
-    {id: 'actions', label : 'Действия'},
+    {id: 'actions', label: 'Действия'},
 ]
 
 const ProductsTable = () => {
 
     const dispatch = useDispatch()
-
+    const [openAlert, setOpenAlert] = useState(false)
     const classes = useStyles();
 
-    useEffect(() => {
-        dispatch(getItems()).then((response)=>{
+
+    //const items = useSelector((state) => state.itemsPage.items)
+
+
+    const getData = () => {
+        dispatch(getItems()).then((response) => {
             setRecords(response.data)
-            console.log(response)
         })
+    }
+
+    useEffect(() => {
+        getData()
     }, [])
-
-    const items = useSelector((state) => state.itemsPage.items)
-
-
-    console.log(items)
-
-
-
 
     const [records, setRecords] = useState(null)
     const [filterFn, setFilterFn] = useState({
@@ -68,6 +69,16 @@ const ProductsTable = () => {
             return items;
         }
     })
+    const deleteProduct = (id) => {
+        itemsAPI.deleteProduct(id).then(response =>{
+            if(response.status === 200){
+                setOpenAlert(true)
+                getData()
+            }
+        })
+        setOpenAlert(true)
+    }
+
 
     const {
         TblContainer,
@@ -83,7 +94,7 @@ const ProductsTable = () => {
                 if (target.value === "")
                     return items
                 else {
-                    return items.filter(x => x.secondName?.toLowerCase().includes(target.value))
+                    return items.filter(x => x.name?.toLowerCase().includes(target.value))
                 }
             }
         })
@@ -92,6 +103,7 @@ const ProductsTable = () => {
 
     return (
         <Paper sx={{width: '1'}}>
+            <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Товар успешно удалён'}/>
             <Toolbar sx={{marginTop: '10px'}}>
                 <Input
                     label='Поиск товара'
@@ -105,11 +117,13 @@ const ProductsTable = () => {
                 />
                 <Button
                     startIcon={<AddIcon/>}
-                    variant = 'outlined'
-                    sx={{ margin: 'spacing(0.5)',
-                        color : "#1976d2",
+                    variant='outlined'
+                    sx={{
+                        margin: 'spacing(0.5)',
+                        color: "#1976d2",
                         position: 'absolute',
-                        right: '10px',}}
+                        right: '10px',
+                    }}
                 >
                     Добавить товар
                 </Button>
@@ -133,15 +147,18 @@ const ProductsTable = () => {
                                             component="img"
                                             height="60"
                                             //image={item.image ? item.image : adminAvatarSrc}
-                                            image={ backEndUrl + item.image }
+                                            image={backEndUrl + item.image}
                                             alt="green iguana"
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        <Button sx={{color: '#4caf50',  minWidth: 0,}}>
+                                        <Button sx={{color: '#4caf50', minWidth: 0,}}>
                                             <EditOutlinedIcon fontSize='small'/>
                                         </Button>
-                                        <Button  sx={{color: '#ef5350',  minWidth: 0}}>
+                                        <Button
+                                            onClick={() => deleteProduct(item._id)}
+                                            sx={{color: '#ef5350', minWidth: 0}}
+                                        >
                                             <CloseIcon fontSize='small'/>
                                         </Button>
                                     </TableCell>
