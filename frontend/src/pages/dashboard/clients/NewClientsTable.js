@@ -14,6 +14,12 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
 import {usersAPI} from "../../../api/api";
 import ActionAlert from "../../../components/alert/ActionAlert";
+import Modal from "../../../components/modal/Modal";
+import Register from "../../auth/Register";
+import ModalCreateUpdate from "./ModalCreate";
+import ModalCreate from "./ModalCreate";
+import ModalModify from "./ModalModify";
+import AlertDialog from "../../../components/alert/AlertDialog";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -44,11 +50,16 @@ const headCells = [
 
 const NewClientsTable = () => {
 
+    const [modalCreateActive, setModalCreateActive] = useState(false)
+    const [modalModifyActive, setModalModifyActive] = useState(false)
     const dispatch = useDispatch()
-
     const classes = useStyles();
-
     const [openAlert, setOpenAlert] = useState(false)
+    const [userCreate, setUserCreate] = useState(false)
+    const [userModifyAlert, setUserModifyAlert] = useState(false)
+    const [userDataModify, setUserDataModify] = useState(false)
+    const [openConfirmModal, setConfirmModal] = useState(false)
+    const [isDelete, setIsDelete] = useState(false)
 
     const getData = () => {
         dispatch(getUsers()).then((response) => {
@@ -66,18 +77,17 @@ const NewClientsTable = () => {
             return items;
         }
     })
-
     const deleteUserByAdmin = (id) => {
-        usersAPI.deleteUserByAdmin(id).then(response =>{
-            if(response.status === 200){
+        // setConfirmModal(true)
+        // console.log(isDelete)
+        usersAPI.deleteUserByAdmin(id).then(response => {
+            if (response.status === 200) {
                 setOpenAlert(true)
                 getData()
             }
         })
 
     }
-
-
     const {
         TblContainer,
         TblHead,
@@ -98,11 +108,51 @@ const NewClientsTable = () => {
         })
     }
 
+    const createUser = () => {
+        setModalCreateActive(true)
+    }
+
+    const modifyUsers = (item) => {
+        setModalModifyActive(true)
+        setUserDataModify(item)
+    }
+
+    const createUserSubmit = (data) => {
+        return usersAPI.createUser(data)
+            .then(response => {
+                if (response.status === 200) {
+                    setUserCreate(true)
+                    setModalCreateActive(false)
+                    getData()
+                    return response
+                }
+                if (response.status === 400) {
+                }
+            })
+    }
+
+    const modifyUserSubmit = (data) => {
+        return usersAPI.modifyUser(data)
+            .then(response => {
+                if (response.status === 200) {
+                    setUserModifyAlert(true)
+                    setModalModifyActive(false)
+                    getData()
+                    return response
+                }
+                if (response.status === 400) {
+                }
+            })
+    }
+
 
     return (
         <>
             <Paper sx={{width: '1'}}>
-                <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert}/>
+                <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Пользователь успешно удалён'}/>
+                <ActionAlert openAlert={userCreate} setOpenAlert={setUserCreate} text={'Пользователь успешно создан'}/>
+                <ActionAlert openAlert={userModifyAlert} setOpenAlert={setUserModifyAlert} text={'Пользователь успешно отредактирован'}/>
+                <AlertDialog open={openConfirmModal} setOpen={setConfirmModal} setIsDelete={setIsDelete} text={'Вы уверены, что хотите удалить пользователя'}/>
                 <Toolbar sx={{marginTop: '10px'}}>
                     <Input
                         label='Поиск клиента по фамилии'
@@ -115,6 +165,7 @@ const NewClientsTable = () => {
                         onChange={handleSearch}
                     />
                     <Button
+                        onClick={() => createUser()}
                         startIcon={<AddIcon/>}
                         variant='outlined'
                         sx={{
@@ -144,7 +195,10 @@ const NewClientsTable = () => {
                                         <TableCell>{item.building}</TableCell>
                                         <TableCell>{item.apartment}</TableCell>
                                         <TableCell>
-                                            <Button sx={{color: '#4caf50', minWidth: 0,}}>
+                                            <Button
+                                                sx={{color: '#4caf50', minWidth: 0,}}
+                                                onClick={() => modifyUsers(item)}
+                                            >
                                                 <EditOutlinedIcon fontSize='small'/>
                                             </Button>
                                             <Button
@@ -163,6 +217,13 @@ const NewClientsTable = () => {
                     <TblPagination/>
                 </TblContainer>
             </Paper>
+
+            <Modal active={modalCreateActive} setActive={setModalCreateActive}>
+                <ModalCreate isModal={true} createUserSubmit={createUserSubmit}/>
+            </Modal>
+            <Modal active={modalModifyActive} setActive={setModalModifyActive}>
+                <ModalModify isModal={true} modifyUserSubmit={modifyUserSubmit} userDataModify={userDataModify}/>
+            </Modal>
         </>
 
     );

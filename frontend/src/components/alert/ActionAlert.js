@@ -27,7 +27,7 @@ export default function ActionAlert(props) {
                     }
                     sx={{ mb: 2 }}
                 >
-                    Пользователь успешно удалён
+                    {props.text}
                 </Alert>
             </Collapse>
         </Box>

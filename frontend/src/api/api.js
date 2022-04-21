@@ -23,6 +23,19 @@ export const itemsAPI = {
                     }
                 })
         )
+    },
+    deleteProduct(id){
+        return (
+            instance.delete(`product/delete/${id}`, {})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
     }
 }
 
@@ -30,6 +43,19 @@ export const usersAPI = {
     createUser(data) {
         return (
             instance.post('user/registration', {...data})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+    modifyUser(data) {
+        return (
+            instance.patch(`admin/userModify/${data._id}`, {...data})
                 .then(function (response) {
                     return response
                 })
@@ -104,7 +130,9 @@ export const usersAPI = {
                     }
                 })
         )
-    }
+    },
+
+
 
 }
 
