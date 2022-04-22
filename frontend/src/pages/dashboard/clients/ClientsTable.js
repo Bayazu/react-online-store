@@ -36,7 +36,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const headCells = [
-    {id: '_id', label: '_id'},
     {id: 'firstName', label: 'Имя'},
     {id: 'secondName', label: 'Фамилия'},
     {id: 'email', label: 'email'},
@@ -48,7 +47,7 @@ const headCells = [
     {id: 'actions', label: 'Действия'},
 ]
 
-const NewClientsTable = () => {
+const ClientsTable = () => {
 
     const [modalCreateActive, setModalCreateActive] = useState(false)
     const [modalModifyActive, setModalModifyActive] = useState(false)
@@ -185,7 +184,6 @@ const NewClientsTable = () => {
                         <TableBody>
                             {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
                                     <TableRow key={item._id} sx={{cursor: 'pointer'}}>
-                                        <TableCell>{item._id}</TableCell>
                                         <TableCell>{item.firstName}</TableCell>
                                         <TableCell>{item.secondName}</TableCell>
                                         <TableCell>{item.email}</TableCell>
@@ -229,4 +227,4 @@ const NewClientsTable = () => {
     );
 };
 
-export default NewClientsTable;
+export default ClientsTable;

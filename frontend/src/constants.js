@@ -10,12 +10,16 @@ export const defaultTabs = [
     {
         label : '/products/',
         value : 1,
+    },
+    {
+        label: '/dashboard/',
+        value: 2
     }
 ]
 
 export const navigationBarRoutes = [
     {label: 'Продукты', value: 'items'},
-    {label: 'Дашборд', value: 'clients'},
+    {label: 'Дашборд', value: 'dashboard'},
     {label : 'Профиль', value: 'profile'},
     {label : 'Корзина', value: 'basket'},
     {label : 'Выйти', value: 'logoff'},

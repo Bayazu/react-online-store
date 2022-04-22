@@ -33,7 +33,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const headCells = [
-    {id: '_id', label: '_id'},
     {id: 'name', label: 'Наименование'},
     {id: 'description', label: 'Описание'},
     {id: 'price', label: 'Цена'},
@@ -135,7 +134,6 @@ const ProductsTable = () => {
                     <TableBody>
                         {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
                                 <TableRow key={item._id} sx={{cursor: 'pointer'}}>
-                                    <TableCell>{item._id}</TableCell>
                                     <TableCell>{item.name}</TableCell>
                                     <TableCell>{item.description}</TableCell>
                                     <TableCell>{item.price}</TableCell>

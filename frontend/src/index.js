@@ -23,6 +23,7 @@ import ProtectedRoutes from "./ProtectedRoutes";
 import AdminLogin from "./pages/auth/AdminLogin";
 import ProductsPage from "./pages/dashboard/ProductsPage";
 import LayoutsWithNavbar from "./LayoutsWithNavbar";
+import DashboardPage from "./pages/dashboard/DashboardPage";
 
 
 ReactDOM.render(
@@ -43,6 +44,7 @@ ReactDOM.render(
                     <Route path="/" element={<LayoutsWithNavbar/>}>
                         <Route path="/clients" element={<ClientsPage/>}/>
                         <Route path="/products" element={<ProductsPage/>}/>
+                        <Route path="/dashboard" element={<DashboardPage/>}/>
                     </Route>
                 </Route>
 

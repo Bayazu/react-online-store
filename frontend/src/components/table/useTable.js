@@ -16,6 +16,7 @@ const useStyles = makeStyles(theme => ({
         '& tbody tr:hover': {
             backgroundColor: '#e2e9ed',
             cursor: 'pointer',
+            transition: 'background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
         },
     },
 }))
