@@ -45,6 +45,7 @@ export default function DashboardTabs() {
 
                         <Tab label="Клиенты"/>
                         <Tab label="Товары"/>
+                        <Tab label="Дашборд"/>
                         {/*<Tab label="Item Three"/>*/}
                         {/*<Tab label="Item Four"/>*/}
                         {/*<Tab label="Item Five"/>*/}
