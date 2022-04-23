@@ -24,6 +24,8 @@ import AdminLogin from "./pages/auth/AdminLogin";
 import ProductsPage from "./pages/dashboard/ProductsPage";
 import LayoutsWithNavbar from "./LayoutsWithNavbar";
 import DashboardPage from "./pages/dashboard/DashboardPage";
+import ProfileUser from "./pages/ProfileUser/ProfileUser";
+
 
 
 ReactDOM.render(
@@ -45,6 +47,7 @@ ReactDOM.render(
                         <Route path="/clients" element={<ClientsPage/>}/>
                         <Route path="/products" element={<ProductsPage/>}/>
                         <Route path="/dashboard" element={<DashboardPage/>}/>
+                        <Route path="/profileUser/:id" element={<ProfileUser/>}/>
                     </Route>
                 </Route>
 
