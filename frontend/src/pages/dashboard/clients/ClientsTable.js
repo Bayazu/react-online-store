@@ -20,6 +20,7 @@ import ModalCreateUpdate from "./ModalCreate";
 import ModalCreate from "./ModalCreate";
 import ModalModify from "./ModalModify";
 import AlertDialog from "../../../components/alert/AlertDialog";
+import {useNavigate} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -59,6 +60,7 @@ const ClientsTable = () => {
     const [userDataModify, setUserDataModify] = useState(false)
     const [openConfirmModal, setConfirmModal] = useState(false)
     const [isDelete, setIsDelete] = useState(false)
+    const navigate = useNavigate()
 
     const getData = () => {
         dispatch(getUsers()).then((response) => {
@@ -183,7 +185,7 @@ const ClientsTable = () => {
                         <TblHead/>
                         <TableBody>
                             {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
-                                    <TableRow key={item._id} sx={{cursor: 'pointer'}}>
+                                    <TableRow onClick={() => navigate(`/profileUser/${item._id}`)} key={item._id} sx={{cursor: 'pointer'}}>
                                         <TableCell>{item.firstName}</TableCell>
                                         <TableCell>{item.secondName}</TableCell>
                                         <TableCell>{item.email}</TableCell>

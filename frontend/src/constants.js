@@ -14,7 +14,8 @@ export const defaultTabs = [
     {
         label: '/dashboard/',
         value: 2
-    }
+    },
+
 ]
 
 export const navigationBarRoutes = [

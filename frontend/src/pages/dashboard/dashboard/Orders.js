@@ -5,6 +5,7 @@ import styled from "styled-components/macro";
 import {useDispatch} from "react-redux";
 import Box from "@mui/material/Box";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HeaderText from "../../../components/HeaderText";
 
 const Orders = (props) => {
 
@@ -39,7 +40,7 @@ const Orders = (props) => {
 
 
         <Paper sx={{margin: '5px', padding: '5px', marginTop: '-10px', boxShadow: '0px -1px #c3c3c3', width: props.changeResolution ? null : '100%' }}>
-            <Box sx={{color: 'text.primary', fontSize: 28, fontWeight: 'medium', padding: '3px 0px 10px 9px' }}>Оплаченные заказы</Box>
+            <HeaderText text={'Оплаченные заказы'}/>
             {orders?.map(el=>{
                 return(
                     <Line>

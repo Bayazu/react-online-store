@@ -57,10 +57,6 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: ${props => props.changeResolution ? 'column' : 'row'};
-
-
-  // display: flex;
-   
 `;
 const InnerContainer = styled.div`
   background: blue;

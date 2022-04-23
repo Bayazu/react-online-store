@@ -1,32 +1,37 @@
 import React from 'react'
-import { Button as MuiButton} from "@material-ui/core";
+import {Button as MuiButton} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import Button from "@mui/material/Button";
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        margin: theme.spacing(0.5),
-        color : "#1976d2"
-    },
-    label: {
-        textTransform: 'none'
-    }
-}))
+// const useStyles = makeStyles(theme => ({
+//     root: {
+//         margin: theme.spacing(0.5),
+//         color: "#1976d2"
+//     },
+//     label: {
+//         textTransform: 'none'
+//     }
+// }))
 
-export default function Button(props) {
 
-    const { text, size, color, variant, onClick, ...other } = props
-    const classes = useStyles();
+const CustomButton = React.forwardRef((props, ref) => {
+
+    const {text, size, color, variant, onClick, ...other} = props
+
 
     return (
-        <MuiButton
+        <Button
             variant={variant || "contained"}
             size={size || "large"}
             color={color || "primary"}
             onClick={onClick}
             {...other}
-             classes={{ root: classes.root, label: classes.label }}
+            ref={ref}
+
         >
             {text}
-        </MuiButton>
+        </Button>
     )
-}
+})
+
+export default CustomButton;
