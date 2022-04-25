@@ -78,6 +78,16 @@ class adminController{
             res.status(500).json(e)
         }
     }
+
+    async userId(req,res){
+        try{
+            const user = await User.findById(req.params.id)
+            res.status(200).json(user)
+        }catch (e) {
+            res.status(500).json(e)
+        }
+    }
 }
+
 
 module.exports = new adminController()
