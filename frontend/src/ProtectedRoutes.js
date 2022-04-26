@@ -1,5 +1,5 @@
 import {Outlet} from 'react-router'
-import Items from "./pages/Items/Items";
+import AllProducts from "./pages/Items/AllProducts";
 import {useSelector} from "react-redux";
 
 const ProtectedRoutes = () =>{
@@ -7,7 +7,7 @@ const ProtectedRoutes = () =>{
     const isAuth = useSelector((state) => state.user.isUserAuth)
 
 
-    return ((isAuth && userRole === 'ADMIN')  ? <Outlet/> : <Items/>)
+    return ((isAuth && userRole === 'ADMIN')  ? <Outlet/> : <AllProducts/>)
 }
 
 export default ProtectedRoutes

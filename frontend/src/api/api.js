@@ -24,6 +24,19 @@ export const itemsAPI = {
                 })
         )
     },
+    getOneItem(id) {
+        return (
+            instance.get(`product/current/${id}`, {})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
     deleteProduct(id){
         return (
             instance.delete(`product/delete/${id}`, {})
