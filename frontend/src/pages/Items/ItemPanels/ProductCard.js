@@ -8,7 +8,7 @@ import adminAvatarSrc from '../../../imgs/admin.jpg'
 import styled from 'styled-components/macro'
 
 
-const ItemCard = (props) => {
+const ProductCard = (props) => {
 
     const backEndUrl = 'http://localhost:8080/'
 
@@ -52,4 +52,4 @@ const ItemCardWrapper = styled.div`
   max-height: 400px;
 `;
 
-export default ItemCard
+export default ProductCard

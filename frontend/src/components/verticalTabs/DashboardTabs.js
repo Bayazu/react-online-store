@@ -46,11 +46,11 @@ export default function DashboardTabs() {
                         <Tab label="Клиенты"/>
                         <Tab label="Товары"/>
                         <Tab label="Дашборд"/>
-                        {/*<Tab label="Item Three"/>*/}
-                        {/*<Tab label="Item Four"/>*/}
-                        {/*<Tab label="Item Five"/>*/}
-                        {/*<Tab label="Item Six"/>*/}
-                        {/*<Tab label="Item Seven"/>*/}
+                        {/*<Tab label="Product Three"/>*/}
+                        {/*<Tab label="Product Four"/>*/}
+                        {/*<Tab label="Product Five"/>*/}
+                        {/*<Tab label="Product Six"/>*/}
+                        {/*<Tab label="Product Seven"/>*/}
                     </Tabs>
                 </Box>
             </Left>

@@ -11,7 +11,7 @@ import {Provider} from 'react-redux'
 import store from './redux/store'
 import Dashboard from "./pages/dashboard/ClientsPage";
 import NavBar from "./components/navBar/NavBar";
-import Items from "./pages/Items/Items";
+import AllProducts from "./pages/Items/AllProducts";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import InitialAuth from "./components/InitialAuth";
@@ -25,6 +25,8 @@ import ProductsPage from "./pages/dashboard/ProductsPage";
 import LayoutsWithNavbar from "./LayoutsWithNavbar";
 import DashboardPage from "./pages/dashboard/DashboardPage";
 import ProfileUser from "./pages/ProfileUser/ProfileUser";
+import Product from "./pages/Items/Product/Product";
+import Basket from "./pages/Basket/Basket";
 
 
 
@@ -37,10 +39,12 @@ ReactDOM.render(
             <Routes>
                 <Route path="/" element={<App/>}/>
                 {/*<Route path="dashboard" element={<Dashboard/>}/>*/}
-                <Route path="/items/" element={<Items/>}/>
+                <Route path="/items/" element={<AllProducts/>}/>
+                <Route path="/product/:id" element={<Product/>}/>
                 <Route path="/register/" element={<Register/>}/>
                 <Route path="/login/" element={<Login/>}/>
                 <Route path="/admin/" element={<AdminLogin/>}/>
+                <Route path="/basket/" element={<Basket/>}/>
 
                 <Route element={<ProtectedRoutes/>}>
                     <Route path="/" element={<LayoutsWithNavbar/>}>

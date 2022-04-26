@@ -1,20 +1,25 @@
 import styled from 'styled-components/macro'
 import React, {useEffect} from 'react';
-import ItemCard from "./ItemPanels/ItemCard";
+import ProductCard from "./ItemPanels/ProductCard";
 import {useDispatch, useSelector} from "react-redux";
 import {getItems} from "../../redux/reducers/itemsReducer";
+import {useNavigate} from "react-router-dom";
 
 
-const Items = () => {
+const AllProducts = () => {
+
 
     const items = useSelector((state) => state.itemsPage.items)
     const dispatch = useDispatch()
-
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(getItems())
     }, [])
 
+    const onNavigate = (id) =>{
+       return navigate(`/product/${id}`)
+    }
 
     return (
 
@@ -22,8 +27,8 @@ const Items = () => {
             <Block>
                 {items?.map(item => {
                     return (
-                        <ItemCardWrapper key={item._id}>
-                            <ItemCard
+                        <ItemCardWrapper key={item._id} onClick={()=>onNavigate(item._id)}>
+                            <ProductCard
                                 item={item}
                             />
                         </ItemCardWrapper>
@@ -54,4 +59,4 @@ const Block = styled.div`
   flex-wrap: wrap;
 `;
 
-export default Items;
+export default AllProducts;
