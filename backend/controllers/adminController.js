@@ -51,7 +51,7 @@ class adminController{
 
     async delete(req, res){
         try{
-            const user = await User.findById(req.params.id)
+            const user = await User.findById(req.params.id, {password: 0})
             await user.remove()
             res.status(200).json({message: "Пользователь удален"})
         }catch (e) {
@@ -61,7 +61,7 @@ class adminController{
 
     async users(req, res){
         try {
-            const users = await User.find({})
+            const users = await User.find({}, {password: 0})
             res.status(200).json(users)
         }catch (e) {
             res.status(500).json(e)
@@ -71,7 +71,11 @@ class adminController{
     async userModify(req, res){
         try{
             const user = await User.findById(req.params.id)
-            Object.assign(user, req.body)
+            const userChange = req.body
+            if(await userChange.password){
+                userChange.password = bcrypt.hashSync(userChange.password, 7)
+            }
+            Object.assign(user, userChange)
             user.save()
             res.status(200).json(user)
         } catch (e) {
@@ -81,7 +85,7 @@ class adminController{
 
     async userId(req,res){
         try{
-            const user = await User.findById(req.params.id)
+            const user = await User.findById(req.params.id, {password: 0})
             res.status(200).json(user)
         }catch (e) {
             res.status(500).json(e)
