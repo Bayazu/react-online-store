@@ -185,7 +185,8 @@ const ClientsTable = () => {
                         <TblHead/>
                         <TableBody>
                             {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
-                                    <TableRow onClick={() => navigate(`/profileUser/${item._id}`)} key={item._id} sx={{cursor: 'pointer'}}>
+                                    // <TableRow onClick={() => navigate(`/profileUser/${item._id}`)} key={item._id} sx={{cursor: 'pointer'}}>
+                                    <TableRow >
                                         <TableCell>{item.firstName}</TableCell>
                                         <TableCell>{item.secondName}</TableCell>
                                         <TableCell>{item.email}</TableCell>
