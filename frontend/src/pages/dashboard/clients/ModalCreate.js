@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components/macro";
 import {Alert, Stack,} from "@mui/material";
 import {useForm} from 'react-hook-form'
-
+//TODO Удалить за ненадобностью
 const Register = (props) => {
     const {
         register,

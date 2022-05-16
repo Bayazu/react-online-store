@@ -64,7 +64,7 @@ const Product = () => {
 
     const addProductToBasket = () => {
         if(isProductInBasket){
-            return navigate("/items");
+            return navigate("/basket");
         }
         const productData = {
             product: product,

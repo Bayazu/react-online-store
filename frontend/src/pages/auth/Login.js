@@ -1,32 +1,42 @@
-import React, {useState} from 'react';
+import React, {useState} from "react";
+import {useForm, Controller} from "react-hook-form";
 import styled from "styled-components/macro";
-import {Alert, Stack} from "@mui/material";
-import {useForm} from 'react-hook-form'
+import {Alert, Paper, Stack} from "@mui/material";
+import Box from "@mui/material/Box";
+import HeaderText from "../../components/HeaderText";
+import Input from "../../components/controls/Input";
+import useWindowDimensions from "../../helpers/hooks/useWindowDimensions";
+import CustomButton from "../../components/controls/Button";
+import LoginIcon from '@mui/icons-material/Login';
 import {useDispatch} from "react-redux";
-import {loginUser} from "../../redux/reducers/userReducer";
 import {useNavigate} from "react-router-dom";
-
-import Button from "@mui/material/Button";
+import {loginAdmin, loginUser} from "../../redux/reducers/userReducer";
 import Modal from "../../components/modal/Modal";
+import Button from "@mui/material/Button";
 
-const LoginForm = () => {
-    const {
-        register,
-        formState: {
-            errors
-        },
-        reset,
-        handleSubmit,
-    } = useForm({
-        mode: "onBlur"
-    })
+//TODO adminLogin и Login впринципе ничем не отличаются, можно объединить в 1 компонент
+
+const Login = () => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const [modalActive, setModalActive] = useState(false)
+    const {width} = useWindowDimensions();
+    const changeResolution = width < 1214;
 
 
-    const onSubmit = (data) => {
+    const {
+        register, formState: {
+            errors
+        }, reset, handleSubmit, control
+    } = useForm({
+        defaultValues: {
+            username: '', password: ''
+        }, mode: "onBlur"
+    })
+
+
+        const onSubmit = (data) => {
         dispatch(loginUser(data)).then((response) => {
             if (response.status === 400) {
                 setModalActive(true)
@@ -36,67 +46,125 @@ const LoginForm = () => {
         })
     }
 
-    return (
-        <AnotherCont>
-            <ContainerForm>
+
+    return (<Container changeResolution={changeResolution}>
+        <Box component={Paper} sx={{padding: 2, minWidth: 0, width: changeResolution ? '100%' : null}}>
+            <Stack sx={{width: '100%'}} spacing={2}>
+                {errors?.password && <Alert severity="error">Пароль должен иметь от 4 до 10 символов</Alert>}
+            </Stack>
+            <Half changeResolution={changeResolution}>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <Stack sx={{width: '100%'}} spacing={2}>
-                        {errors?.password && <Alert severity="error">Пароль должен иметь от 4 до 10 символов</Alert>}
-                    </Stack>
-                    <FormWrapper>
-                        <InputWrapper>
-                            <label>
-                                Логин:
-                                <input
-                                    type="username"
-                                    {...register('username', {
-                                            required: "Поле обязательно к заполнению",
-                                        }
-                                    )}
-                                />
-                            </label>
+                    <HeaderText text={'Логин'} padding={'0px 0px 0px 25px'}/>
+                    <Wrapper changeResolution={changeResolution}>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Логин'
+                                    {...field}
+                                />}
+
+                                name="username"
+                                control={control}
+                            />
                         </InputWrapper>
-
-                        <InputWrapper>
-                            {/*Пароль минимум 4 максимум 10*/}
-                            <label>
-                                Пароль:
-                                <input
-                                    {...register('password', {
-                                            required: true,
-                                            minLength: 4, maxLength: 10
-                                        }
-                                    )}
-                                />
-                            </label>
+                    </Wrapper>
+                    <HeaderText text={'Пароль'} padding={'0px 0px 0px 25px'}/>
+                    <Wrapper changeResolution={changeResolution}>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Пароль'
+                                    {...field}
+                                />}
+                                rules={{minLength: 4, maxLength: 10, required: true}}
+                                name="password"
+                                control={control}
+                            />
                         </InputWrapper>
-
-
-                    </FormWrapper>
-                    <input type="submit"/>
-
+                    </Wrapper>
+                    <WrapperButtons>
+                        {/*<Controller*/}
+                        {/*    render={({field}) => <CustomButton*/}
+                        {/*        startIcon={<DeleteIcon />}*/}
+                        {/*        type="submit"*/}
+                        {/*        variant='outlined'*/}
+                        {/*        sx={{*/}
+                        {/*            margin: 'spacing(0.5)',*/}
+                        {/*            right: '10px',*/}
+                        {/*        }}*/}
+                        {/*        text={'Удалить пользователя'}*/}
+                        {/*        {...field}*/}
+                        {/*    />}*/}
+                        {/*    name="textField"*/}
+                        {/*    control={control}*/}
+                        {/*/>*/}
+                        <Controller
+                            render={({field}) => <CustomButton
+                                startIcon={<LoginIcon/>}
+                                type="submit"
+                                variant='outlined'
+                                sx={{
+                                    margin: 'spacing(0.5)', color: "#1976d2", right: '10px',
+                                }}
+                                text={'Авторизоваться'}
+                                {...field}
+                            />}
+                            name="textField"
+                            control={control}
+                        />
+                    </WrapperButtons>
                 </form>
-
-            </ContainerForm>
-
+            </Half>
             <Modal active={modalActive} setActive={setModalActive}>
-                    <WrapperContentText>
-                        <Text>
-                            Вы неверно ввели логин или пароль
-                        </Text>
-                    </WrapperContentText>
-                    <ButtonWrapper>
-                        <Button
-                            variant="contained"
-                            onClick={() => (setModalActive(false))}>Ок
-                        </Button>
-                    </ButtonWrapper>
+                <WrapperContentText>
+                    <Text>
+                        Вы неверно ввели логин или пароль
+                    </Text>
+                </WrapperContentText>
+                <ButtonWrapper>
+                    <Button
+                        variant="contained"
+                        onClick={() => (setModalActive(false))}>Ок
+                    </Button>
+                </ButtonWrapper>
 
             </Modal>
-        </AnotherCont>
-
-    );
+        </Box>
+    </Container>);
 };
+
+const InputWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  padding: 5px;
+  margin-right: 5px;
+  flex-direction: ${props => props.changeResolution ? 'column' : 'row'};
+}
+`;
+const Wrapper = styled.div`
+  justify-content: center;
+  display: flex;
+  padding: 10px;
+  flex-direction: ${props => props.changeResolution ? 'column' : 'row'};
+`;
+
+const WrapperButtons = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 7px 0 26px;
+`;
+
+const Container = styled.div`
+  justify-content: center;
+  width: 100%;
+  display: flex;
+    //justify-content: ${props => props.changeResolution ? 'center' : null};
+
+`;
+
+const Half = styled.div`
+  min-width: ${props => props.changeResolution ? null : '460px'};
+`;
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -113,140 +181,5 @@ const Text = styled.div`
 
 `;
 
-const InputWrapper = styled.div`
-  display: flex;
-  padding: 10px;
-`;
-const AnotherCont = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 25px;
-`;
+export default Login;
 
-const FormWrapper = styled.div`
-  border-radius: 1%;
-  background: #ecf2f5;
-  box-shadow: 0 0 3px rgb(0 0 0 / 50%);
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: space-around;
-`;
-
-const ContainerForm = styled.div`
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-content: center;
-
-
-  .form {
-    display: flex !important;
-    background: #0e101c;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  p {
-    color: #bf1650;
-  }
-
-  p::before {
-    display: inline;
-    content: "⚠ ";
-  }
-
-  input {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    border-radius: 4px;
-    border: 1px solid white;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    font-size: 14px;
-  }
-
-  label {
-    line-height: 2;
-    text-align: left;
-    display: block;
-    margin-bottom: 13px;
-    margin-top: 20px;
-    color: black;
-    font-size: 14px;
-    font-weight: 200;
-  }
-
-  button[type="submit"],
-  input[type="submit"] {
-    background: #aecdf2;
-    color: black;
-    text-transform: uppercase;
-    border: none;
-    margin-top: 40px;
-    padding: 20px;
-    font-size: 16px;
-    font-weight: 100;
-    letter-spacing: 10px;
-  }
-
-  button[type="submit"]:hover,
-  input[type="submit"]:hover {
-    background: #1976d2;
-  }
-
-  button[type="submit"]:active,
-  input[type="button"]:active,
-  input[type="submit"]:active {
-    transition: 0.3s all;
-    transform: translateY(3px);
-    border: 1px solid transparent;
-    opacity: 0.8;
-  }
-
-  input:disabled {
-    opacity: 0.4;
-  }
-
-  input[type="button"]:hover {
-    transition: 0.3s all;
-  }
-
-  button[type="submit"],
-  input[type="button"],
-  input[type="submit"] {
-    -webkit-appearance: none;
-  }
-
-  button[type="button"] {
-    display: block;
-    appearance: none;
-    background: #333;
-    color: white;
-    border: none;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    border-radius: 4px;
-  }
-
-  hr {
-    margin-top: 30px;
-  }
-
-  button {
-    display: block;
-    appearance: none;
-    margin-top: 40px;
-    border: 1px solid #333;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    border-radius: 4px;
-  }
-`;
-
-
-export default LoginForm;

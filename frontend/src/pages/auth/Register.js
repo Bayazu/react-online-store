@@ -1,72 +1,94 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from "react";
+import {useForm, Controller} from "react-hook-form";
 import styled from "styled-components/macro";
-import {Alert, Stack,} from "@mui/material";
-import {useForm} from 'react-hook-form'
-import { useNavigate } from "react-router-dom";
+import {Alert, Paper, Stack} from "@mui/material";
+import Box from "@mui/material/Box";
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+import HeaderText from "../../components/HeaderText";
+import CustomButton from "../../components/controls/Button";
+import Input from "../../components/controls/Input";
+import useWindowDimensions from "../../helpers/hooks/useWindowDimensions";
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import {useNavigate} from "react-router-dom";
 import {usersAPI} from "../../api/api";
 import Modal from "../../components/modal/Modal";
 import Button from "@mui/material/Button";
 
 
+const Register = () => {
 
-const Register = (props) => {
+    const {width} = useWindowDimensions();
+    const changeResolution = width < 1214;
+    const navigate = useNavigate();
+    const [modalActive, setModalActive] = useState(false)
+    const [badRequest, setBadRequest] = useState(false)
+    const [isPasswordMatch, setIsPasswordMatch] = useState(false)
+
+
+
+
+    const onSubmit = async (data) => {
+        usersAPI.createUser(data)
+            .then(response => {
+                if (response.status === 200) {
+                    setModalActive(true)
+                }
+                if (response.status === 400) {
+                    setModalActive(true)
+                    setBadRequest(true)
+                }
+            })
+    }
+
+    const onSubmitModal = () => {
+        if (!badRequest) {
+            navigate("/login");
+            setModalActive(false)
+            setBadRequest(false)
+        } else {
+            setModalActive(false)
+            setBadRequest(false)
+        }
+    }
 
     const {
         register,
         formState: {
             errors
         },
+        watch,
         reset,
         handleSubmit,
+        control
     } = useForm({
-        mode: "onBlur"
+        defaultValues: {
+            username: '',
+            firstName: '',
+            secondName: '',
+            email: '',
+            country: '',
+            city: '',
+            street: '',
+            building: '',
+            apartment: '',
+            password: '',
+            passwordConfirm: ''
+        }, mode: "onBlur"
     })
+    const password = useRef({});
+    password.current = watch("password", "");
+   // console.log(password)
+    //console.log(password.current)
+    // console.log(errors)
+    console.log(errors)
 
-    const navigate = useNavigate();
-    const [modalActive, setModalActive] = useState(false)
-    const [badRequest, setBadRequest] = useState(false)
-
-
-    const onSubmit = async (data) => {
-        usersAPI.createUser(data)
-            .then(response => {
-               if(response.status === 200){
-                   setModalActive(true)
-               }
-               if(response.status === 400){
-                   setModalActive(true)
-                   setBadRequest(true)
-               }
-            })
-    }
-
-    const onSubmitModal = () => {
-        if(!badRequest){
-            navigate("/login");
-            setModalActive(false)
-            setBadRequest(false)
-        }else{
-            setModalActive(false)
-            setBadRequest(false)
-        }
-    }
-
-    // useEffect(()=>{
-    //     const data = {
-    //         apartment: "312"
-    //     }
-    //
-    //     reset(data)
-    // },[])
-
-
-
-    return (
-
-        <AnotherCont>
-            <Stack sx={{width: '100%', position: 'absolute'}} spacing={2}>
+    return (<Container changeResolution={changeResolution}>
+        <Box component={Paper} sx={{padding: 2, minWidth: 0, width: changeResolution ? '100%' : null}}>
+            <Stack sx={{width: '100%'}} spacing={2}>
                 {errors?.username && <Alert severity="error">{errors?.username.message}</Alert>}
                 {errors?.password && <Alert severity="error">Пароль должен иметь от 4 до 10 символов</Alert>}
+                {errors?.email && <Alert severity="error">{errors?.email.message}</Alert>}
                 {errors?.firstName && <Alert severity="error">{errors?.firstName.message}</Alert>}
                 {errors?.secondName && <Alert severity="error">{errors?.secondName.message}</Alert>}
                 {errors?.country && <Alert severity="error">{errors?.country.message}</Alert>}
@@ -74,144 +96,196 @@ const Register = (props) => {
                 {errors?.building && <Alert severity="error">{errors?.building.message}</Alert>}
                 {errors?.street && <Alert severity="error">{errors?.street.message}</Alert>}
                 {errors?.city && <Alert severity="error">{errors?.city.message}</Alert>}
+                {errors.passwordConfirm && <Alert severity="error">Пароли не совпадают</Alert>}
             </Stack>
-            <ContainerForm>
+            <Half>
                 <form onSubmit={handleSubmit(onSubmit)}>
-
-                    <FormWrapper>
-                        <InputWrapper>
-                            <label>
-                                {/*Валидацие не пустая*/}
-                                Имя пользователя:
-                                <input
-                                    {...register('username', {
-                                            required: "Поле `Имя пользователя` обязательно к заполнению"
-                                        }
-                                    )}
-                                />
-                            </label>
+                    <HeaderText text={'Личные данные'} padding={'0px 0px 0px 19px'}/>
+                    <Wrapper changeResolution={changeResolution}>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Логин'
+                                    {...field}
+                                />}
+                                name="username"
+                                control={control}
+                                rules={{required: 'Поле логин обязательно к заполнению'}}
+                            />
                         </InputWrapper>
-
-                        <InputWrapper>
-                            <label>
-                                Имя:
-                                <input
-                                    {...register('firstName', {
-                                            required: "Поле обязательно к заполнению"
-                                        }
-                                    )}
-                                />
-                            </label>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Имя'
+                                    {...field}
+                                />}
+                                name="firstName"
+                                control={control}
+                                rules={{required: 'Поле имя обязательно к заполнению'}}
+                            />
                         </InputWrapper>
-
-                        <InputWrapper>
-                            <label>
-                                Фамилия:
-                                <input
-                                    {...register('secondName', {
-                                            required: "Поле обязательно к заполнению"
-                                        }
-                                    )}
-                                />
-                            </label>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Фамилия'
+                                    {...field}
+                                />}
+                                name="secondName"
+                                control={control}
+                                rules={{required: 'Поле фамилия обязательно к заполнению'}}
+                            />
                         </InputWrapper>
-
-                        <InputWrapper>
-                            <label>
-                                E-mail:
-                                <input
-                                    type="email"
-                                    {...register('email', {
-                                            required: "Поле обязательно к заполнению",
-                                        // pattern: /^\S+@\S+$/i
-                                        }
-                                    )}
-                                />
-                            </label>
+                    </Wrapper>
+                    <Wrapper changeResolution={changeResolution}>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='E-mail'
+                                    {...field}
+                                />}
+                                name="email"
+                                type="email"
+                                control={control}
+                                rules={{
+                                    required: true,
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        message: "Емайл введён некорректно"
+                                    }
+                                }}
+                            />
                         </InputWrapper>
-
-                        <InputWrapper>
-                            {/*Пароль минимум 4 максимум 10*/}
-                            <label>
-                                Пароль:
-                                <input
-                                    {...register('password', {
-                                            required: true,
-                                            minLength: 4, maxLength: 10
-                                        }
-                                    )}
-                                />
-                            </label>
+                    </Wrapper>
+                    <HeaderText text={'Адрес'} padding={'0px 0px 0px 19px'}/>
+                    <Wrapper changeResolution={changeResolution}>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Страна'
+                                    {...field}
+                                />}
+                                name="country"
+                                control={control}
+                                rules={{required: 'Поле страна обязательно к заполнению'}}
+                            />
                         </InputWrapper>
-
-                        <InputWrapper>
-                            <label>
-                                Страна:
-                                <input
-                                    {...register('country', {
-                                            required: "Поле обязательно к заполнению"
-                                        }
-                                    )}
-                                />
-                            </label>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Город'
+                                    {...field}
+                                />}
+                                name="city"
+                                control={control}
+                                rules={{required: 'Поле город обязательно к заполнению'}}
+                            />
                         </InputWrapper>
-
-                        <InputWrapper>
-                            <label>
-                                Город:
-                                <input
-                                    {...register('city', {
-                                            required: "Поле обязательно к заполнению"
-                                        }
-                                    )}
-                                />
-                            </label>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Улица'
+                                    {...field}
+                                />}
+                                name="street"
+                                control={control}
+                                rules={{required: 'Поле улица обязательно к заполнению'}}
+                            />
                         </InputWrapper>
-
-                        <InputWrapper>
-                            <label>
-                                Улица:
-                                <input
-                                    type="street"
-                                    {...register('street', {
-                                            required: "Поле обязательно к заполнению"
-                                        }
-                                    )}
-                                />
-                            </label>
+                    </Wrapper>
+                    <Wrapper changeResolution={changeResolution}>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Дом'
+                                    {...field}
+                                />}
+                                name="building"
+                                control={control}
+                                rules={{required: 'Поле дом обязательно к заполнению'}}
+                            />
                         </InputWrapper>
-
-                        <InputWrapper>
-                            <label>
-                                Дом:
-                                <input
-                                    type="building"
-                                    {...register('building', {
-                                            required: "Поле обязательно к заполнению"
-                                        }
-                                    )}
-                                />
-                            </label>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Квартира'
+                                    {...field}
+                                />}
+                                name="apartmen"
+                                control={control}
+                                rules={{required: 'Поле квартира обязательно к заполнению'}}
+                            />
                         </InputWrapper>
-
-                        <InputWrapper>
-                            <label>
-                                Квартира:
-                                <input
-                                    {...register('apartment', {
-                                            required: "Поле обязательно к заполнению"
-                                        }
-                                    )}
-                                />
-                            </label>
+                    </Wrapper>
+                    <HeaderText text={'Пароль'} padding={'0px 0px 0px 19px'}/>
+                    <Wrapper changeResolution={changeResolution}>
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Пароль'
+                                    {...field}
+                                />}
+                                name="password"
+                                type='password'
+                                control={control}
+                                rules={{
+                                    required: true,
+                                    minLength: 4,
+                                    maxLength: 10
+                                }}
+                            />
                         </InputWrapper>
-                    </FormWrapper>
-                    <input type="submit"/>
-
+                        <InputWrapper changeResolution={changeResolution}>
+                            <Controller
+                                render={({field}) => <Input
+                                    label='Подтверждение пароля'
+                                    {...field}
+                                />}
+                                name="passwordConfirm"
+                                type='password'
+                                control={control}
+                                rules={{
+                                    required: true,
+                                    validate: value => value === password.current || "The passwords do not match"
+                                }}
+                            />
+                        </InputWrapper>
+                    </Wrapper>
+                    <WrapperButtons>
+                        {/*<Controller*/}
+                        {/*    render={({field}) => <CustomButton*/}
+                        {/*        startIcon={<DeleteIcon />}*/}
+                        {/*        type="submit"*/}
+                        {/*        variant='outlined'*/}
+                        {/*        sx={{*/}
+                        {/*            margin: 'spacing(0.5)',*/}
+                        {/*            right: '10px',*/}
+                        {/*        }}*/}
+                        {/*        text={'Удалить пользователя'}*/}
+                        {/*        {...field}*/}
+                        {/*    />}*/}
+                        {/*    name="textField"*/}
+                        {/*    control={control}*/}
+                        {/*/>*/}
+                        <Controller
+                            render={({field}) => <CustomButton
+                                startIcon={<BorderColorIcon/>}
+                                type="submit"
+                                variant='outlined'
+                                sx={{
+                                    margin: 'spacing(0.5)',
+                                    color: "#1976d2",
+                                    // position: 'absolute',
+                                    right: '10px',
+                                }}
+                                text={'Зарегестрироваться'}
+                                {...field}
+                            />}
+                            name="textField"
+                            control={control}
+                        />
+                    </WrapperButtons>
                 </form>
-
-            </ContainerForm>
-
+            </Half>
             <Modal active={modalActive} setActive={setModalActive}>
                 <WrapperContentText>
                     <Text>
@@ -227,15 +301,39 @@ const Register = (props) => {
                 </ButtonWrapper>
 
             </Modal>
-        </AnotherCont>
-
-    );
+        </Box>
+    </Container>);
 };
 
-const ButtonWrapper = styled.div`
-  margin-top: 10px;
+const InputWrapper = styled.div`
   display: flex;
+  padding: 5px;
+  margin-right: 5px;
+  flex-direction: ${props => props.changeResolution ? 'column' : 'row'};
+}
+`;
+const Wrapper = styled.div`
+  display: flex;
+  padding: 10px;
+  flex-direction: ${props => props.changeResolution ? 'column' : 'row'};
+`;
+
+const WrapperButtons = styled.div`
+  justify-content: flex-end;
+  display: flex;
+  padding: 10px 7px 0 26px;
+`;
+
+const Container = styled.div`
   justify-content: center;
+  width: 100%;
+  display: flex;
+    //justify-content: ${props => props.changeResolution ? 'center' : null};
+
+`;
+
+const Half = styled.div`
+
 `;
 
 const WrapperContentText = styled.div`
@@ -247,140 +345,11 @@ const Text = styled.div`
 
 `;
 
-const InputWrapper = styled.div`
-  display: flex;
-`;
-const AnotherCont = styled.div`
+const ButtonWrapper = styled.div`
+  margin-top: 10px;
   display: flex;
   justify-content: center;
-  //margin-top: 25px;
 `;
-
-const FormWrapper = styled.div`
-  margin-top: 35px;
-  border-radius: 1%;
-  background: #ecf2f5;
-  box-shadow: 0 0 3px rgb(0 0 0 / 50%);
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: space-around;
-`;
-
-const ContainerForm = styled.div`
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-content: center;
-
-
-  .form {
-    display: flex !important;
-    background: #0e101c;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  p {
-    color: #bf1650;
-  }
-
-  p::before {
-    display: inline;
-    content: "⚠ ";
-  }
-
-  input {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    border-radius: 4px;
-    border: 1px solid white;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    font-size: 14px;
-  }
-
-  label {
-    line-height: 2;
-    text-align: left;
-    display: block;
-    margin-bottom: 13px;
-    margin-top: 20px;
-    color: black;
-    font-size: 14px;
-    font-weight: 200;
-  }
-
-  button[type="submit"],
-  input[type="submit"] {
-    background: #aecdf2;
-    color: black;
-    text-transform: uppercase;
-    border: none;
-    margin-top: 40px;
-    padding: 20px;
-    font-size: 16px;
-    font-weight: 100;
-    letter-spacing: 10px;
-  }
-
-  button[type="submit"]:hover,
-  input[type="submit"]:hover {
-    background: #1976d2;
-  }
-
-  button[type="submit"]:active,
-  input[type="button"]:active,
-  input[type="submit"]:active {
-    transition: 0.3s all;
-    transform: translateY(3px);
-    border: 1px solid transparent;
-    opacity: 0.8;
-  }
-
-  input:disabled {
-    opacity: 0.4;
-  }
-
-  input[type="button"]:hover {
-    transition: 0.3s all;
-  }
-
-  button[type="submit"],
-  input[type="button"],
-  input[type="submit"] {
-    -webkit-appearance: none;
-  }
-
-  button[type="button"] {
-    display: block;
-    appearance: none;
-    background: #333;
-    color: white;
-    border: none;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    border-radius: 4px;
-  }
-
-  hr {
-    margin-top: 30px;
-  }
-
-  button {
-    display: block;
-    appearance: none;
-    margin-top: 40px;
-    border: 1px solid #333;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    border-radius: 4px;
-  }
-`;
-
 
 export default Register;
+
