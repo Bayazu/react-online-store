@@ -1,8 +1,10 @@
 const Admin = require("../models/admin");
 const User = require("../models/client")
+const Order = require("../models/order")
 const bcrypt = require("bcryptjs");
 const {secret} = require("../config")
 const jwt = require("jsonwebtoken")
+const moment = require("moment");
 
 const generateAdminToken = (id, roles, username, ) => {
     const payload = {
@@ -87,6 +89,62 @@ class adminController{
         try{
             const user = await User.findById(req.params.id, {password: 0})
             res.status(200).json(user)
+        }catch (e) {
+            res.status(500).json(e)
+        }
+    }
+    async orderList(req,res){
+        try {
+            const orders = await Order.find({})
+            res.status(200).json(orders)
+        }catch (e) {
+            res.status(500).json(e)
+        }
+    }
+    async ordersMonths(req,res){
+        try {
+            const orders = await Order.find({})
+            const currentMonth = moment().format('M');
+            const filtered = await orders.filter((el) => {
+                if(currentMonth === moment(el.datePurchase).format('M')){
+                    return el
+                }
+            })
+            res.status(200).json(filtered)
+        }catch (e) {
+            res.status(500).json(e)
+        }
+    }
+    async usersWeek(req,res){
+        try {
+            const users = await User.find({})
+            const start = +moment().startOf('isoWeek').valueOf()
+            const end = +moment().endOf('isoWeek').valueOf()
+            const filtered = await users.filter((el) => {
+                const currentDate = el.dateRegistration.valueOf()
+                if(start < currentDate){
+                    if(end > currentDate){
+                        return el
+                    }
+                }
+            })
+            res.status(200).json(filtered)
+        }catch (e) {
+            res.status(500).json(e)
+        }
+    }
+    async ordersSummMonths(req,res){
+        try {
+            const orders = await Order.find({})
+            const currentMonth = moment().format('M');
+            const filtered = await orders.reduce((sum, el) => {
+                if(currentMonth === moment(el.datePurchase).format('M')){
+                    return sum + el.priceOrder
+                }else{
+                    return null
+                }
+            }, 0)
+            res.status(200).json(filtered)
         }catch (e) {
             res.status(500).json(e)
         }
