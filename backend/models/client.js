@@ -45,6 +45,10 @@ const clientSchema = new Schema({
     role: {
         type: String,
         default: "USER"
+    },
+    dateRegistration: {
+        type: Date,
+        default: Date.now()
     }
 })
 
