@@ -27,7 +27,11 @@ class orderController{
                 secondName: user.secondName,
                 email: user.email
             }
-            const products = req.body.basketData
+            const products = req.body
+
+            const allAmount = products.reduce((sum, el) =>{
+                return sum + parseInt(el.amount)
+            },0)
 
             const allPrices = await Promise.all(products.map(async el => {
                 const nameProd =  await Product.findOne({_id: el._id})
@@ -37,9 +41,12 @@ class orderController{
                 return sum + el;
             }, 0);
             const allProducts = await Promise.all(products.map(async el => {
-                return await Product.findOne({_id: el._id})
+                const products = await Product.findOne({_id: el._id})
+                products.amount = el.amount
+                products.priceInTotal = el.amount * products.price
+                return products
             }));
-            const order = new Order({clientId: user._id, clientInfo: clientInfo, clientAddress: address, products: allProducts , priceOrder: resultPrice})
+            const order = new Order({clientId: user._id, clientInfo: clientInfo, clientAddress: address, products: allProducts , priceOrder: resultPrice, amountInOrder: allAmount})
             await order.save()
             res.status(200).json(order)
         }catch (e) {

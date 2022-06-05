@@ -16,6 +16,10 @@ const orderSchema = new Schema({
     products: {
         type: Schema.Types.Array,
     },
+    amountInOrder:{
+        type: Number,
+        required: true
+    },
     priceOrder: {
         type: Number,
         unique: false,
