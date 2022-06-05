@@ -122,10 +122,8 @@ class adminController{
             const end = +moment().endOf('isoWeek').valueOf()
             const filtered = await users.filter((el) => {
                 const currentDate = el.dateRegistration.valueOf()
-                if(start < currentDate){
-                    if(end > currentDate){
+                if(start < currentDate && end> currentDate){
                         return el
-                    }
                 }
             })
             res.status(200).json(filtered)
