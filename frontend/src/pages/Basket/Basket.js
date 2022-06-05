@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components/macro";
 import {Paper} from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
@@ -10,18 +10,19 @@ import Input from "../../components/controls/Input";
 import AddIcon from "@mui/icons-material/Add";
 import CustomButton from "../../components/controls/Button";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import useWindowDimensions from "../../helpers/hooks/useWindowDimensions";
 import {
     changeBasket,
-    changeBasketAC,
+    changeBasketAC, clearBasket, createOrder,
     getTotalProductsPrice,
     removeProductFromBasket
 } from "../../redux/reducers/basketReducer";
 import InfoContainer from "../../components/InfoContainer";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CloseIcon from "@material-ui/icons/Close";
+import Modal from "../../components/modal/Modal";
+import {useNavigate} from "react-router-dom";
 
 
 
@@ -29,10 +30,11 @@ const Basket = () => {
 
     const basket = useSelector((state) => state.basket?.basket)
     const totalProductsPrice = useSelector((state) => state.basket?.totalProductsPrice)
-
+    const [modalActive, setModalActive] = useState(false)
+    const [badRequest, setBadRequest] = useState(false)
+    const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    console.log(totalProductsPrice);
 
     useEffect(() => {
         dispatch(getTotalProductsPrice())
@@ -75,14 +77,42 @@ const Basket = () => {
 
     // TODO Переписать вёрстку на человечачий, вместо  Mui
 
-    const addProductToBasket = () => {
-        console.log('dasopkads')
+
+    const createNewOrder = () => {
+        const basketToDispatch = basket.map((el) => {
+            return {
+                _id: el._id,
+                amount: el.amountInOrder
+            }
+        })
+        dispatch(createOrder(basketToDispatch)).then((response) => {
+            if (response.status === 200) {
+                setModalActive(true)
+            }
+            if (response.status === 400) {
+                setModalActive(true)
+                setBadRequest(true)
+            }
+        })
     }
     const removeProductBasket = (id) => {
         dispatch(removeProductFromBasket(id))
     }
 
+    const onSubmitModal = () => {
+        if (!badRequest) {
+            navigate("/profile");
+            setModalActive(false)
+            setBadRequest(false)
+            dispatch(clearBasket())
+        } else {
+            setModalActive(false)
+            setBadRequest(false)
+        }
+    }
+
     return (
+        <>
         <Container>
             {basket?.length !== 0
                 ?
@@ -144,7 +174,7 @@ const Basket = () => {
                                 <CustomButton
                                     startIcon={<ShoppingCartIcon/>}
                                     onClick={() => {
-                                        addProductToBasket()
+                                        createNewOrder()
                                     }}
                                     type="submit"
                                     variant={'outlined'}
@@ -159,14 +189,42 @@ const Basket = () => {
                 </>
                 :
                 <EmptyBasket>
-                    <InfoContainer headerText={'Корзина пуста'} textSecondary={'Вы не добавили ни одного товара в корзину'} />
+                    <InfoContainer headerText={'Корзина пуста'}
+                                   textSecondary={'Вы не добавили ни одного товара в корзину'}/>
                 </EmptyBasket>
             }
 
 
         </Container>
+            <Modal active={modalActive} setActive={setModalActive}>
+                <WrapperContentText>
+                    <div>
+                        {badRequest ? "Произошла ошибка при покупке товара" : "Товар успешно куплен и добавлен в профиль заказов"}
+                    </div>
+                </WrapperContentText>
+                <ButtonWrapper>
+                    <Button
+                        variant="contained"
+                        onClick={() => (onSubmitModal())}>
+                        Ок
+                    </Button>
+                </ButtonWrapper>
+
+            </Modal>
+        </>
     );
 };
+
+const WrapperContentText = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const ButtonWrapper = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+`;
 
 const Container = styled.div`
   padding: 15px;

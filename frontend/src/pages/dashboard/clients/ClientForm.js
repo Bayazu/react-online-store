@@ -9,21 +9,23 @@ import useWindowDimensions from "../../../helpers/hooks/useWindowDimensions";
 import CustomButton from "../../../components/controls/Button";
 import HeaderText from "../../../components/HeaderText";
 import Input from "../../../components/controls/Input";
-import {useDispatch} from "react-redux";
-import {modifyUserById} from "../../../redux/reducers/userReducer";
+import {useDispatch, useSelector} from "react-redux";
 import ActionAlert from "../../../components/alert/ActionAlert";
 
 
 const ClientForm = (props) => {
 
+    const userRole = useSelector((state) => state.user.userRole)
+
     const {
         userData,
         openAlert,
         setOpenAlert,
-        modifyUser = (data) => {},
+        modifyUser = (data) => {
+        },
     } = props
 
-    const { width } = useWindowDimensions();
+    const {width} = useWindowDimensions();
     const changeResolution = width < 1214;
     const dispatch = useDispatch()
 
@@ -52,11 +54,10 @@ const ClientForm = (props) => {
 
     const onSubmit = async (data) => {
         modifyUser(data)
-
     }
 
     useEffect(() => {
-        if(userData){
+        if (userData) {
             reset({
                 username: userData.username,
                 firstName: userData.firstName,
@@ -72,10 +73,11 @@ const ClientForm = (props) => {
     }, [userData])
 
 
-    return (<Container changeResolution={changeResolution} >
-        <Box component={Paper} sx={{padding: 2, minWidth: 0,width: changeResolution ? '100%' : null}}>
+    return (<Container changeResolution={changeResolution}>
+        <Box component={Paper} sx={{padding: 2, minWidth: 0, width: changeResolution ? '100%' : null}}>
             <Half>
-                <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Данные пользователя успешно изменены'}/>
+                <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert}
+                             text={'Данные пользователя успешно изменены'}/>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <HeaderText text={'Личные данные'} padding={'0px 0px 0px 19px'}/>
                     <Wrapper changeResolution={changeResolution}>
@@ -201,24 +203,28 @@ const ClientForm = (props) => {
                         </InputWrapper>
                     </Wrapper>
                     <WrapperButtons>
+                        {userRole === 'ADMIN'
+                            ?
+                            <Controller
+                                render={({field}) => <CustomButton
+                                    startIcon={<DeleteIcon/>}
+                                    type="submit"
+                                    variant='outlined'
+                                    sx={{
+                                        margin: 'spacing(0.5)',
+                                        right: '10px',
+                                    }}
+                                    text={'Удалить пользователя'}
+                                    {...field}
+                                />}
+                                name="textField"
+                                control={control}
+                            />
+                            : null
+                        }
                         <Controller
                             render={({field}) => <CustomButton
-                                startIcon={<DeleteIcon />}
-                                type="submit"
-                                variant='outlined'
-                                sx={{
-                                    margin: 'spacing(0.5)',
-                                    right: '10px',
-                                }}
-                                text={'Удалить пользователя'}
-                                {...field}
-                            />}
-                            name="textField"
-                            control={control}
-                        />
-                        <Controller
-                            render={({field}) => <CustomButton
-                                startIcon={<SaveIcon />}
+                                startIcon={<SaveIcon/>}
                                 type="submit"
                                 variant='outlined'
                                 sx={{
@@ -260,15 +266,15 @@ const WrapperButtons = styled.div`
 `;
 
 const Container = styled.div`
-  
+
   width: 100%;
   display: flex;
   justify-content: ${props => props.changeResolution ? 'center' : null};
-  
+
 `;
 
 const Half = styled.div`
- 
+
 `;
 
 export default ClientForm;
