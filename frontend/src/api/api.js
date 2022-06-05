@@ -53,6 +53,32 @@ export const itemsAPI = {
 }
 
 export const usersAPI = {
+    modifyUserById(userData, id) {
+        return (
+            instance.patch(`admin/userModify/${id}`,{...userData})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+    getUserById(id) {
+        return (
+            instance.get(`admin/userId/${id}`, )
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
     createUser(data) {
         return (
             instance.post('user/registration', {...data})
@@ -105,7 +131,7 @@ export const usersAPI = {
                 })
         )
     },
-    loginByToken(token) {
+    loginByToken() {
         return (
             instance.get('user/profile',)
                 .then(function (response) {

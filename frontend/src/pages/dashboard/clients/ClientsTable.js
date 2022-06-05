@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Input from "../../../components/controls/Input";
 import {Search} from "@mui/icons-material";
 import {useDispatch, useSelector} from "react-redux";
-import allUsersReducer, {getUsers} from "../../../redux/reducers/allUsersReducer";
+
 
 import AddIcon from '@material-ui/icons/Add';
 import {makeStyles} from "@material-ui/core/styles";
@@ -21,6 +21,7 @@ import ModalCreate from "./ModalCreate";
 import ModalModify from "./ModalModify";
 import AlertDialog from "../../../components/alert/AlertDialog";
 import {useNavigate} from "react-router-dom";
+import {getUsers} from "../../../redux/reducers/userReducer";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -185,8 +186,8 @@ const ClientsTable = () => {
                         <TblHead/>
                         <TableBody>
                             {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
-                                    // <TableRow onClick={() => navigate(`/profileUser/${item._id}`)} key={item._id} sx={{cursor: 'pointer'}}>
-                                    <TableRow >
+                                     <TableRow onClick={() => navigate(`/profileUser/${item._id}`)} key={item._id} sx={{cursor: 'pointer'}}>
+                                    {/*<TableRow >*/}
                                         <TableCell>{item.firstName}</TableCell>
                                         <TableCell>{item.secondName}</TableCell>
                                         <TableCell>{item.email}</TableCell>

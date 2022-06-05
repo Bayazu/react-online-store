@@ -23,8 +23,6 @@ const Register = () => {
     const navigate = useNavigate();
     const [modalActive, setModalActive] = useState(false)
     const [badRequest, setBadRequest] = useState(false)
-    const [isPasswordMatch, setIsPasswordMatch] = useState(false)
-
 
 
 
@@ -210,7 +208,7 @@ const Register = () => {
                                     label='Квартира'
                                     {...field}
                                 />}
-                                name="apartmen"
+                                name="apartment"
                                 control={control}
                                 rules={{required: 'Поле квартира обязательно к заполнению'}}
                             />
@@ -325,6 +323,7 @@ const WrapperButtons = styled.div`
 `;
 
 const Container = styled.div`
+  padding-top: 20px;
   justify-content: center;
   width: 100%;
   display: flex;

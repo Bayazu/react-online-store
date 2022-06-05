@@ -45,6 +45,7 @@ ReactDOM.render(
                 <Route path="/login/" element={<Login/>}/>
                 <Route path="/admin/" element={<AdminLogin/>}/>
                 <Route path="/basket/" element={<Basket/>}/>
+                <Route path="/profile/" element={<ProfileUser/>}/>
 
                 <Route element={<ProtectedRoutes/>}>
                     <Route path="/" element={<LayoutsWithNavbar/>}>
