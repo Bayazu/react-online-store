@@ -155,6 +155,7 @@ const WrapperButtons = styled.div`
 `;
 
 const Container = styled.div`
+  padding-top: 20px;
   justify-content: center;
   width: 100%;
   display: flex;

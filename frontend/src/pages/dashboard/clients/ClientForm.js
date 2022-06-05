@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useForm, Controller} from "react-hook-form";
 import styled from "styled-components/macro";
 import {Paper} from "@mui/material";
@@ -9,12 +9,24 @@ import useWindowDimensions from "../../../helpers/hooks/useWindowDimensions";
 import CustomButton from "../../../components/controls/Button";
 import HeaderText from "../../../components/HeaderText";
 import Input from "../../../components/controls/Input";
+import {useDispatch} from "react-redux";
+import {modifyUserById} from "../../../redux/reducers/userReducer";
+import ActionAlert from "../../../components/alert/ActionAlert";
 
 
-const ClientForm = () => {
+const ClientForm = (props) => {
+
+    const {
+        userData,
+        openAlert,
+        setOpenAlert,
+        modifyUser = (data) => {},
+    } = props
 
     const { width } = useWindowDimensions();
     const changeResolution = width < 1214;
+    const dispatch = useDispatch()
+
 
     const {
         register,
@@ -39,13 +51,31 @@ const ClientForm = () => {
     })
 
     const onSubmit = async (data) => {
-        console.log(data)
+        modifyUser(data)
+
     }
+
+    useEffect(() => {
+        if(userData){
+            reset({
+                username: userData.username,
+                firstName: userData.firstName,
+                secondName: userData.secondName,
+                email: userData.email,
+                country: userData.country,
+                city: userData.city,
+                street: userData.street,
+                building: userData.building,
+                apartment: userData.apartment
+            })
+        }
+    }, [userData])
 
 
     return (<Container changeResolution={changeResolution} >
         <Box component={Paper} sx={{padding: 2, minWidth: 0,width: changeResolution ? '100%' : null}}>
             <Half>
+                <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Данные пользователя успешно изменены'}/>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <HeaderText text={'Личные данные'} padding={'0px 0px 0px 19px'}/>
                     <Wrapper changeResolution={changeResolution}>
@@ -53,11 +83,6 @@ const ClientForm = () => {
                             <Controller
                                 render={({field}) => <Input
                                     label='Логин'
-                                    // InputProps={{
-                                    //     startAdornment: (<InputAdornment position="start">
-                                    //         <Search/>
-                                    //     </InputAdornment>)
-                                    // }}
                                     {...field}
                                 />}
                                 name="username"
@@ -147,7 +172,7 @@ const ClientForm = () => {
                                     label='Квартира'
                                     {...field}
                                 />}
-                                name="apartmen"
+                                name="apartment"
                                 control={control}
                             />
                         </InputWrapper>

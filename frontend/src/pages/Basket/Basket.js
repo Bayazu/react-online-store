@@ -73,7 +73,7 @@ const Basket = () => {
 
     const changeResolution = width < 1214;
 
-    // TODO Переписать вёрстку на человечачий, вместо ёбаного Mui
+    // TODO Переписать вёрстку на человечачий, вместо  Mui
 
     const addProductToBasket = () => {
         console.log('dasopkads')

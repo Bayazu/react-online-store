@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Paper} from "@mui/material";
-import {getUsers} from "../../../redux/reducers/allUsersReducer";
+
 import styled from "styled-components/macro";
 import {useDispatch} from "react-redux";
 import Box from "@mui/material/Box";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HeaderText from "../../../components/HeaderText";
+import {getUsers} from "../../../redux/reducers/userReducer";
 
 const NewClients = () => {
 
