@@ -19,6 +19,7 @@ const Profile = () => {
     const {width} = useWindowDimensions();
     const changeResolution = width < 1214;
     const [userData, setUserData] = useState(null)
+    const [userOrders, setUserOrders] = useState(null)
     const dispatch = useDispatch()
     const [openAlert, setOpenAlert] = useState(false)
 
@@ -35,29 +36,29 @@ const Profile = () => {
 
     const modifyUser = (data) => {
         dispatch(modifyUserByToken(data)).then((response) => {
-            if(response.status === 200){
+            if (response.status === 200) {
                 setOpenAlert(true)
             }
         })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getUserOrdersByToken()).then((response) => {
-            console.log(response.data)
+            if (response.status === 200) {
+                setUserOrders(response.data)
+            }
         })
-    },[])
-
-    console.log('ll')
-
+    }, [])
 
     return (
         <Container changeResolution={changeResolution}>
             <Half changeResolution={changeResolution}>
-                <ClientForm userData={userData} openAlert={openAlert} setOpenAlert={setOpenAlert} modifyUser={modifyUser}/>
+                <ClientForm userData={userData} openAlert={openAlert} setOpenAlert={setOpenAlert}
+                            modifyUser={modifyUser}/>
             </Half>
             <Half changeResolution={changeResolution}>
                 <InnerWrapper>
-                    <UserOrders changeResolution={changeResolution}/>
+                    <UserOrders userOrders={userOrders} changeResolution={changeResolution}/>
                 </InnerWrapper>
             </Half>
         </Container>
