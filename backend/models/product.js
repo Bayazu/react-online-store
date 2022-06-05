@@ -15,7 +15,11 @@ const productSchema = new Schema({
     },
     amount: {
         type: Number,
-        required: true,
+        default: null
+    },
+    priceInTotal:{
+        type: Number,
+        default: null
     },
     image: {
         type: String,
