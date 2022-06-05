@@ -1,5 +1,6 @@
 const User = require('../models/client');
 const Admin = require('../models/admin')
+const Order = require('../models/order')
 const bcrypt = require('bcryptjs');
 const {secret} = require("../config")
 const {validationResult} = require("express-validator")
@@ -106,6 +107,19 @@ class userController{
                 return res.status(400).json({message: "Не удалось найти такого пользователя"})
             }
             res.status(200).json({emailValidation, usernameValidation})
+        }catch (e) {
+            res.status(500).json(e)
+        }
+    }
+    async userOrders(req, res){
+        try{
+            const token = req.headers.authorization.split(' ')[1]
+            if(!token){
+                return res.status(400).json({message: "Вы не авторизованы"})
+            }
+            const decodedInfo = jwt.verify(token, secret)
+            const orders = await Order.find({clientId: decodedInfo.id})
+            res.status(200).json(orders)
         }catch (e) {
             res.status(500).json(e)
         }

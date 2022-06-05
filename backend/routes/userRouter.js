@@ -13,5 +13,6 @@ router.post('/login', userController.login)
 router.patch('/modify', userController.modify)
 router.delete('/delete', userController.delete)
 router.get('/profile', userController.profile)
+router.get('/userOrders', userController.userOrders)
 
 module.exports = router

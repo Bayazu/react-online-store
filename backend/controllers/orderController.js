@@ -3,7 +3,6 @@ const User = require("../models/client")
 const Product = require("../models/product")
 const jwt = require("jsonwebtoken")
 const {secret} = require("../config")
-const {add} = require("nodemon/lib/rules");
 
 class orderController{
     async buy(req,res){
@@ -47,11 +46,6 @@ class orderController{
             res.status(500).json(e)
         }
     }
-
-    async orders(req,res){
-
-    }
-
 }
 
 module.exports = new orderController()
