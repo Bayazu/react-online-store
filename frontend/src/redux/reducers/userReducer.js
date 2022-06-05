@@ -101,6 +101,31 @@ export const modifyUserById = (userData, id) => {
         })
     }
 }
+export const getUserOrdersByToken = (userData, id) => {
+    return (dispatch) => {
+        dispatch(toggleIsFetching(true));
+        return usersAPI.getUserOrdersByToken().then((response) => {
+            if (response?.status === 200) {
+                dispatch(toggleIsFetching(false));
+                return response
+            }
+            return response
+        })
+    }
+}
+
+export const modifyUserByToken = (userData) => {
+    return (dispatch) => {
+        dispatch(toggleIsFetching(true));
+        return usersAPI.modifyUserByToken(userData).then((response) => {
+            if (response?.status === 200) {
+                dispatch(toggleIsFetching(false));
+                return response
+            }
+            return response
+        })
+    }
+}
 
 export const loginAdmin = (data) => {
     return (dispatch) => {
@@ -122,7 +147,7 @@ export const loginAdmin = (data) => {
 export const loginUserByToken = (token) => {
     return (dispatch) => {
         dispatch(toggleIsFetching(true))
-        return usersAPI.loginByToken(token).then((response) => {
+        return usersAPI.getUserDataByToken(token).then((response) => {
             if (response?.status === 200) {
                 if (response.data?.emailValidation?.role === 'USER') {
                     dispatch(loginUserByTokenAC(response.data.emailValidation, token))
@@ -150,6 +175,17 @@ export const getUsers = () => {
         return usersAPI.getAllUsers().then((response)=>{
             if(response?.status === 200){
                 dispatch(getUsersAC(response.data))
+                return response
+            }
+            return  response
+        })
+    }
+}
+
+export const getProfileData = () => {
+    return (dispatch) => {
+        return usersAPI.getUserDataByToken().then((response)=>{
+            if(response?.status === 200){
                 return response
             }
             return  response

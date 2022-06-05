@@ -24,9 +24,11 @@ import AdminLogin from "./pages/auth/AdminLogin";
 import ProductsPage from "./pages/dashboard/ProductsPage";
 import LayoutsWithNavbar from "./LayoutsWithNavbar";
 import DashboardPage from "./pages/dashboard/DashboardPage";
-import ProfileUser from "./pages/ProfileUser/ProfileUser";
+
 import Product from "./pages/Items/Product/Product";
 import Basket from "./pages/Basket/Basket";
+import ProfileUser from "./pages/dashboard/ProfileUser/ProfileUser";
+import Profile from "./pages/ProfileUser/Profile";
 
 
 
@@ -45,7 +47,7 @@ ReactDOM.render(
                 <Route path="/login/" element={<Login/>}/>
                 <Route path="/admin/" element={<AdminLogin/>}/>
                 <Route path="/basket/" element={<Basket/>}/>
-                <Route path="/profile/" element={<ProfileUser/>}/>
+                <Route path="/profile/" element={<Profile/>}/>
 
                 <Route element={<ProtectedRoutes/>}>
                     <Route path="/" element={<LayoutsWithNavbar/>}>

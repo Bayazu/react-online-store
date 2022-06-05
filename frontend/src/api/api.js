@@ -37,7 +37,7 @@ export const itemsAPI = {
                 })
         )
     },
-    deleteProduct(id){
+    deleteProduct(id) {
         return (
             instance.delete(`product/delete/${id}`, {})
                 .then(function (response) {
@@ -52,10 +52,28 @@ export const itemsAPI = {
     }
 }
 
+export const orderAPI = {
+    orderCreat(basketData) {
+        console.log(basketData);
+        return (
+            instance.post('order/orderCreate', {basketData: basketData})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+
+}
+
 export const usersAPI = {
     modifyUserById(userData, id) {
         return (
-            instance.patch(`admin/userModify/${id}`,{...userData})
+            instance.patch(`admin/userModify/${id}`, {...userData})
                 .then(function (response) {
                     return response
                 })
@@ -68,7 +86,20 @@ export const usersAPI = {
     },
     getUserById(id) {
         return (
-            instance.get(`admin/userId/${id}`, )
+            instance.get(`admin/userId/${id}`,)
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+    getUserOrdersByToken() {
+        return (
+            instance.get(`user/userOrders`,)
                 .then(function (response) {
                     return response
                 })
@@ -82,6 +113,19 @@ export const usersAPI = {
     createUser(data) {
         return (
             instance.post('user/registration', {...data})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+    modifyUserByToken(data) {
+        return (
+            instance.patch(`user/modify`, {...data})
                 .then(function (response) {
                     return response
                 })
@@ -131,7 +175,7 @@ export const usersAPI = {
                 })
         )
     },
-    loginByToken() {
+    getUserDataByToken() {
         return (
             instance.get('user/profile',)
                 .then(function (response) {
@@ -144,6 +188,7 @@ export const usersAPI = {
                 })
         )
     },
+
     getAllUsers() {
         return (
             instance.get('admin/users/', {})
@@ -157,7 +202,7 @@ export const usersAPI = {
                 })
         )
     },
-    deleteUserByAdmin(id){
+    deleteUserByAdmin(id) {
         return (
             instance.delete(`admin/delete/${id}`, {})
                 .then(function (response) {
@@ -170,7 +215,6 @@ export const usersAPI = {
                 })
         )
     },
-
 
 
 }

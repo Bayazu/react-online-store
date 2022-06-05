@@ -27,7 +27,7 @@ class orderController{
                 secondName: user.secondName,
                 email: user.email
             }
-            const products = req.body
+            const products = req.body.basketData
 
             const allPrices = await Promise.all(products.map(async el => {
                 const nameProd =  await Product.findOne({_id: el._id})
