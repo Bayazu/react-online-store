@@ -93,6 +93,14 @@ class adminController{
             res.status(500).json(e)
         }
     }
+    async userOrders(req,res){
+        try {
+            const orders = await Order.find({clientId: req.params.id})
+            res.status(200).json(orders)
+        }catch (e) {
+            res.status(500).json(e)
+        }
+    }
     async orderList(req,res){
         try {
             const orders = await Order.find({})
@@ -143,6 +151,17 @@ class adminController{
                 }
             }, 0)
             res.status(200).json(filtered)
+        }catch (e) {
+            res.status(500).json(e)
+        }
+    }
+    async orderStatus(req,res){
+        try{
+            const order = await Order.findById(req.params.id)
+            const changes = req.body
+            Object.assign(order, changes)
+            order.save()
+            res.status(200).json(order)
         }catch (e) {
             res.status(500).json(e)
         }
