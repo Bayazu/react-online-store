@@ -9,26 +9,22 @@ import {
 } from "react-router-dom";
 import {Provider} from 'react-redux'
 import store from './redux/store'
-import Dashboard from "./pages/dashboard/ClientsPage";
 import NavBar from "./components/navBar/NavBar";
 import AllProducts from "./pages/Items/AllProducts";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import InitialAuth from "./components/InitialAuth";
-import DashboardTabs from "./components/verticalTabs/DashboardTabs";
-
-
 import ClientsPage from "./pages/dashboard/ClientsPage";
 import ProtectedRoutes from "./ProtectedRoutes";
 import AdminLogin from "./pages/auth/AdminLogin";
 import ProductsPage from "./pages/dashboard/ProductsPage";
 import LayoutsWithNavbar from "./LayoutsWithNavbar";
 import DashboardPage from "./pages/dashboard/DashboardPage";
-
 import Product from "./pages/Items/Product/Product";
 import Basket from "./pages/Basket/Basket";
 import ProfileUser from "./pages/dashboard/ProfileUser/ProfileUser";
 import Profile from "./pages/ProfileUser/Profile";
+import OrdersPage from "./pages/dashboard/OrdersPage/OrdersPage";
 
 
 
@@ -53,6 +49,7 @@ ReactDOM.render(
                     <Route path="/" element={<LayoutsWithNavbar/>}>
                         <Route path="/clients" element={<ClientsPage/>}/>
                         <Route path="/products" element={<ProductsPage/>}/>
+                        <Route path="/orders" element={<OrdersPage/>}/>
                         <Route path="/dashboard" element={<DashboardPage/>}/>
                         <Route path="/profileUser/:id" element={<ProfileUser/>}/>
                     </Route>

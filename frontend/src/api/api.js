@@ -70,6 +70,22 @@ export const orderAPI = {
 
 }
 
+export const ordersAPI = {
+    getAllOrders(){
+        return(
+            instance.get('admin/orders',{})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err =>{
+                    if(err.response){
+                        return err.response
+                    }
+                })
+        )
+    },
+}
+
 export const usersAPI = {
     modifyUserById(userData, id) {
         return (
