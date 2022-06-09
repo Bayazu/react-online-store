@@ -8,6 +8,7 @@ import useWindowDimensions from "../../../helpers/hooks/useWindowDimensions";
 import {getUserById, modifyUserById} from "../../../redux/reducers/userReducer";
 import ClientForm from "../clients/ClientForm";
 import UserOrders from "../clients/UserOrders";
+import {FUCK} from "./chart";
 
 
 const ProfileUser = () => {
@@ -46,9 +47,9 @@ const ProfileUser = () => {
                 <InnerWrapper>
                     <UserOrders changeResolution={changeResolution}/>
                 </InnerWrapper>
-                {/*<InnerWrapper>*/}
-                {/*    <FUCK/>*/}
-                {/*</InnerWrapper>*/}
+                <InnerWrapper>
+                    <FUCK/>
+                </InnerWrapper>
             </Half>
         </Container>
     )

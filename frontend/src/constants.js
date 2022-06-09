@@ -15,6 +15,10 @@ export const defaultTabs = [
         label: '/dashboard/',
         value: 2
     },
+    {
+        label: '/orders/',
+        value: 3
+    },
 
 ]
 
