@@ -8,34 +8,40 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 //TODO спрашивать у юзера разрешение на удаление
 export default function AlertDialog(props) {
-    const [open, setOpen] = React.useState(true);
 
-    // const handleClickOpen = () => {
-    //     setOpen(true);
-    // };
+    const {
+        open,
+        text,
+        title,
+        setOpen = (data) => {
+        },
+        confirmAlert = () =>{
+        }
+    } = props
 
     const handleClose = () => {
-        props.setOpen(false);
+        setOpen(false);
     };
 
     const handleSubmit = () => {
-        props.setOpen(false);
+        confirmAlert()
+        setOpen(false);
     }
 
     return (
         <div>
             <Dialog
-                open={props.open}
+                open={open}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Use Google's location service?"}
+                    {title}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {props.text}
+                        {text}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

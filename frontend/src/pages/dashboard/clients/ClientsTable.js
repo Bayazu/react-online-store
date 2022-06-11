@@ -18,10 +18,10 @@ import Modal from "../../../components/modal/Modal";
 import Register from "../../auth/Register";
 import ModalCreateUpdate from "./ModalCreate";
 import ModalCreate from "./ModalCreate";
-import ModalModify from "./ModalModify";
 import AlertDialog from "../../../components/alert/AlertDialog";
 import {useNavigate} from "react-router-dom";
 import {getUsers} from "../../../redux/reducers/userReducer";
+import ClientForm from "./ClientForm";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -52,16 +52,16 @@ const headCells = [
 const ClientsTable = () => {
 
     const [modalCreateActive, setModalCreateActive] = useState(false)
-    const [modalModifyActive, setModalModifyActive] = useState(false)
-    const dispatch = useDispatch()
-    const classes = useStyles();
     const [openAlert, setOpenAlert] = useState(false)
     const [userCreate, setUserCreate] = useState(false)
-    const [userModifyAlert, setUserModifyAlert] = useState(false)
-    const [userDataModify, setUserDataModify] = useState(false)
-    const [openConfirmModal, setConfirmModal] = useState(false)
-    const [isDelete, setIsDelete] = useState(false)
+    const [openConfirmModal, setOpenConfirmModal] = useState(false)
+    const [userId, setUserId] = useState(null)
+
+    const isCreate = true
+
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const classes = useStyles();
 
     const getData = () => {
         dispatch(getUsers()).then((response) => {
@@ -79,17 +79,7 @@ const ClientsTable = () => {
             return items;
         }
     })
-    const deleteUserByAdmin = (id) => {
-        // setConfirmModal(true)
-        // console.log(isDelete)
-        usersAPI.deleteUserByAdmin(id).then(response => {
-            if (response.status === 200) {
-                setOpenAlert(true)
-                getData()
-            }
-        })
 
-    }
     const {
         TblContainer,
         TblHead,
@@ -114,9 +104,14 @@ const ClientsTable = () => {
         setModalCreateActive(true)
     }
 
-    const modifyUsers = (item) => {
-        setModalModifyActive(true)
-        setUserDataModify(item)
+    const deleteUserByAdmin = () => {
+        usersAPI.deleteUserByAdmin(userId).then(response => {
+            if (response.status === 200) {
+                setOpenAlert(true)
+                getData()
+            }
+        })
+
     }
 
     const createUserSubmit = (data) => {
@@ -133,28 +128,19 @@ const ClientsTable = () => {
             })
     }
 
-    const modifyUserSubmit = (data) => {
-        return usersAPI.modifyUser(data)
-            .then(response => {
-                if (response.status === 200) {
-                    setUserModifyAlert(true)
-                    setModalModifyActive(false)
-                    getData()
-                    return response
-                }
-                if (response.status === 400) {
-                }
-            })
-    }
-
 
     return (
         <>
             <Paper sx={{width: '1'}}>
                 <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Пользователь успешно удалён'}/>
                 <ActionAlert openAlert={userCreate} setOpenAlert={setUserCreate} text={'Пользователь успешно создан'}/>
-                <ActionAlert openAlert={userModifyAlert} setOpenAlert={setUserModifyAlert} text={'Пользователь успешно отредактирован'}/>
-                <AlertDialog open={openConfirmModal} setOpen={setConfirmModal} setIsDelete={setIsDelete} text={'Вы уверены, что хотите удалить пользователя'}/>
+                <AlertDialog
+                    confirmAlert={deleteUserByAdmin}
+                    open={openConfirmModal}
+                    setOpen={setOpenConfirmModal}
+                    text={'Вы уверены, что хотите удалить пользователя'}
+                    title={'Удаление пользователя'}
+                />
                 <Toolbar sx={{marginTop: '10px'}}>
                     <Input
                         label='Поиск клиента по фамилии'
@@ -205,7 +191,11 @@ const ClientsTable = () => {
                                                 <EditOutlinedIcon fontSize='small'/>
                                             </Button>
                                             <Button
-                                                onClick={() => deleteUserByAdmin(item._id)}
+                                                //onClick={() => deleteUserByAdmin(item._id)}
+                                                onClick={()=>{
+                                                        setOpenConfirmModal(true)
+                                                        setUserId(item._id)
+                                                }}
                                                 sx={{color: '#ef5350', minWidth: 0}}
                                             >
                                                 <CloseIcon fontSize='small'/>
@@ -222,10 +212,8 @@ const ClientsTable = () => {
             </Paper>
 
             <Modal active={modalCreateActive} setActive={setModalCreateActive}>
-                <ModalCreate isModal={true} createUserSubmit={createUserSubmit}/>
-            </Modal>
-            <Modal active={modalModifyActive} setActive={setModalModifyActive}>
-                <ModalModify isModal={true} modifyUserSubmit={modifyUserSubmit} userDataModify={userDataModify}/>
+                {/*<ModalCreate isModal={true} createUserSubmit={createUserSubmit}/>*/}
+                <ClientForm createUserSubmit={createUserSubmit} isCreate={isCreate}/>
             </Modal>
         </>
 

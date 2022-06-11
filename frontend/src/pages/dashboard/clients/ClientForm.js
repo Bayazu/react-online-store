@@ -21,8 +21,11 @@ const ClientForm = (props) => {
         userData,
         openAlert,
         setOpenAlert,
+        createUserSubmit = (data) => {
+        },
         modifyUser = (data) => {
         },
+        isCreate = false,
     } = props
 
     const {width} = useWindowDimensions();
@@ -48,11 +51,20 @@ const ClientForm = (props) => {
             city: '',
             street: '',
             building: '',
-            apartment: ''
+            apartment: '',
+            password: '',
+            passwordConfirm: '',
         }, mode: "onBlur"
     })
 
     const onSubmit = async (data) => {
+        if(createUserSubmit){
+            createUserSubmit(data).then((response)=>{
+                if(response.status === 200){
+                    reset(null)
+                }
+            })
+        }
         modifyUser(data)
     }
 
@@ -203,7 +215,7 @@ const ClientForm = (props) => {
                         </InputWrapper>
                     </Wrapper>
                     <WrapperButtons>
-                        {userRole === 'ADMIN'
+                        {userRole === 'ADMIN' && !isCreate
                             ?
                             <Controller
                                 render={({field}) => <CustomButton

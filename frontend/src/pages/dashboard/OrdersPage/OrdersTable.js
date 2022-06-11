@@ -107,12 +107,13 @@ const OrdersTable = () => {
 
     const handleSearch = e => {
         let target = e.target;
+
         setFilterFn({
             fn: items => {
                 if (target.value === "")
                     return items
                 else {
-                    return items.filter(x => x.secondName?.toLowerCase().includes(target.value))
+                    return items.filter(x => x?.clientInfo?.email.toLowerCase().includes(target.value))
                 }
             }
         })
@@ -159,13 +160,13 @@ const OrdersTable = () => {
     return (
         <>
             <Paper sx={{width: '1'}}>
-                <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Пользователь успешно удалён'}/>
-                <ActionAlert openAlert={userCreate} setOpenAlert={setUserCreate} text={'Пользователь успешно создан'}/>
-                <ActionAlert openAlert={userModifyAlert} setOpenAlert={setUserModifyAlert} text={'Пользователь успешно отредактирован'}/>
-                <AlertDialog open={openConfirmModal} setOpen={setConfirmModal} setIsDelete={setIsDelete} text={'Вы уверены, что хотите удалить пользователя'}/>
+                {/*<ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Пользователь успешно удалён'}/>*/}
+                {/*<ActionAlert openAlert={userCreate} setOpenAlert={setUserCreate} text={'Пользователь успешно создан'}/>*/}
+                {/*<ActionAlert openAlert={userModifyAlert} setOpenAlert={setUserModifyAlert} text={'Пользователь успешно отредактирован'}/>*/}
+                {/*<AlertDialog open={openConfirmModal} setOpen={setConfirmModal} setIsDelete={setIsDelete} text={'Вы уверены, что хотите удалить пользователя'}/>*/}
                 <Toolbar sx={{marginTop: '10px'}}>
                     <Input
-                        label='Поиск клиента по фамилии'
+                        label='Поиск заказа по email клиента'
                         className={classes.searchInput}
                         InputProps={{
                             startAdornment: (<InputAdornment position="start">
@@ -174,19 +175,19 @@ const OrdersTable = () => {
                         }}
                         onChange={handleSearch}
                     />
-                    <Button
-                        onClick={() => createUser()}
-                        startIcon={<AddIcon/>}
-                        variant='outlined'
-                        sx={{
-                            margin: 'spacing(0.5)',
-                            color: "#1976d2",
-                            position: 'absolute',
-                            right: '10px',
-                        }}
-                    >
-                        Добавить пользователя
-                    </Button>
+                    {/*<Button*/}
+                    {/*    onClick={() => createUser()}*/}
+                    {/*    startIcon={<AddIcon/>}*/}
+                    {/*    variant='outlined'*/}
+                    {/*    sx={{*/}
+                    {/*        margin: 'spacing(0.5)',*/}
+                    {/*        color: "#1976d2",*/}
+                    {/*        position: 'absolute',*/}
+                    {/*        right: '10px',*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    Добавить пользователя*/}
+                    {/*</Button>*/}
 
                 </Toolbar>
                 <TblContainer>
@@ -194,8 +195,8 @@ const OrdersTable = () => {
                         <TblHead/>
                         <TableBody>
                             {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
-                                     <TableRow onClick={() => navigate(`/profileUser/${item._id}`)} key={item._id} sx={{cursor: 'pointer'}}>
-                                    {/*<TableRow >*/}
+                                     // <TableRow onClick={() => navigate(`/profileUser/${item._id}`)} key={item._id} sx={{cursor: 'pointer'}}>
+                                    <TableRow key={item._id}  >
                                          <TableCell>{item.clientInfo.firstName}</TableCell>
                                          <TableCell>{item.clientInfo.secondName}</TableCell>
                                          <TableCell>{item.clientInfo.email}</TableCell>
@@ -211,7 +212,7 @@ const OrdersTable = () => {
                                         <TableCell>
                                             <Button
                                                 sx={{color: '#4caf50', minWidth: 0,}}
-                                                onClick={() => modifyUsers(item)}
+                                                onClick={() => navigate(`/profileUser/${item._id}`)}
                                             >
                                                 <EditOutlinedIcon fontSize='small'/>
                                             </Button>
