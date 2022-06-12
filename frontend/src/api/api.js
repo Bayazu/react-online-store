@@ -10,6 +10,7 @@ const instance = axios.create({
     }
 });
 
+//TODO вынести API в отдельные файлы
 
 export const itemsAPI = {
     getItems() {
@@ -55,7 +56,6 @@ export const itemsAPI = {
 
 export const orderAPI = {
     orderCreat(basketData) {
-        console.log(basketData);
         return (
             instance.post('order/orderCreate', {basketData: basketData})
                 .then(function (response) {
@@ -96,19 +96,6 @@ export const ordersAPI = {
 // })
 
 export const productAPI = {
-    // createNewProduct(data){
-    //     return(
-    //         instance.post('product/new',{data})
-    //             .then(function (response) {
-    //                 return response
-    //             })
-    //             .catch(err=>{
-    //                 if(err.response){
-    //                     return err.response
-    //                 }
-    //             })
-    //     )
-    // }
     createNewProduct(data){
         return(
             axios({
@@ -125,7 +112,24 @@ export const productAPI = {
                     }
                 })
         )
-    }
+    },
+    modifyProduct(data, productId){
+        return(
+            axios({
+                method: "patch",
+                url: `http://localhost:8080/api/product/modify/${productId}`,
+                data: data,
+                headers: { "Content-Type": "multipart/form-data" },
+            }).then(function (response){
+                return response
+            })
+                .catch(err=>{
+                    if(err.response){
+                        return err.response
+                    }
+                })
+        )
+    },
 }
 
 export const usersAPI = {

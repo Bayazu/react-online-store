@@ -13,6 +13,8 @@ import ActionAlert from "../../../components/alert/ActionAlert";
 import styled from "styled-components/macro";
 import UploadIcon from '@mui/icons-material/Upload';
 import {productAPI} from "../../../api/api";
+import CardMedia from "@mui/material/CardMedia";
+import {backEndUrl} from "../../../constants";
 
 
 const ProductForm = (props) => {
@@ -20,12 +22,12 @@ const ProductForm = (props) => {
     const userRole = useSelector((state) => state.user.userRole)
 
     const {
-        userData,
+        productData,
         openAlert,
         setOpenAlert,
         createNewItem = (data) => {
         },
-        modifyUser = (data) => {
+        modifyProduct = (data) => {
         },
         isCreate = false,
     } = props
@@ -34,6 +36,7 @@ const ProductForm = (props) => {
     const changeResolution = width < 1214;
 
     const [image, setImage] = useState('')
+    const [imageDisplay, setImageDisplay] = useState(null)
 
 
     const {
@@ -54,37 +57,38 @@ const ProductForm = (props) => {
     })
 
     const onSubmit = async (data) => {
-        const itemData = {
-            ...data,
-            image
+        if (isCreate) {
+            const itemData = {
+                ...data,
+                image
+            }
+            createNewItem(itemData).then((response) => {
+                    if (response.status === 200) {
+                        reset(null)
+                        setImage('')
+                    }
+                }
+            )
+        } else {
+            const itemData = {
+                ...data,
+                image
+            }
+            modifyProduct(itemData)
         }
-        createNewItem(itemData)
-        // if (isCreate) {
-        //     createUserSubmit(data).then((response) => {
-        //         if (response.status === 200) {
-        //             reset(null)
-        //         }
-        //     })
-        // } else {
-        //     modifyUser(data)
-        // }
     }
 
     useEffect(() => {
-        if (userData) {
+        if (productData) {
             reset({
-                username: userData.username,
-                firstName: userData.firstName,
-                secondName: userData.secondName,
-                email: userData.email,
-                country: userData.country,
-                city: userData.city,
-                street: userData.street,
-                building: userData.building,
-                apartment: userData.apartment
+                description: productData.description,
+                name: productData.name,
+                price: productData.price,
+                tag: productData.tag,
             })
+            setImageDisplay(productData.image)
         }
-    }, [userData])
+    }, [productData])
 
     const InputImage = styled('input')({
         display: 'none',
@@ -93,10 +97,7 @@ const ProductForm = (props) => {
     const uploadImage = (e) => {
         const file = e.target.files[0]
         setImage(file)
-        // const data = new FormData()
-        // data.append('file',file[0])
-        // data.append('upload_preset', 'darwin')
-        // console.log(data);
+        setImageDisplay(null)
     }
 
     return (<Container changeResolution={changeResolution}>
@@ -155,7 +156,7 @@ const ProductForm = (props) => {
                     <HeaderText text={'Картинка'} padding={'0px 0px 0px 19px'}/>
                     <WrapperButtons>
                         {image
-                            ?  <HeaderText text={image.name} padding={'0px 0px 0px 19px'}/>
+                            ? <HeaderText text={image.name} padding={'0px 0px 0px 19px'}/>
                             : <Controller
                                 render={({field}) =>
                                     <label htmlFor="contained-button-file">
@@ -180,7 +181,18 @@ const ProductForm = (props) => {
                                 control={control}
                             />
                         }
-
+                    </WrapperButtons>
+                    <WrapperButtons>
+                        <CardWrapper>
+                            <CardContainer>
+                                <CardMedia
+                                    component="img"
+                                    maxHeight="300"
+                                    maxWidth="200"
+                                    image={backEndUrl + imageDisplay}
+                                />
+                            </CardContainer>
+                        </CardWrapper>
                     </WrapperButtons>
                     <WrapperButtons>
                         {userRole === 'ADMIN' && !isCreate
@@ -194,7 +206,7 @@ const ProductForm = (props) => {
                                         margin: 'spacing(0.5)',
                                         right: '10px',
                                     }}
-                                    text={'Удалить пользователя'}
+                                    text={'Удалить товар'}
                                     {...field}
                                 />}
                                 name="textField"
@@ -225,6 +237,18 @@ const ProductForm = (props) => {
         </Box>
     </Container>);
 };
+
+
+const CardWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const CardContainer = styled.div`
+  max-Width: 50%;
+  display: flex;
+`;
+
 
 const InputWrapper = styled.div`
   width: 100%;
