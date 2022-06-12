@@ -54,5 +54,16 @@ export const createNewProduct= (data) =>{
     }
 }
 
+export const modifyItem= (data, productId) =>{
+    return (dispatch) => {
+        return productAPI.modifyProduct(data,productId).then(response =>{
+            if(response.status === 200){
+                return response
+            }
+            return response
+        })
+    }
+}
+
 
 export default itemsReducer;
