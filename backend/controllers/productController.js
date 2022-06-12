@@ -39,8 +39,23 @@ class productController{
     async modify(req, res){
         try{
             const product = await Product.findById(req.params.id)
-            Object.assign(product, req.body);
+            if(typeof req.body.image == "string"){
+                delete req.body.image
+            }
+            console.log(req.body)
+            if(req.files){
+                const {image} = req.files
+                fs.unlink("static/" + product.image, (err)=>{
+                    if (err){
+                        console.log(err)
+                    } else{
+                        image.mv(path.resolve(__dirname,'..', 'static', product.image))
+                    }
+                })
+            }
+            Object.assign(product, req.body)
             product.save()
+            console.log(product)
             res.status(200).json(product)
         }catch (e) {
             res.status(500).json(e)
