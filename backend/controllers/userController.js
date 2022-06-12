@@ -26,8 +26,9 @@ class userController{
             const {username, firstName, secondName, email, password, country, city, street, building, apartment} = req.body
 
             const candidate = await User.findOne({username})
-            if (candidate){
-                return res.status(400).json({message: "Пользователь с таким именем уже существует"})
+            const candidateMail = await User.findOne({email})
+            if (candidate || candidateMail){
+                return res.status(400).json({message: "Пользователь с таким именем или почтой уже существует"})
             }
             const hashPassword = bcrypt.hashSync(password, 7)
             const user = new User({username, firstName, secondName, email, password: hashPassword, country, city, street, building, apartment})
