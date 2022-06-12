@@ -67,11 +67,9 @@ class userController{
             const decodedEmail = jwt.verify(token, secret)
             const emailFind = await User.findOne({email: decodedEmail.email})
             const userChange = req.body
-            console.log(userChange.password)
             if(await userChange.password){
                 userChange.password = bcrypt.hashSync(userChange.password, 7)
             }
-            console.log(userChange.password)
             Object.assign(emailFind, userChange)
             emailFind.save()
             res.status(200).json(emailFind)

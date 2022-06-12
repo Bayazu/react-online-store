@@ -42,7 +42,6 @@ class productController{
             if(typeof req.body.image == "string"){
                 delete req.body.image
             }
-            console.log(req.body)
             if(req.files){
                 const {image} = req.files
                 fs.unlink("static/" + product.image, (err)=>{
@@ -55,7 +54,6 @@ class productController{
             }
             Object.assign(product, req.body)
             product.save()
-            console.log(product)
             res.status(200).json(product)
         }catch (e) {
             res.status(500).json(e)
