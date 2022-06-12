@@ -33,7 +33,7 @@ const orderSchema = new Schema({
         type: String,
         required: true,
         unique: false,
-        default: "Created"
+        default: "Создан"
     }
 })
 

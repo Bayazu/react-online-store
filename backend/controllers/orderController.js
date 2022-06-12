@@ -24,7 +24,6 @@ class orderController{
                 email: user.email
             }
             const products = req.body.basketData
-            console.log(products)
 
             const allAmount = products.reduce((sum, el) =>{
                 return sum + parseInt(el.amount)
