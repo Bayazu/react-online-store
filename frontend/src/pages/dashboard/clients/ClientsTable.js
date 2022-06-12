@@ -4,9 +4,7 @@ import useTable from "../../../components/table/useTable";
 import Toolbar from "@mui/material/Toolbar";
 import Input from "../../../components/controls/Input";
 import {Search} from "@mui/icons-material";
-import {useDispatch, useSelector} from "react-redux";
-
-
+import {useDispatch} from "react-redux";
 import AddIcon from '@material-ui/icons/Add';
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
@@ -15,9 +13,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import {usersAPI} from "../../../api/api";
 import ActionAlert from "../../../components/alert/ActionAlert";
 import Modal from "../../../components/modal/Modal";
-import Register from "../../auth/Register";
-import ModalCreateUpdate from "./ModalCreate";
-import ModalCreate from "./ModalCreate";
 import AlertDialog from "../../../components/alert/AlertDialog";
 import {useNavigate} from "react-router-dom";
 import {getUsers} from "../../../redux/reducers/userReducer";
@@ -56,8 +51,6 @@ const ClientsTable = () => {
     const [userCreate, setUserCreate] = useState(false)
     const [openConfirmModal, setOpenConfirmModal] = useState(false)
     const [userId, setUserId] = useState(null)
-
-    const isCreate = true
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -129,6 +122,7 @@ const ClientsTable = () => {
     }
 
 
+
     return (
         <>
             <Paper sx={{width: '1'}}>
@@ -165,15 +159,13 @@ const ClientsTable = () => {
                     >
                         Добавить пользователя
                     </Button>
-
                 </Toolbar>
                 <TblContainer>
                     <Table>
                         <TblHead/>
                         <TableBody>
                             {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
-                                     <TableRow  key={item._id} >
-                                    {/*<TableRow >*/}
+                                    <TableRow key={item._id}>
                                         <TableCell>{item.firstName}</TableCell>
                                         <TableCell>{item.secondName}</TableCell>
                                         <TableCell>{item.email}</TableCell>
@@ -186,15 +178,13 @@ const ClientsTable = () => {
                                             <Button
                                                 onClick={() => navigate(`/profileUser/${item._id}`)}
                                                 sx={{color: '#4caf50', minWidth: 0,}}
-                                                // onClick={() => modifyUsers(item)}
                                             >
                                                 <EditOutlinedIcon fontSize='small'/>
                                             </Button>
                                             <Button
-                                                //onClick={() => deleteUserByAdmin(item._id)}
-                                                onClick={()=>{
-                                                        setOpenConfirmModal(true)
-                                                        setUserId(item._id)
+                                                onClick={() => {
+                                                    setOpenConfirmModal(true)
+                                                    setUserId(item._id)
                                                 }}
                                                 sx={{color: '#ef5350', minWidth: 0}}
                                             >
@@ -212,8 +202,7 @@ const ClientsTable = () => {
             </Paper>
 
             <Modal active={modalCreateActive} setActive={setModalCreateActive}>
-                {/*<ModalCreate isModal={true} createUserSubmit={createUserSubmit}/>*/}
-                <ClientForm createUserSubmit={createUserSubmit} isCreate={isCreate}/>
+                <ClientForm createUserSubmit={createUserSubmit} isCreate={true}/>
             </Modal>
         </>
 

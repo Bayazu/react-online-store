@@ -22,9 +22,9 @@ import LayoutsWithNavbar from "./LayoutsWithNavbar";
 import DashboardPage from "./pages/dashboard/DashboardPage";
 import Product from "./pages/Items/Product/Product";
 import Basket from "./pages/Basket/Basket";
-import ProfileUser from "./pages/dashboard/ProfileUser/ProfileUser";
+import ProfileUser from "./pages/dashboard/clients/ProfileUser/ProfileUser";
 import Profile from "./pages/ProfileUser/Profile";
-import OrdersPage from "./pages/dashboard/OrdersPage/OrdersPage";
+import OrdersPage from "./pages/dashboard/OrdersPage";
 
 
 

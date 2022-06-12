@@ -1,4 +1,4 @@
-import {itemsAPI, usersAPI} from "../../api/api";
+import {itemsAPI, productAPI, usersAPI} from "../../api/api";
 import {getUsersAC, toggleIsFetchingAC} from "./allUsersReducer";
 
 const SET_ITEMS_DATA = 'SET_ITEMS_DATA'
@@ -40,6 +40,17 @@ export const getItems = () => {
                 }
                 return  response
             });
+    }
+}
+
+export const createNewProduct= (data) =>{
+    return (dispatch) => {
+        return productAPI.createNewProduct(data).then(response =>{
+            if(response.status === 200){
+                return response
+            }
+            return response
+        })
     }
 }
 

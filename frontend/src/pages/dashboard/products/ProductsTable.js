@@ -12,11 +12,14 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
-import {getItems} from "../../../redux/reducers/itemsReducer";
+import {createNewProduct, getItems} from "../../../redux/reducers/itemsReducer";
 import CardMedia from "@mui/material/CardMedia";
 import {backEndUrl} from "../../../constants";
 import ActionAlert from "../../../components/alert/ActionAlert";
 import {itemsAPI, usersAPI} from "../../../api/api";
+import ClientForm from "../clients/ClientForm";
+import Modal from "../../../components/modal/Modal";
+import ProductForm from "./ProductForm";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -48,7 +51,7 @@ const ProductsTable = () => {
     const [openAlert, setOpenAlert] = useState(false)
     const classes = useStyles();
 
-
+    const [modalCreateActive, setModalCreateActive] = useState(true)
     //const items = useSelector((state) => state.itemsPage.items)
 
 
@@ -69,8 +72,8 @@ const ProductsTable = () => {
         }
     })
     const deleteProduct = (id) => {
-        itemsAPI.deleteProduct(id).then(response =>{
-            if(response.status === 200){
+        itemsAPI.deleteProduct(id).then(response => {
+            if (response.status === 200) {
                 setOpenAlert(true)
                 getData()
             }
@@ -99,78 +102,105 @@ const ProductsTable = () => {
         })
     }
 
+    const [fuck, setFuck] = useState(null)
+
+    const createNewItem = (data) => {
+        console.log(data);
+        const itemData = new FormData()
+        // name: '',
+        //     description: '',
+        //     price: '',
+        //     tag: '',
+        //     image: ''
+        itemData.append('image',data.image)
+        itemData.append('name',data.name)
+        itemData.append('description',data.description)
+        itemData.append('price',data.price)
+        itemData.append('tag',data.tag)
+        console.log(itemData);
+        dispatch(createNewProduct(itemData)).then((response) => {
+            setFuck(response.data)
+        })
+    }
+
+    console.log(fuck);
+
 
     return (
-        <Paper sx={{width: '1'}}>
-            <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Товар успешно удалён'}/>
-            <Toolbar sx={{marginTop: '10px'}}>
-                <Input
-                    label='Поиск товара'
-                    className={classes.searchInput}
-                    InputProps={{
-                        startAdornment: (<InputAdornment position="start">
-                            <Search/>
-                        </InputAdornment>)
-                    }}
-                    onChange={handleSearch}
-                />
-                <Button
-                    startIcon={<AddIcon/>}
-                    variant='outlined'
-                    sx={{
-                        margin: 'spacing(0.5)',
-                        color: "#1976d2",
-                        position: 'absolute',
-                        right: '10px',
-                    }}
-                >
-                    Добавить товар
-                </Button>
+        <>
+            <Paper sx={{width: '1'}}>
+                <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Товар успешно удалён'}/>
+                <Toolbar sx={{marginTop: '10px'}}>
+                    <Input
+                        label='Поиск товара'
+                        className={classes.searchInput}
+                        InputProps={{
+                            startAdornment: (<InputAdornment position="start">
+                                <Search/>
+                            </InputAdornment>)
+                        }}
+                        onChange={handleSearch}
+                    />
+                    <Button
+                        startIcon={<AddIcon/>}
+                        variant='outlined'
+                        sx={{
+                            margin: 'spacing(0.5)',
+                            color: "#1976d2",
+                            position: 'absolute',
+                            right: '10px',
+                        }}
+                    >
+                        Добавить товар
+                    </Button>
 
-            </Toolbar>
-            <TblContainer>
-                <Table>
-                    <TblHead/>
-                    <TableBody>
-                        {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
-                                <TableRow key={item._id} sx={{cursor: 'pointer'}}>
-                                    <TableCell>{item.name}</TableCell>
-                                    <TableCell>{item.description}</TableCell>
-                                    <TableCell>{item.price}</TableCell>
-                                    <TableCell>{item.amount}</TableCell>
-                                    <TableCell>{item.tag}</TableCell>
-                                    {/*<TableCell>{item.image}</TableCell>*/}
-                                    <TableCell>
-                                        <CardMedia
-                                            component="img"
-                                            height="60"
-                                            //image={item.image ? item.image : adminAvatarSrc}
-                                            image={backEndUrl + item.image}
-                                            alt="green iguana"
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button sx={{color: '#4caf50', minWidth: 0,}}>
-                                            <EditOutlinedIcon fontSize='small'/>
-                                        </Button>
-                                        <Button
-                                            onClick={() => deleteProduct(item._id)}
-                                            sx={{color: '#ef5350', minWidth: 0}}
-                                        >
-                                            <CloseIcon fontSize='small'/>
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                            : null
-                        }
-                    </TableBody>
-                </Table>
-                <TblPagination/>
-            </TblContainer>
-        </Paper>
+                </Toolbar>
+                <TblContainer>
+                    <Table>
+                        <TblHead/>
+                        <TableBody>
+                            {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
+                                    <TableRow key={item._id} sx={{cursor: 'pointer'}}>
+                                        <TableCell>{item.name}</TableCell>
+                                        <TableCell>{item.description}</TableCell>
+                                        <TableCell>{item.price}</TableCell>
+                                        <TableCell>{item.amount}</TableCell>
+                                        <TableCell>{item.tag}</TableCell>
+                                        {/*<TableCell>{item.image}</TableCell>*/}
+                                        <TableCell>
+                                            <CardMedia
+                                                component="img"
+                                                height="60"
+                                                //image={item.image ? item.image : adminAvatarSrc}
+                                                image={backEndUrl + item.image}
+                                                alt="green iguana"
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button sx={{color: '#4caf50', minWidth: 0,}}>
+                                                <EditOutlinedIcon fontSize='small'/>
+                                            </Button>
+                                            <Button
+                                                onClick={() => deleteProduct(item._id)}
+                                                sx={{color: '#ef5350', minWidth: 0}}
+                                            >
+                                                <CloseIcon fontSize='small'/>
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                                : null
+                            }
+                        </TableBody>
+                    </Table>
+                    <TblPagination/>
+                </TblContainer>
+            </Paper>
 
-
+            <Modal active={modalCreateActive} setActive={setModalCreateActive}>
+                <ProductForm createNewItem={createNewItem}  isCreate={true}/>
+            </Modal>
+        </>
     );
 };
 

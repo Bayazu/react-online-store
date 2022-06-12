@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {useForm, Controller} from "react-hook-form";
-import styled from "styled-components/macro";
 import {Paper} from "@mui/material";
 import Box from "@mui/material/Box";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,11 +8,14 @@ import useWindowDimensions from "../../../helpers/hooks/useWindowDimensions";
 import CustomButton from "../../../components/controls/Button";
 import HeaderText from "../../../components/HeaderText";
 import Input from "../../../components/controls/Input";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import ActionAlert from "../../../components/alert/ActionAlert";
+import styled from "styled-components/macro";
+import UploadIcon from '@mui/icons-material/Upload';
+import {productAPI} from "../../../api/api";
 
 
-const ClientForm = (props) => {
+const ProductForm = (props) => {
 
     const userRole = useSelector((state) => state.user.userRole)
 
@@ -21,7 +23,7 @@ const ClientForm = (props) => {
         userData,
         openAlert,
         setOpenAlert,
-        createUserSubmit = (data) => {
+        createNewItem = (data) => {
         },
         modifyUser = (data) => {
         },
@@ -30,11 +32,11 @@ const ClientForm = (props) => {
 
     const {width} = useWindowDimensions();
     const changeResolution = width < 1214;
-    const dispatch = useDispatch()
+
+    const [image, setImage] = useState('')
 
 
     const {
-        register,
         formState: {
             errors
         },
@@ -43,30 +45,29 @@ const ClientForm = (props) => {
         control
     } = useForm({
         defaultValues: {
-            username: '',
-            firstName: '',
-            secondName: '',
-            email: '',
-            country: '',
-            city: '',
-            street: '',
-            building: '',
-            apartment: '',
-            password: '',
-            passwordConfirm: '',
+            name: '',
+            description: '',
+            price: '',
+            tag: '',
+            image: ''
         }, mode: "onBlur"
     })
 
     const onSubmit = async (data) => {
-        if(isCreate){
-            createUserSubmit(data).then((response)=>{
-                if(response.status === 200){
-                    reset(null)
-                }
-            })
-        }else{
-            modifyUser(data)
+        const itemData = {
+            ...data,
+            image
         }
+        createNewItem(itemData)
+        // if (isCreate) {
+        //     createUserSubmit(data).then((response) => {
+        //         if (response.status === 200) {
+        //             reset(null)
+        //         }
+        //     })
+        // } else {
+        //     modifyUser(data)
+        // }
     }
 
     useEffect(() => {
@@ -85,6 +86,18 @@ const ClientForm = (props) => {
         }
     }, [userData])
 
+    const InputImage = styled('input')({
+        display: 'none',
+    });
+
+    const uploadImage = (e) => {
+        const file = e.target.files[0]
+        setImage(file)
+        // const data = new FormData()
+        // data.append('file',file[0])
+        // data.append('upload_preset', 'darwin')
+        // console.log(data);
+    }
 
     return (<Container changeResolution={changeResolution}>
         <Box component={Paper} sx={{padding: 2, minWidth: 0, width: changeResolution ? '100%' : null}}>
@@ -92,129 +105,83 @@ const ClientForm = (props) => {
                 <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert}
                              text={'Данные пользователя успешно изменены'}/>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <HeaderText text={'Личные данные'} padding={'0px 0px 0px 19px'}/>
+                    <HeaderText text={'Данные о товаре'} padding={'0px 0px 0px 19px'}/>
                     <Wrapper changeResolution={changeResolution}>
                         <InputWrapper changeResolution={changeResolution}>
                             <Controller
                                 render={({field}) => <Input
-                                    label='Логин'
+                                    label='Наименование товара'
                                     {...field}
                                 />}
-                                name="username"
+                                name="name"
                                 control={control}
                             />
                         </InputWrapper>
                         <InputWrapper changeResolution={changeResolution}>
                             <Controller
                                 render={({field}) => <Input
-                                    label='Имя'
+                                    label='Цена'
                                     {...field}
                                 />}
-                                name="firstName"
+                                name="price"
                                 control={control}
                             />
                         </InputWrapper>
                         <InputWrapper changeResolution={changeResolution}>
                             <Controller
+                                //TODO переписать на селект
                                 render={({field}) => <Input
-                                    label='Фамилия'
+                                    label='Категория'
                                     {...field}
                                 />}
-                                name="secondName"
+                                name="tag"
                                 control={control}
                             />
                         </InputWrapper>
                     </Wrapper>
                     <Wrapper changeResolution={changeResolution}>
+
                         <InputWrapper changeResolution={changeResolution}>
                             <Controller
                                 render={({field}) => <Input
-                                    label='E-mail'
+                                    label='Описание'
                                     {...field}
                                 />}
-                                name="email"
+                                name="description"
                                 control={control}
                             />
                         </InputWrapper>
                     </Wrapper>
-                    <HeaderText text={'Адрес'} padding={'0px 0px 0px 19px'}/>
-                    <Wrapper changeResolution={changeResolution}>
-                        <InputWrapper changeResolution={changeResolution}>
-                            <Controller
-                                render={({field}) => <Input
-                                    label='Страна'
-                                    {...field}
-                                />}
-                                name="country"
+                    <HeaderText text={'Картинка'} padding={'0px 0px 0px 19px'}/>
+                    <WrapperButtons>
+                        {image
+                            ?  <HeaderText text={image.name} padding={'0px 0px 0px 19px'}/>
+                            : <Controller
+                                render={({field}) =>
+                                    <label htmlFor="contained-button-file">
+                                        <InputImage onChange={(e) => uploadImage(e)} id="contained-button-file"
+                                                    type="file"/>
+                                        <CustomButton
+                                            fullWidth
+                                            component="span"
+                                            startIcon={<UploadIcon/>}
+                                            type="submit"
+                                            sx={{
+                                                margin: 'spacing(0.5)',
+                                                // position: 'absolute',
+                                                right: '10px',
+                                            }}
+                                            text={'загрузить'}
+                                            {...field}
+                                        />
+                                    </label>
+                                }
+                                name="image"
                                 control={control}
                             />
-                        </InputWrapper>
-                        <InputWrapper changeResolution={changeResolution}>
-                            <Controller
-                                render={({field}) => <Input
-                                    label='Город'
-                                    {...field}
-                                />}
-                                name="city"
-                                control={control}
-                            />
-                        </InputWrapper>
-                        <InputWrapper changeResolution={changeResolution}>
-                            <Controller
-                                render={({field}) => <Input
-                                    label='Улица'
-                                    {...field}
-                                />}
-                                name="street"
-                                control={control}
-                            />
-                        </InputWrapper>
-                    </Wrapper>
-                    <Wrapper changeResolution={changeResolution}>
-                        <InputWrapper changeResolution={changeResolution}>
-                            <Controller
-                                render={({field}) => <Input
-                                    label='Дом'
-                                    {...field}
-                                />}
-                                name="building"
-                                control={control}
-                            />
-                        </InputWrapper>
-                        <InputWrapper changeResolution={changeResolution}>
-                            <Controller
-                                render={({field}) => <Input
-                                    label='Квартира'
-                                    {...field}
-                                />}
-                                name="apartment"
-                                control={control}
-                            />
-                        </InputWrapper>
-                    </Wrapper>
-                    <HeaderText text={'Пароль'} padding={'0px 0px 0px 19px'}/>
-                    <Wrapper changeResolution={changeResolution}>
-                        <InputWrapper changeResolution={changeResolution}>
-                            <Controller
-                                render={({field}) => <Input
-                                    label='Пароль'
-                                    {...field}
-                                />}
-                                name="password"
-                                control={control}
-                            />
-                        </InputWrapper>
-                        <InputWrapper changeResolution={changeResolution}>
-                            <Controller
-                                render={({field}) => <Input
-                                    label='Подтверждение пароля'
-                                    {...field}
-                                />}
-                                name="passwordConfirm"
-                                control={control}
-                            />
-                        </InputWrapper>
-                    </Wrapper>
+                        }
+
+                    </WrapperButtons>
                     <WrapperButtons>
                         {userRole === 'ADMIN' && !isCreate
                             ?
@@ -260,6 +227,7 @@ const ClientForm = (props) => {
 };
 
 const InputWrapper = styled.div`
+  width: 100%;
   display: flex;
   padding: 5px;
   margin-right: 5px;
@@ -276,6 +244,10 @@ const WrapperButtons = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 10px 7px 0 26px;
+
+  label {
+    width: 100%
+  }
 `;
 
 const Container = styled.div`
@@ -290,4 +262,4 @@ const Half = styled.div`
 
 `;
 
-export default ClientForm;
+export default ProductForm;

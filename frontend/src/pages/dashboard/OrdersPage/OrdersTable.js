@@ -24,6 +24,8 @@ import {useNavigate} from "react-router-dom";
 import {getUsers} from "../../../redux/reducers/userReducer";
 import {getAllOrders} from "../../../redux/reducers/ordersReducer";
 import dayjs from "dayjs";
+import MultipleSelectChip from "./MuiltiSelect";
+import styled from "styled-components/macro";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -31,12 +33,13 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(3)
     },
     searchInput: {
-        width: '25%'
+        width: '100%',
+        marginRight: '10px'
     },
-    newButton: {
-        position: 'absolute',
-        right: '10px'
-    }
+    // newButton: {
+    //     position: 'absolute',
+    //     right: '10px'
+    // }
 }))
 
 const headCells = [
@@ -68,6 +71,7 @@ const OrdersTable = () => {
     const [openConfirmModal, setConfirmModal] = useState(false)
     const [isDelete, setIsDelete] = useState(false)
     const navigate = useNavigate()
+    const [statuses, setStatuses] = useState([]);
 
     const getData = () => {
         dispatch(getAllOrders()).then((response) => {
@@ -81,7 +85,6 @@ const OrdersTable = () => {
 
     const [records, setRecords] = useState(null)
 
-    console.log(records);
     const [filterFn, setFilterFn] = useState({
         fn: items => {
             return items;
@@ -107,7 +110,6 @@ const OrdersTable = () => {
 
     const handleSearch = e => {
         let target = e.target;
-
         setFilterFn({
             fn: items => {
                 if (target.value === "")
@@ -118,6 +120,35 @@ const OrdersTable = () => {
             }
         })
     }
+
+    const filterByStatus = (arr1, statuses) => {
+        return arr1.filter((item) => {
+            const foundItem = statuses.find((status) => status === item.status)
+            if (foundItem) {
+                return item
+            }
+            // const foundItem = arr2.find((item2) => item2.status === item.status);
+            // if (foundItem) {
+            //     return { ...foundItem };
+            // }
+            // return item;
+        });
+    };
+
+
+    useEffect(() => {
+        console.log(statuses);
+        setFilterFn({
+            fn: items => {
+                if (statuses.length === 0)
+                    return items
+                else {
+                    return filterByStatus(items,statuses)
+                }
+            }
+        })
+    }, [statuses])
+
 
     const createUser = () => {
         setModalCreateActive(true)
@@ -156,7 +187,13 @@ const OrdersTable = () => {
             })
     }
 
-
+    const InputWrapper = styled.div`
+      width: 25%;,
+    margin-right: 10 px;
+    `;
+    const SelectWrapper = styled.div`
+      margin-left: 10px;
+    `;
     return (
         <>
             <Paper sx={{width: '1'}}>
@@ -165,16 +202,22 @@ const OrdersTable = () => {
                 {/*<ActionAlert openAlert={userModifyAlert} setOpenAlert={setUserModifyAlert} text={'Пользователь успешно отредактирован'}/>*/}
                 {/*<AlertDialog open={openConfirmModal} setOpen={setConfirmModal} setIsDelete={setIsDelete} text={'Вы уверены, что хотите удалить пользователя'}/>*/}
                 <Toolbar sx={{marginTop: '10px'}}>
-                    <Input
-                        label='Поиск заказа по email клиента'
-                        className={classes.searchInput}
-                        InputProps={{
-                            startAdornment: (<InputAdornment position="start">
-                                <Search/>
-                            </InputAdornment>)
-                        }}
-                        onChange={handleSearch}
-                    />
+                    <InputWrapper>
+                        <Input
+                            label='Поиск заказа по email клиента'
+                            className={classes.searchInput}
+                            InputProps={{
+                                startAdornment: (<InputAdornment position="start">
+                                    <Search/>
+                                </InputAdornment>)
+                            }}
+                            onChange={handleSearch}
+                        />
+                    </InputWrapper>
+                    <SelectWrapper>
+                        <MultipleSelectChip statuses={statuses} setStatuses={setStatuses}/>
+                    </SelectWrapper>
+
                     {/*<Button*/}
                     {/*    onClick={() => createUser()}*/}
                     {/*    startIcon={<AddIcon/>}*/}
@@ -195,15 +238,15 @@ const OrdersTable = () => {
                         <TblHead/>
                         <TableBody>
                             {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
-                                     // <TableRow onClick={() => navigate(`/profileUser/${item._id}`)} key={item._id} sx={{cursor: 'pointer'}}>
-                                    <TableRow key={item._id}  >
-                                         <TableCell>{item.clientInfo.firstName}</TableCell>
-                                         <TableCell>{item.clientInfo.secondName}</TableCell>
-                                         <TableCell>{item.clientInfo.email}</TableCell>
-                                         <TableCell>{item.clientInfo.username}</TableCell>
-                                         <TableCell>{dayjs(item.datePurchase).format('DD/MM/YYYY')}</TableCell>
-                                         <TableCell>{item.priceOrder + '₽'}</TableCell>
-                                         <TableCell>{item.status}</TableCell>
+                                    // <TableRow onClick={() => navigate(`/profileUser/${item._id}`)} key={item._id} sx={{cursor: 'pointer'}}>
+                                    <TableRow key={item._id}>
+                                        <TableCell>{item.clientInfo.firstName}</TableCell>
+                                        <TableCell>{item.clientInfo.secondName}</TableCell>
+                                        <TableCell>{item.clientInfo.email}</TableCell>
+                                        <TableCell>{item.clientInfo.username}</TableCell>
+                                        <TableCell>{dayjs(item.datePurchase).format('DD/MM/YYYY')}</TableCell>
+                                        <TableCell>{item.priceOrder + '₽'}</TableCell>
+                                        <TableCell>{item.status}</TableCell>
                                         {/*<TableCell>{item.country}</TableCell>*/}
                                         {/*<TableCell>{item.city}</TableCell>*/}
                                         {/*<TableCell>{item.street}</TableCell>*/}

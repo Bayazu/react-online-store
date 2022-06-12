@@ -16,11 +16,11 @@ import Button from "@mui/material/Button";
 
 const CustomButton = React.forwardRef((props, ref) => {
 
-    const {text, size, color, variant, onClick, ...other} = props
-
+    const {fullWidth, text, size, color, variant, onClick, ...other} = props
 
     return (
         <Button
+            fullWidth={fullWidth || false }
             variant={variant || "contained"}
             size={size || "large"}
             color={color || "primary"}

@@ -4,10 +4,10 @@ import styled from "styled-components/macro";
 
 import {useDispatch} from "react-redux";
 import {useParams} from "react-router";
-import useWindowDimensions from "../../../helpers/hooks/useWindowDimensions";
-import {getUserById, modifyUserById} from "../../../redux/reducers/userReducer";
-import ClientForm from "../clients/ClientForm";
-import UserOrders from "../clients/UserOrders";
+import useWindowDimensions from "../../../../helpers/hooks/useWindowDimensions";
+import {getUserById, modifyUserById} from "../../../../redux/reducers/userReducer";
+import ClientForm from "../ClientForm";
+import UserOrders from "../UserOrders";
 import {FUCK} from "./chart";
 
 

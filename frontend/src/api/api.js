@@ -10,6 +10,7 @@ const instance = axios.create({
     }
 });
 
+
 export const itemsAPI = {
     getItems() {
         return (
@@ -84,6 +85,47 @@ export const ordersAPI = {
                 })
         )
     },
+}
+// const instanceImage = axios.create({
+//     baseURL: 'http://localhost:8080/api/',
+//     data: formData,
+//     headers: {
+//         'content-Type': 'multipart/form-data',
+//         Authorization: `Bearer ${token}`
+//     }
+// })
+
+export const productAPI = {
+    // createNewProduct(data){
+    //     return(
+    //         instance.post('product/new',{data})
+    //             .then(function (response) {
+    //                 return response
+    //             })
+    //             .catch(err=>{
+    //                 if(err.response){
+    //                     return err.response
+    //                 }
+    //             })
+    //     )
+    // }
+    createNewProduct(data){
+        return(
+            axios({
+                method: "post",
+                url: "http://localhost:8080/api/product/new",
+                data: data,
+                headers: { "Content-Type": "multipart/form-data" },
+            }).then(function (response){
+                return response
+            })
+                .catch(err=>{
+                    if(err.response){
+                        return err.response
+                    }
+                })
+        )
+    }
 }
 
 export const usersAPI = {
