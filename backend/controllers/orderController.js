@@ -5,10 +5,6 @@ const jwt = require("jsonwebtoken")
 const {secret} = require("../config")
 
 class orderController{
-    async buy(req,res){
-
-    }
-
     async orderCreate(req,res){
         try{
             const token = req.headers.authorization.split(' ')[1]
@@ -51,6 +47,14 @@ class orderController{
             await order.save()
             res.status(200).json(order)
         }catch (e) {
+            res.status(500).json(e)
+        }
+    }
+    async orderById(req,res){
+        try{
+            const order = await Order.findById(req.params.id)
+            res.status(200).json(order)
+        }catch (e){
             res.status(500).json(e)
         }
     }

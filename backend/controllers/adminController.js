@@ -166,14 +166,6 @@ class adminController{
             res.status(500).json(e)
         }
     }
-    async orderById(req,res){
-        try{
-            const order = await Order.findById(req.params.id)
-            res.status(200).json(order)
-        }catch (e){
-            res.status(500).json(e)
-        }
-    }
 }
 
 
