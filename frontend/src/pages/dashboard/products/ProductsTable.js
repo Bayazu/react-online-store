@@ -20,6 +20,8 @@ import {itemsAPI, usersAPI} from "../../../api/api";
 import ClientForm from "../clients/ClientForm";
 import Modal from "../../../components/modal/Modal";
 import ProductForm from "./ProductForm";
+import AlertDialog from "../../../components/alert/AlertDialog";
+import {useNavigate} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -39,7 +41,6 @@ const headCells = [
     {id: 'name', label: 'Наименование'},
     {id: 'description', label: 'Описание'},
     {id: 'price', label: 'Цена'},
-    {id: 'amount', label: 'Остаток'},
     {id: 'tag', label: 'Тэг'},
     {id: 'image', label: 'Картинка'},
     {id: 'actions', label: 'Действия'},
@@ -49,11 +50,13 @@ const ProductsTable = () => {
 
     const dispatch = useDispatch()
     const [openAlert, setOpenAlert] = useState(false)
+    const [openCreateAlert, setOpenCreateAlert] = useState(false)
     const classes = useStyles();
-
-    const [modalCreateActive, setModalCreateActive] = useState(true)
+    const navigate = useNavigate()
+    const [modalCreateActive, setModalCreateActive] = useState(false)
+    const [openConfirmModal, setOpenConfirmModal] = useState(false)
+    const [productId, setProductId] = useState(null)
     //const items = useSelector((state) => state.itemsPage.items)
-
 
     const getData = () => {
         dispatch(getItems()).then((response) => {
@@ -71,14 +74,13 @@ const ProductsTable = () => {
             return items;
         }
     })
-    const deleteProduct = (id) => {
-        itemsAPI.deleteProduct(id).then(response => {
+    const deleteProduct = () => {
+        itemsAPI.deleteProduct(productId).then(response => {
             if (response.status === 200) {
                 setOpenAlert(true)
                 getData()
             }
         })
-        setOpenAlert(true)
     }
 
 
@@ -102,34 +104,38 @@ const ProductsTable = () => {
         })
     }
 
-    const [fuck, setFuck] = useState(null)
+
 
     const createNewItem = (data) => {
-        console.log(data);
         const itemData = new FormData()
-        // name: '',
-        //     description: '',
-        //     price: '',
-        //     tag: '',
-        //     image: ''
-        itemData.append('image',data.image)
-        itemData.append('name',data.name)
-        itemData.append('description',data.description)
-        itemData.append('price',data.price)
-        itemData.append('tag',data.tag)
-        console.log(itemData);
-        dispatch(createNewProduct(itemData)).then((response) => {
-            setFuck(response.data)
+        itemData.append('image', data.image)
+        itemData.append('name', data.name)
+        itemData.append('description', data.description)
+        itemData.append('price', data.price)
+        itemData.append('tag', data.tag)
+        return dispatch(createNewProduct(itemData)).then((response) => {
+            if (response.status === 200) {
+                setOpenCreateAlert(true)
+                setModalCreateActive(false)
+                getData()
+                return response
+            }
         })
     }
-
-    console.log(fuck);
-
 
     return (
         <>
             <Paper sx={{width: '1'}}>
                 <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Товар успешно удалён'}/>
+                <ActionAlert openAlert={openCreateAlert} setOpenAlert={setOpenCreateAlert}
+                             text={'Товар успешно создан'}/>
+                <AlertDialog
+                    confirmAlert={deleteProduct}
+                    open={openConfirmModal}
+                    setOpen={setOpenConfirmModal}
+                    text={'Вы уверены, что хотите удалить пользователя'}
+                    title={'Удаление пользователя'}
+                />
                 <Toolbar sx={{marginTop: '10px'}}>
                     <Input
                         label='Поиск товара'
@@ -144,6 +150,7 @@ const ProductsTable = () => {
                     <Button
                         startIcon={<AddIcon/>}
                         variant='outlined'
+                        onClick={() => setModalCreateActive(true)}
                         sx={{
                             margin: 'spacing(0.5)',
                             color: "#1976d2",
@@ -160,11 +167,10 @@ const ProductsTable = () => {
                         <TblHead/>
                         <TableBody>
                             {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
-                                    <TableRow key={item._id} sx={{cursor: 'pointer'}}>
+                                    <TableRow key={item._id}>
                                         <TableCell>{item.name}</TableCell>
                                         <TableCell>{item.description}</TableCell>
                                         <TableCell>{item.price}</TableCell>
-                                        <TableCell>{item.amount}</TableCell>
                                         <TableCell>{item.tag}</TableCell>
                                         {/*<TableCell>{item.image}</TableCell>*/}
                                         <TableCell>
@@ -177,11 +183,14 @@ const ProductsTable = () => {
                                             />
                                         </TableCell>
                                         <TableCell>
-                                            <Button sx={{color: '#4caf50', minWidth: 0,}}>
+                                            <Button onClick={()=>navigate(`/productEdit/${item._id}`)} sx={{color: '#4caf50', minWidth: 0,}}>
                                                 <EditOutlinedIcon fontSize='small'/>
                                             </Button>
                                             <Button
-                                                onClick={() => deleteProduct(item._id)}
+                                                onClick={() => {
+                                                    setOpenConfirmModal(true)
+                                                    setProductId(item._id)
+                                                }}
                                                 sx={{color: '#ef5350', minWidth: 0}}
                                             >
                                                 <CloseIcon fontSize='small'/>
@@ -198,7 +207,7 @@ const ProductsTable = () => {
             </Paper>
 
             <Modal active={modalCreateActive} setActive={setModalCreateActive}>
-                <ProductForm createNewItem={createNewItem}  isCreate={true}/>
+                <ProductForm createNewItem={createNewItem} isCreate={true}/>
             </Modal>
         </>
     );
