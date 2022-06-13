@@ -9,6 +9,7 @@ import {getUserById, modifyUserById} from "../../../../redux/reducers/userReduce
 import ClientForm from "../ClientForm";
 import UserOrders from "../UserOrders";
 import {FUCK} from "./chart";
+import {ordersAPI} from "../../../../api/api";
 
 
 const ProfileUser = () => {
@@ -16,6 +17,7 @@ const ProfileUser = () => {
     const {width} = useWindowDimensions();
     const changeResolution = width < 1214;
     const [userData, setUserData] = useState(null)
+    const [userOrders, setUserOrders] = useState(null)
     const dispatch = useDispatch()
     const [openAlert, setOpenAlert] = useState(false)
 
@@ -26,6 +28,9 @@ const ProfileUser = () => {
     useEffect(() => {
         dispatch(getUserById(userId)).then((response) => {
             setUserData(response.data)
+        })
+        ordersAPI.getUserOrderById(userId).then((response)=>{
+            setUserOrders(response.data)
         })
     }, [])
 
@@ -45,11 +50,11 @@ const ProfileUser = () => {
             </Half>
             <Half changeResolution={changeResolution}>
                 <InnerWrapper>
-                    <UserOrders changeResolution={changeResolution}/>
+                    <UserOrders userOrders={userOrders} changeResolution={changeResolution}/>
                 </InnerWrapper>
-                <InnerWrapper>
-                    <FUCK/>
-                </InnerWrapper>
+                {/*<InnerWrapper>*/}
+                {/*    <FUCK/>*/}
+                {/*</InnerWrapper>*/}
             </Half>
         </Container>
     )

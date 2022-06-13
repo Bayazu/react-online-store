@@ -12,7 +12,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
-import {usersAPI} from "../../../api/api";
+import {orderAPI as orderApi, usersAPI} from "../../../api/api";
 import ActionAlert from "../../../components/alert/ActionAlert";
 import Modal from "../../../components/modal/Modal";
 import Register from "../../auth/Register";
@@ -22,7 +22,7 @@ import Register from "../../auth/Register";
 import AlertDialog from "../../../components/alert/AlertDialog";
 import {useNavigate} from "react-router-dom";
 import {getUsers} from "../../../redux/reducers/userReducer";
-import {getAllOrders} from "../../../redux/reducers/ordersReducer";
+import {getAllOrders, setOrderData} from "../../../redux/reducers/ordersReducer";
 import dayjs from "dayjs";
 import MultipleSelectChip from "./MuiltiSelect";
 import styled from "styled-components/macro";
@@ -90,10 +90,8 @@ const OrdersTable = () => {
             return items;
         }
     })
-    const deleteUserByAdmin = (id) => {
-        // setConfirmModal(true)
-        // console.log(isDelete)
-        usersAPI.deleteUserByAdmin(id).then(response => {
+    const deleteOrder = (id) => {
+        orderApi.deleteOrder(id).then(response => {
             if (response.status === 200) {
                 setOpenAlert(true)
                 getData()
@@ -137,13 +135,12 @@ const OrdersTable = () => {
 
 
     useEffect(() => {
-        console.log(statuses);
         setFilterFn({
             fn: items => {
                 if (statuses.length === 0)
                     return items
                 else {
-                    return filterByStatus(items,statuses)
+                    return filterByStatus(items, statuses)
                 }
             }
         })
@@ -187,13 +184,13 @@ const OrdersTable = () => {
             })
     }
 
-    const InputWrapper = styled.div`
-      width: 25%;,
-    margin-right: 10 px;
-    `;
-    const SelectWrapper = styled.div`
-      margin-left: 10px;
-    `;
+    const navigateToOrderProfile = (orderData) => {
+        navigate(`/orderProfile/${orderData._id}`)
+    }
+
+    console.log(statuses);
+
+
     return (
         <>
             <Paper sx={{width: '1'}}>
@@ -255,12 +252,12 @@ const OrdersTable = () => {
                                         <TableCell>
                                             <Button
                                                 sx={{color: '#4caf50', minWidth: 0,}}
-                                                onClick={() => navigate(`/profileUser/${item._id}`)}
+                                                onClick={() => navigateToOrderProfile(item)}
                                             >
                                                 <EditOutlinedIcon fontSize='small'/>
                                             </Button>
                                             <Button
-                                                onClick={() => deleteUserByAdmin(item._id)}
+                                                onClick={() => deleteOrder(item._id)}
                                                 sx={{color: '#ef5350', minWidth: 0}}
                                             >
                                                 <CloseIcon fontSize='small'/>
@@ -286,5 +283,13 @@ const OrdersTable = () => {
 
     );
 };
+
+const InputWrapper = styled.div`
+  width: 25%;,
+  margin-right: 10px;
+`;
+const SelectWrapper = styled.div`
+  margin-left: 10px;
+`;
 
 export default OrdersTable;

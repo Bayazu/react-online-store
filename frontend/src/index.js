@@ -26,6 +26,7 @@ import ProfileUser from "./pages/dashboard/clients/ProfileUser/ProfileUser";
 import Profile from "./pages/ProfileUser/Profile";
 import OrdersPage from "./pages/dashboard/OrdersPage";
 import ProductEdit from "./pages/dashboard/products/ProductEdit";
+import OrderProfile from "./pages/dashboard/OrdersPage/OrderProfile/OrderProfile";
 
 
 
@@ -52,6 +53,7 @@ ReactDOM.render(
                         <Route path="/products" element={<ProductsPage/>}/>
                         <Route path="/orders" element={<OrdersPage/>}/>
                         <Route path="/dashboard" element={<DashboardPage/>}/>
+                        <Route path="/orderProfile/:id" element={<OrderProfile/>}/>
                         <Route path="/profileUser/:id" element={<ProfileUser/>}/>
                         <Route path="/productEdit/:id" element={<ProductEdit/>}/>
                     </Route>

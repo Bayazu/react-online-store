@@ -7,7 +7,7 @@ const App = () => {
 
     return (
         <AppMain>
-
+            asdadas
         </AppMain>
     );
 }
