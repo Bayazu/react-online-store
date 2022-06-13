@@ -133,7 +133,7 @@ const ProductsTable = () => {
                     confirmAlert={deleteProduct}
                     open={openConfirmModal}
                     setOpen={setOpenConfirmModal}
-                    text={'Вы уверены, что хотите удалить пользователя'}
+                    text={'Вы уверены, что хотите удалить товар'}
                     title={'Удаление пользователя'}
                 />
                 <Toolbar sx={{marginTop: '10px'}}>

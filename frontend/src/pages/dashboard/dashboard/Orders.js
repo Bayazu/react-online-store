@@ -68,7 +68,6 @@ const Line = styled.div`
     &:hover {
       background-color: #e2e9ed;
     }
-
 `;
 const ClientName = styled.div`
     margin-left: 10px;

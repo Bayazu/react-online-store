@@ -6,41 +6,36 @@ import Box from "@mui/material/Box";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HeaderText from "../../../components/HeaderText";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import dayjs from "dayjs";
+import {useNavigate} from "react-router-dom";
 
 const UserOrders = (props) => {
 
+    const {
+        userOrders
+    } = props
 
-    const orders = [
-        {
-            price: 850,
-            amount: 8,
-            date: 'Суббота 24 февраля, 2022'
-        },
-        {
-            price: 1250,
-            amount: 12,
-            date: 'Пятница 14 февраля, 2022'
-        },
-    ]
+    console.log(userOrders);
+
+    const navigate = useNavigate()
 
     return (
 
         <Paper sx={{padding: '5px', width: props.changeResolution ? null : '100%'}}>
             <HeaderText text={'Заказы пользователя'}/>
-            {orders?.map(el => {
+            {userOrders?.map(el => {
                 return (
-                    <Line>
+                    <Line onClick={()=>{navigate(`/orderProfile/${el._id}`)}}>
                         <Box sx={{color: '#1b5e20', fontSize: 34, verticalAlign: 'medium'}}
                              component={AttachMoneyIcon}/>
                         <Products>
-                            {el.amount} Продуктов в заказе,
+                            {el.products.length} Продукта в заказе,
                         </Products>
-
                         <OrderByData>
-                            {el.date}
+                            {dayjs(el?.datePurchase).format('DD.MM.YYYY')}
                         </OrderByData>
                         <ProductPrice>
-                            {el.price + ' ₽'}
+                            {el.priceOrder + ' ₽'}
                         </ProductPrice>
                     </Line>
 
