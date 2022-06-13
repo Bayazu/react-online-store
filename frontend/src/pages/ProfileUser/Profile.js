@@ -50,6 +50,7 @@ const Profile = () => {
         })
     }, [])
 
+
     return (
         <Container changeResolution={changeResolution}>
             <Half changeResolution={changeResolution}>

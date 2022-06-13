@@ -11,7 +11,6 @@ const instance = axios.create({
 });
 
 //TODO вынести API в отдельные файлы
-
 export const itemsAPI = {
     getItems() {
         return (
@@ -68,6 +67,58 @@ export const orderAPI = {
                 })
         )
     },
+    deleteOrder(id) {
+        return (
+            instance.get(`admin/orderDelete/${id}` )
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+    changeStatusOrder(id,status){
+        return (
+            instance.patch(`admin/orderStatus/${id}`,{status} )
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+    getOrdersSumForMonth(){
+        return (
+            instance.get(`admin/summMonth`,)
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+    getOrdersForMonth(){
+        return (
+            instance.get(`admin/ordersMonth`,)
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
 
 }
 
@@ -85,6 +136,32 @@ export const ordersAPI = {
                 })
         )
     },
+    getOrderById(id){
+        return(
+            instance.get(`order/orderById/${id}`)
+                .then(function (response) {
+                    return response
+                })
+                .catch(err =>{
+                    if(err.response){
+                        return err.response
+                    }
+                })
+        )
+    },
+    getUserOrderById(id){
+        return(
+            instance.get(`admin/userOrders/${id}`)
+                .then(function (response) {
+                    return response
+                })
+                .catch(err =>{
+                    if(err.response){
+                        return err.response
+                    }
+                })
+        )
+    }
 }
 // const instanceImage = axios.create({
 //     baseURL: 'http://localhost:8080/api/',
@@ -102,7 +179,10 @@ export const productAPI = {
                 method: "post",
                 url: "http://localhost:8080/api/product/new",
                 data: data,
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`
+                },
             }).then(function (response){
                 return response
             })
@@ -119,7 +199,10 @@ export const productAPI = {
                 method: "patch",
                 url: `http://localhost:8080/api/product/modify/${productId}`,
                 data: data,
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`
+                },
             }).then(function (response){
                 return response
             })
@@ -277,7 +360,18 @@ export const usersAPI = {
                 })
         )
     },
-
-
+    getUsersByWeek() {
+        return (
+            instance.get(`admin/usersWeek/`, {})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
 }
 
