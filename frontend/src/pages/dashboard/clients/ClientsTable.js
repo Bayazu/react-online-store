@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {InputAdornment, Paper, Table, TableBody, TableCell, TableRow} from "@mui/material";
 import useTable from "../../../components/table/useTable";
 import Toolbar from "@mui/material/Toolbar";
@@ -56,15 +56,16 @@ const ClientsTable = () => {
     const dispatch = useDispatch()
     const classes = useStyles();
 
-    const getData = () => {
+    const getData = useCallback(()=>{
         dispatch(getUsers()).then((response) => {
             setRecords(response.data)
         })
-    }
+    },[])
 
     useEffect(() => {
         getData()
-    }, [])
+    }, [getData])
+
 
     const [records, setRecords] = useState(null)
     const [filterFn, setFilterFn] = useState({
@@ -104,7 +105,6 @@ const ClientsTable = () => {
                 getData()
             }
         })
-
     }
 
     const createUserSubmit = (data) => {
@@ -120,7 +120,6 @@ const ClientsTable = () => {
                 }
             })
     }
-
 
 
     return (

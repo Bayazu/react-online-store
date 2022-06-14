@@ -40,7 +40,6 @@ const ProductForm = (props) => {
 
     const {
         formState: {
-            errors
         },
         reset,
         handleSubmit,

@@ -9,7 +9,7 @@ import Product from "./pages/Items/Product/Product";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import AdminLogin from "./pages/auth/AdminLogin";
-import Basket from "./pages/Basket/Basket";
+import Basket from "./pages/basket/Basket";
 import Profile from "./pages/ProfileUser/Profile";
 import LayoutsWithNavbar from "./LayoutsWithNavbar";
 import ClientsPage from "./pages/dashboard/ClientsPage";
@@ -20,7 +20,7 @@ import ProfileUser from "./pages/dashboard/clients/ProfileUser/ProfileUser";
 import ProductEdit from "./pages/dashboard/products/ProductEdit";
 import AdminProtectedRoutes from "./ProtectedRoutes/AdminProtectedRoutes";
 import ProtectedRoutes from "./ProtectedRoutes/ProtectedRoutes";
-import OrderProfile from "./pages/dashboard/OrdersPage/OrderProfile/OrderProfile";
+import OrderProfile from "./pages/dashboard/ordersPage/orderProfile/OrderProfile";
 
 const App = () => {
 
