@@ -1,5 +1,4 @@
-import {ordersAPI} from "../../api/api";
-
+import {ordersAPI} from "../../api/ordersAPI";
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 
 let initialState = {

@@ -5,8 +5,8 @@ import {useParams} from "react-router";
 import useWindowDimensions from "../../../helpers/hooks/useWindowDimensions";
 import ProductForm from "./ProductForm";
 import UserOrders from "../clients/UserOrders";
-import {itemsAPI as ItemsApi} from "../../../api/api";
 import {modifyItem} from "../../../redux/reducers/itemsReducer";
+import {productsAPI} from "../../../api/productsAPI";
 
 
 const ProductEdit = () => {
@@ -21,7 +21,7 @@ const ProductEdit = () => {
     const productId = params.id
 
     useEffect(() => {
-        ItemsApi.getOneItem(productId).then((response)=>{
+        productsAPI.getOneItem(productId).then((response)=>{
             setProductData(response.data)
         })
     }, [])

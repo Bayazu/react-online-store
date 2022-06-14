@@ -5,9 +5,10 @@ import useWindowDimensions from "../../helpers/hooks/useWindowDimensions";
 import InfoContainer from "../../components/InfoContainer";
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import NewClients from "./dashboard/NewClients";
-import {orderAPI as orderApi, usersAPI} from "../../api/api";
 import CurrencyRubleIcon from "@mui/icons-material/CurrencyRuble";
 import TableOrdersInfo from "./dashboard/TableOrdersInfo";
+import {usersAPI} from "../../api/usersAPi";
+import {ordersAPI} from "../../api/ordersAPI";
 
 
 const DashboardPage = () => {
@@ -20,10 +21,10 @@ const DashboardPage = () => {
 
 
     useEffect(() => {
-        orderApi.getOrdersSumForMonth().then((response) => {
+        ordersAPI.getOrdersSumForMonth().then((response) => {
             setSumForMonth(response.data)
         })
-        orderApi.getOrdersForMonth().then((response) => {
+        ordersAPI.getOrdersForMonth().then((response) => {
             setOrderForMonth(response.data)
         })
         usersAPI.getUsersByWeek().then((response)=>{

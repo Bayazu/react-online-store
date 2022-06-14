@@ -12,7 +12,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
-import {orderAPI as orderApi, usersAPI} from "../../../api/api";
 import ActionAlert from "../../../components/alert/ActionAlert";
 import Modal from "../../../components/modal/Modal";
 import Register from "../../auth/Register";
@@ -26,6 +25,8 @@ import {getAllOrders, setOrderData} from "../../../redux/reducers/ordersReducer"
 import dayjs from "dayjs";
 import MultipleSelectChip from "./MuiltiSelect";
 import styled from "styled-components/macro";
+import {usersAPI} from "../../../api/usersAPi";
+import {ordersAPI} from "../../../api/ordersAPI";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -91,7 +92,7 @@ const OrdersTable = () => {
         }
     })
     const deleteOrder = (id) => {
-        orderApi.deleteOrder(id).then(response => {
+        ordersAPI.deleteOrder(id).then(response => {
             if (response.status === 200) {
                 setOpenAlert(true)
                 getData()

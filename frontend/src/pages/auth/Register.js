@@ -1,19 +1,17 @@
-import React, {useEffect, useRef, useState} from "react";
-import {useForm, Controller} from "react-hook-form";
+import React, {useRef, useState} from "react";
+import {Controller, useForm} from "react-hook-form";
 import styled from "styled-components/macro";
 import {Alert, Paper, Stack} from "@mui/material";
 import Box from "@mui/material/Box";
-import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
 import HeaderText from "../../components/HeaderText";
 import CustomButton from "../../components/controls/Button";
 import Input from "../../components/controls/Input";
 import useWindowDimensions from "../../helpers/hooks/useWindowDimensions";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import {useNavigate} from "react-router-dom";
-import {usersAPI} from "../../api/api";
 import Modal from "../../components/modal/Modal";
 import Button from "@mui/material/Button";
+import {usersAPI} from "../../api/usersAPi";
 
 
 const Register = () => {
@@ -23,7 +21,6 @@ const Register = () => {
     const navigate = useNavigate();
     const [modalActive, setModalActive] = useState(false)
     const [badRequest, setBadRequest] = useState(false)
-
 
 
     const onSubmit = async (data) => {
@@ -76,7 +73,7 @@ const Register = () => {
     })
     const password = useRef({});
     password.current = watch("password", "");
-   // console.log(password)
+    // console.log(password)
     //console.log(password.current)
     // console.log(errors)
     console.log(errors)

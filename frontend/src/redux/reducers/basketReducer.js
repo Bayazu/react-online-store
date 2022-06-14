@@ -1,4 +1,4 @@
-import {orderAPI, usersAPI} from "../../api/api";
+import {ordersAPI} from "../../api/ordersAPI";
 
 const SET_BASKET = 'SET_BASKET'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -95,7 +95,7 @@ export const removeProductFromBasket = (id) => {
 
 export const createOrder = (basketData) => {
     return (dispatch) => {
-        return orderAPI.orderCreat(basketData).then((response) => {
+        return ordersAPI.orderCreat(basketData).then((response) => {
             if (response?.status === 200) {
                 return response
             }

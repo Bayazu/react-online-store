@@ -10,13 +10,13 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
-import {usersAPI} from "../../../api/api";
 import ActionAlert from "../../../components/alert/ActionAlert";
 import Modal from "../../../components/modal/Modal";
 import AlertDialog from "../../../components/alert/AlertDialog";
 import {useNavigate} from "react-router-dom";
 import {getUsers} from "../../../redux/reducers/userReducer";
 import ClientForm from "./ClientForm";
+import {usersAPI} from "../../../api/usersAPi";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
