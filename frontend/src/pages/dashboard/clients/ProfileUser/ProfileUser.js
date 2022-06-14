@@ -9,7 +9,8 @@ import {getUserById, modifyUserById} from "../../../../redux/reducers/userReduce
 import ClientForm from "../ClientForm";
 import UserOrders from "../UserOrders";
 import {FUCK} from "./chart";
-import {ordersAPI} from "../../../../api/api";
+import {ordersAPI} from "../../../../api/ordersAPI";
+
 
 
 const ProfileUser = () => {

@@ -1,5 +1,4 @@
-import {itemsAPI, productAPI, usersAPI} from "../../api/api";
-import {getUsersAC, toggleIsFetchingAC} from "./allUsersReducer";
+import {productsAPI} from "../../api/productsAPI";
 
 const SET_ITEMS_DATA = 'SET_ITEMS_DATA'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
@@ -32,7 +31,7 @@ export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFe
 export const getItems = () => {
     return (dispatch) => {
         dispatch(toggleIsFetching(true));
-        return itemsAPI.getItems().then(response => {
+        return productsAPI.getItems().then(response => {
                 if(response.status === 200 ){
                     dispatch(setItemsData(response.data))
                     dispatch(toggleIsFetching(false))
@@ -45,7 +44,7 @@ export const getItems = () => {
 
 export const createNewProduct= (data) =>{
     return (dispatch) => {
-        return productAPI.createNewProduct(data).then(response =>{
+        return productsAPI.createNewProduct(data).then(response =>{
             if(response.status === 200){
                 return response
             }
@@ -56,7 +55,7 @@ export const createNewProduct= (data) =>{
 
 export const modifyItem= (data, productId) =>{
     return (dispatch) => {
-        return productAPI.modifyProduct(data,productId).then(response =>{
+        return productsAPI.modifyProduct(data,productId).then(response =>{
             if(response.status === 200){
                 return response
             }

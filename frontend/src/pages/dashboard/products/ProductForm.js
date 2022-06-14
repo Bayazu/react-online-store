@@ -12,7 +12,6 @@ import {useSelector} from "react-redux";
 import ActionAlert from "../../../components/alert/ActionAlert";
 import styled from "styled-components/macro";
 import UploadIcon from '@mui/icons-material/Upload';
-import {productAPI} from "../../../api/api";
 import CardMedia from "@mui/material/CardMedia";
 import {backEndUrl} from "../../../constants";
 

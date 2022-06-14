@@ -1,3 +1,5 @@
+export const backEndUrl = 'http://localhost:8080/'
+
 export const defaultTabs = [
     // {
     //     label : '',
@@ -32,4 +34,3 @@ export const navigationBarRoutes = [
     {label: 'Зарегестрироваться', value: 'register'}
 ]
 
-export const backEndUrl = 'http://localhost:8080/'

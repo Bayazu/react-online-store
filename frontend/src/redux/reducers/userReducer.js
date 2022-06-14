@@ -1,4 +1,5 @@
-import {usersAPI} from "../../api/api";
+import {usersAPI} from "../../api/usersAPi";
+
 
 const LOGIN_USER = 'LOGIN_USER'
 const CREATE_USER = 'CREATE_USER'

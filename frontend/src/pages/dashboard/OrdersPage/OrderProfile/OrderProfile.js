@@ -7,7 +7,6 @@ import {useParams} from "react-router";
 import Box from "@mui/material/Box";
 import TableOrderProfile from "./TableOrderProfile";
 import useWindowDimensions from "../../../../helpers/hooks/useWindowDimensions";
-import {orderAPI, ordersAPI} from "../../../../api/api";
 import MultiSelectStatuses from "./SelectStatuses";
 import SelectStatuses from "./SelectStatuses";
 import LoginIcon from "@mui/icons-material/Login";
@@ -24,6 +23,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import dayjs from "dayjs";
 import ActionAlert from "../../../../components/alert/ActionAlert";
 import Paper from "@mui/material/Paper";
+import {ordersAPI} from "../../../../api/ordersAPI";
 
 
 const OrderProfile = () => {
@@ -46,7 +46,7 @@ const OrderProfile = () => {
     }, [])
 
     const changeStatus = () => {
-        orderAPI.changeStatusOrder(orderId,currentStatus).then((response)=>{
+        ordersAPI.changeStatusOrder(orderId,currentStatus).then((response)=>{
             if(response.status === 200){
                 setOpenAlert(true)
             }

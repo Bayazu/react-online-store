@@ -5,8 +5,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Input from "../../../components/controls/Input";
 import {Search} from "@mui/icons-material";
 import {useDispatch, useSelector} from "react-redux";
-import allUsersReducer, {getUsers} from "../../../redux/reducers/allUsersReducer";
-
 import AddIcon from '@material-ui/icons/Add';
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
@@ -16,12 +14,12 @@ import {createNewProduct, getItems} from "../../../redux/reducers/itemsReducer";
 import CardMedia from "@mui/material/CardMedia";
 import {backEndUrl} from "../../../constants";
 import ActionAlert from "../../../components/alert/ActionAlert";
-import {itemsAPI, usersAPI} from "../../../api/api";
 import ClientForm from "../clients/ClientForm";
 import Modal from "../../../components/modal/Modal";
 import ProductForm from "./ProductForm";
 import AlertDialog from "../../../components/alert/AlertDialog";
 import {useNavigate} from "react-router-dom";
+import {productsAPI} from "../../../api/productsAPI";
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -75,7 +73,7 @@ const ProductsTable = () => {
         }
     })
     const deleteProduct = () => {
-        itemsAPI.deleteProduct(productId).then(response => {
+        productsAPI.deleteProduct(productId).then(response => {
             if (response.status === 200) {
                 setOpenAlert(true)
                 getData()

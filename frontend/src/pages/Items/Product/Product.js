@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router";
-import {itemsAPI} from "../../../api/api";
 import styled from 'styled-components/macro'
 import {Paper, TextField, Tooltip} from "@mui/material";
 import Box from "@mui/material/Box";
@@ -15,6 +14,7 @@ import {setBasketProducts} from "../../../redux/reducers/basketReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {backEndUrl} from "../../../constants";
 import {useNavigate} from "react-router-dom";
+import {productsAPI} from "../../../api/productsAPI";
 
 const Product = () => {
 
@@ -41,7 +41,7 @@ const Product = () => {
     }, [basket, product])
 
     const getOneItem = (id) => {
-        itemsAPI.getOneItem(id).then(response => {
+        productsAPI.getOneItem(id).then(response => {
             if (response.status === 200) {
                 setProduct(response.data)
             }
