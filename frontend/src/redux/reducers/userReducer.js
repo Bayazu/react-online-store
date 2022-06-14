@@ -2,7 +2,6 @@ import {usersAPI} from "../../api/usersAPi";
 
 
 const LOGIN_USER = 'LOGIN_USER'
-const CREATE_USER = 'CREATE_USER'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 const LOGOUT_USER = 'LOGOUT_USER'
 const LOGIN_USER_BY_TOKEN = 'LOGIN_USER_BY_TOKEN'
@@ -56,7 +55,6 @@ const userReducer = (state = initialState, action) => {
 export const loginUserAC = (data) => ({type: LOGIN_USER, token: data.token, role: data.role})
 export const loginUserByTokenAC = (data, token) => ({type: LOGIN_USER_BY_TOKEN, role: data.role, token})
 export const logoutUserAC = () => ({type: LOGOUT_USER})
-// export const createNewUser = (data) => ({type: CREATE_USER, data: data})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching: isFetching})
 export const getUsersAC = (users) => ({type: GET_ALL_USERS, users: users})
 
@@ -194,36 +192,6 @@ export const getProfileData = () => {
     }
 }
 
-// export const getItems = () => {
-//     return (dispatch) => {
-//         dispatch(toggleIsFetching(true));
-//         itemsAPI.getItems()
-//             .then(response => {
-//                 if(response.status === 200 ){
-//                     dispatch(setItemsData(response.data))
-//                     dispatch(toggleIsFetching(false))
-//                 }
-//             });
-//     }
-// }
-
-// .then(function (response) {
-//     if(response.status === 200) {
-//         navigate("/login");
-//     }
-// })
-// .catch(function (error) {
-//     console.log(error.response.data.errors.errors[0].msg);
-// })
-
-// export const createUser = (data) => {
-//     return (dispatch) => {
-//         dispatch(toggleIsFetching(true));
-//             usersAPI.createUser(data).then(response=>{
-//                 return response
-//             })
-//     }
-// }
 
 
 export default userReducer;

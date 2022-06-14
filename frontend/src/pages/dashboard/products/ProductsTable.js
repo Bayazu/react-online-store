@@ -4,7 +4,7 @@ import useTable from "../../../components/table/useTable";
 import Toolbar from "@mui/material/Toolbar";
 import Input from "../../../components/controls/Input";
 import {Search} from "@mui/icons-material";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import AddIcon from '@material-ui/icons/Add';
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
@@ -14,7 +14,6 @@ import {createNewProduct, getItems} from "../../../redux/reducers/itemsReducer";
 import CardMedia from "@mui/material/CardMedia";
 import {backEndUrl} from "../../../constants";
 import ActionAlert from "../../../components/alert/ActionAlert";
-import ClientForm from "../clients/ClientForm";
 import Modal from "../../../components/modal/Modal";
 import ProductForm from "./ProductForm";
 import AlertDialog from "../../../components/alert/AlertDialog";
@@ -54,7 +53,6 @@ const ProductsTable = () => {
     const [modalCreateActive, setModalCreateActive] = useState(false)
     const [openConfirmModal, setOpenConfirmModal] = useState(false)
     const [productId, setProductId] = useState(null)
-    //const items = useSelector((state) => state.itemsPage.items)
 
     const getData = () => {
         dispatch(getItems()).then((response) => {
@@ -81,7 +79,6 @@ const ProductsTable = () => {
         })
     }
 
-
     const {
         TblContainer,
         TblHead,
@@ -101,8 +98,6 @@ const ProductsTable = () => {
             }
         })
     }
-
-
 
     const createNewItem = (data) => {
         const itemData = new FormData()
@@ -181,7 +176,8 @@ const ProductsTable = () => {
                                             />
                                         </TableCell>
                                         <TableCell>
-                                            <Button onClick={()=>navigate(`/productEdit/${item._id}`)} sx={{color: '#4caf50', minWidth: 0,}}>
+                                            <Button onClick={() => navigate(`/productEdit/${item._id}`)}
+                                                    sx={{color: '#4caf50', minWidth: 0,}}>
                                                 <EditOutlinedIcon fontSize='small'/>
                                             </Button>
                                             <Button

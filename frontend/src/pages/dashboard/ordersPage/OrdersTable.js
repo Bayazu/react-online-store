@@ -1,31 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {InputAdornment, Paper, Table, TableBody, TableCell, TableRow} from "@mui/material";
 import useTable from "../../../components/table/useTable";
 import Toolbar from "@mui/material/Toolbar";
 import Input from "../../../components/controls/Input";
 import {Search} from "@mui/icons-material";
-import {useDispatch, useSelector} from "react-redux";
-
-
-import AddIcon from '@material-ui/icons/Add';
+import {useDispatch} from "react-redux";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@mui/material/Button";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import CloseIcon from '@material-ui/icons/Close';
 import ActionAlert from "../../../components/alert/ActionAlert";
-import Modal from "../../../components/modal/Modal";
-import Register from "../../auth/Register";
-// import ModalCreateUpdate from "./ModalCreate";
-// import ModalCreate from "./ModalCreate";
-// import ModalModify from "./ModalModify";
 import AlertDialog from "../../../components/alert/AlertDialog";
 import {useNavigate} from "react-router-dom";
-import {getUsers} from "../../../redux/reducers/userReducer";
-import {getAllOrders, setOrderData} from "../../../redux/reducers/ordersReducer";
+import {getAllOrders} from "../../../redux/reducers/ordersReducer";
 import dayjs from "dayjs";
 import MultipleSelectChip from "./MuiltiSelect";
 import styled from "styled-components/macro";
-import {usersAPI} from "../../../api/usersAPi";
 import {ordersAPI} from "../../../api/ordersAPI";
 
 const useStyles = makeStyles(theme => ({
@@ -37,10 +27,6 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         marginRight: '10px'
     },
-    // newButton: {
-    //     position: 'absolute',
-    //     right: '10px'
-    // }
 }))
 
 const headCells = [
@@ -51,38 +37,29 @@ const headCells = [
     {id: 'datePurchase', label: 'Дата покупки'},
     {id: 'summaryOrder', label: 'Стоимость заказа'},
     {id: 'statusOrder', label: 'Статус заказа'},
-    // {id: 'country', label: 'Страна'},
-    // {id: 'city', label: 'Город'},
-    // {id: 'street', label: 'Улица'},
-    // {id: 'building', label: 'Дом'},
-    // {id: 'apartment', label: 'Квартира'},
     {id: 'actions', label: 'Действия'},
 ]
 
 const OrdersTable = () => {
 
-    const [modalCreateActive, setModalCreateActive] = useState(false)
-    const [modalModifyActive, setModalModifyActive] = useState(false)
+
     const dispatch = useDispatch()
     const classes = useStyles();
     const [openAlert, setOpenAlert] = useState(false)
-    const [userCreate, setUserCreate] = useState(false)
-    const [userModifyAlert, setUserModifyAlert] = useState(false)
-    const [userDataModify, setUserDataModify] = useState(false)
-    const [openConfirmModal, setConfirmModal] = useState(false)
-    const [isDelete, setIsDelete] = useState(false)
     const navigate = useNavigate()
     const [statuses, setStatuses] = useState([]);
+    const [orderId, setOrderId] = useState(null)
+    const [openConfirmModal, setOpenConfirmModal] = useState(false)
 
-    const getData = () => {
+    const getData = useCallback(() => {
         dispatch(getAllOrders()).then((response) => {
             setRecords(response.data)
         })
-    }
+    }, [])
 
     useEffect(() => {
         getData()
-    }, [])
+    }, [getData])
 
     const [records, setRecords] = useState(null)
 
@@ -91,8 +68,8 @@ const OrdersTable = () => {
             return items;
         }
     })
-    const deleteOrder = (id) => {
-        ordersAPI.deleteOrder(id).then(response => {
+    const deleteOrder = () => {
+        ordersAPI.deleteOrder(orderId).then(response => {
             if (response.status === 200) {
                 setOpenAlert(true)
                 getData()
@@ -126,14 +103,8 @@ const OrdersTable = () => {
             if (foundItem) {
                 return item
             }
-            // const foundItem = arr2.find((item2) => item2.status === item.status);
-            // if (foundItem) {
-            //     return { ...foundItem };
-            // }
-            // return item;
         });
     };
-
 
     useEffect(() => {
         setFilterFn({
@@ -147,58 +118,21 @@ const OrdersTable = () => {
         })
     }, [statuses])
 
-
-    const createUser = () => {
-        setModalCreateActive(true)
-    }
-
-    const modifyUsers = (item) => {
-        setModalModifyActive(true)
-        setUserDataModify(item)
-    }
-
-    const createUserSubmit = (data) => {
-        return usersAPI.createUser(data)
-            .then(response => {
-                if (response.status === 200) {
-                    setUserCreate(true)
-                    setModalCreateActive(false)
-                    getData()
-                    return response
-                }
-                if (response.status === 400) {
-                }
-            })
-    }
-
-    const modifyUserSubmit = (data) => {
-        return usersAPI.modifyUser(data)
-            .then(response => {
-                if (response.status === 200) {
-                    setUserModifyAlert(true)
-                    setModalModifyActive(false)
-                    getData()
-                    return response
-                }
-                if (response.status === 400) {
-                }
-            })
-    }
-
     const navigateToOrderProfile = (orderData) => {
         navigate(`/orderProfile/${orderData._id}`)
     }
 
-    console.log(statuses);
-
-
     return (
         <>
             <Paper sx={{width: '1'}}>
-                {/*<ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Пользователь успешно удалён'}/>*/}
-                {/*<ActionAlert openAlert={userCreate} setOpenAlert={setUserCreate} text={'Пользователь успешно создан'}/>*/}
-                {/*<ActionAlert openAlert={userModifyAlert} setOpenAlert={setUserModifyAlert} text={'Пользователь успешно отредактирован'}/>*/}
-                {/*<AlertDialog open={openConfirmModal} setOpen={setConfirmModal} setIsDelete={setIsDelete} text={'Вы уверены, что хотите удалить пользователя'}/>*/}
+                <ActionAlert openAlert={openAlert} setOpenAlert={setOpenAlert} text={'Заказ успешно удалён'}/>
+                <AlertDialog
+                    confirmAlert={deleteOrder}
+                    open={openConfirmModal}
+                    setOpen={setOpenConfirmModal}
+                    text={'Вы уверены, что хотите удалить заказ'}
+                    title={'Удаление заказ'}
+                />
                 <Toolbar sx={{marginTop: '10px'}}>
                     <InputWrapper>
                         <Input
@@ -215,28 +149,12 @@ const OrdersTable = () => {
                     <SelectWrapper>
                         <MultipleSelectChip statuses={statuses} setStatuses={setStatuses}/>
                     </SelectWrapper>
-
-                    {/*<Button*/}
-                    {/*    onClick={() => createUser()}*/}
-                    {/*    startIcon={<AddIcon/>}*/}
-                    {/*    variant='outlined'*/}
-                    {/*    sx={{*/}
-                    {/*        margin: 'spacing(0.5)',*/}
-                    {/*        color: "#1976d2",*/}
-                    {/*        position: 'absolute',*/}
-                    {/*        right: '10px',*/}
-                    {/*    }}*/}
-                    {/*>*/}
-                    {/*    Добавить пользователя*/}
-                    {/*</Button>*/}
-
                 </Toolbar>
                 <TblContainer>
                     <Table>
                         <TblHead/>
                         <TableBody>
                             {recordsAfterPagingAndSorting() ? recordsAfterPagingAndSorting().map(item => (
-                                    // <TableRow onClick={() => navigate(`/profileUser/${item._id}`)} key={item._id} sx={{cursor: 'pointer'}}>
                                     <TableRow key={item._id}>
                                         <TableCell>{item.clientInfo.firstName}</TableCell>
                                         <TableCell>{item.clientInfo.secondName}</TableCell>
@@ -245,11 +163,6 @@ const OrdersTable = () => {
                                         <TableCell>{dayjs(item.datePurchase).format('DD/MM/YYYY')}</TableCell>
                                         <TableCell>{item.priceOrder + '₽'}</TableCell>
                                         <TableCell>{item.status}</TableCell>
-                                        {/*<TableCell>{item.country}</TableCell>*/}
-                                        {/*<TableCell>{item.city}</TableCell>*/}
-                                        {/*<TableCell>{item.street}</TableCell>*/}
-                                        {/*<TableCell>{item.building}</TableCell>*/}
-                                        {/*<TableCell>{item.apartment}</TableCell>*/}
                                         <TableCell>
                                             <Button
                                                 sx={{color: '#4caf50', minWidth: 0,}}
@@ -258,7 +171,10 @@ const OrdersTable = () => {
                                                 <EditOutlinedIcon fontSize='small'/>
                                             </Button>
                                             <Button
-                                                onClick={() => deleteOrder(item._id)}
+                                                onClick={() => {
+                                                    setOpenConfirmModal(true)
+                                                    setOrderId(item._id)
+                                                }}
                                                 sx={{color: '#ef5350', minWidth: 0}}
                                             >
                                                 <CloseIcon fontSize='small'/>
@@ -273,13 +189,6 @@ const OrdersTable = () => {
                     <TblPagination/>
                 </TblContainer>
             </Paper>
-
-            {/*<Modal active={modalCreateActive} setActive={setModalCreateActive}>*/}
-            {/*    <ModalCreate isModal={true} createUserSubmit={createUserSubmit}/>*/}
-            {/*</Modal>*/}
-            {/*<Modal active={modalModifyActive} setActive={setModalModifyActive}>*/}
-            {/*    <ModalModify isModal={true} modifyUserSubmit={modifyUserSubmit} userDataModify={userDataModify}/>*/}
-            {/*</Modal>*/}
         </>
 
     );

@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Paper} from "@mui/material";
 import styled from "styled-components/macro";
-import {useDispatch} from "react-redux";
 import Box from "@mui/material/Box";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HeaderText from "../../../components/HeaderText";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import dayjs from "dayjs";
@@ -15,8 +13,6 @@ const UserOrders = (props) => {
         userOrders
     } = props
 
-    console.log(userOrders);
-
     const navigate = useNavigate()
 
     return (
@@ -25,7 +21,9 @@ const UserOrders = (props) => {
             <HeaderText text={'Заказы пользователя'}/>
             {userOrders?.map(el => {
                 return (
-                    <Line onClick={()=>{navigate(`/orderProfile/${el._id}`)}}>
+                    <Line onClick={() => {
+                        navigate(`/orderProfile/${el._id}`)
+                    }}>
                         <Box sx={{color: '#1b5e20', fontSize: 34, verticalAlign: 'medium'}}
                              component={AttachMoneyIcon}/>
                         <Products>
