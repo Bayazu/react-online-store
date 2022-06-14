@@ -41,6 +41,7 @@ const App = () => {
                     <Route element={<ProtectedRoutes/>}>
                         <Route path="/basket/" element={<Basket/>}/>
                         <Route path="/profile/" element={<Profile/>}/>
+                        <Route path="/orderProfile/:id" element={<OrderProfile/>}/>
                     </Route>
 
                     <Route element={<AdminProtectedRoutes/>}>

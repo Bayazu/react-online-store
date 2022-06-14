@@ -14,7 +14,9 @@ const OrderInfo = (props) => {
         setCurrentStatus,
         openAlert,
         setOpenAlert,
-        changeStatus = () =>{},
+        userRole,
+        changeStatus = () => {
+        },
     } = props
     return (
         <Box
@@ -44,21 +46,23 @@ const OrderInfo = (props) => {
                 <TableOrderProfile orderData={orderData}/>
                 <Box sx={{color: 'success.dark', fontSize: 54, verticalAlign: 'medium'}}/>
             </Box>
-            <StatusWrapper>
-                <SelectStatuses currentStatus={currentStatus} setCurrentStatus={setCurrentStatus}/>
-                <CustomButton
-                    startIcon={<SaveIcon/>}
-                    type="submit"
-                    variant='outlined'
-                    onClick={()=>changeStatus()}
-                    sx={{
-                        color: "#1976d2",
-                        height: "50px",
-                    }}
-                    text={'Сохранить'}
-                />
-            </StatusWrapper>
-
+            {!userRole === 'USER'
+                ? <StatusWrapper>
+                    <SelectStatuses currentStatus={currentStatus} setCurrentStatus={setCurrentStatus}/>
+                    <CustomButton
+                        startIcon={<SaveIcon/>}
+                        type="submit"
+                        variant='outlined'
+                        onClick={() => changeStatus()}
+                        sx={{
+                            color: "#1976d2",
+                            height: "50px",
+                        }}
+                        text={'Сохранить'}
+                    />
+                </StatusWrapper>
+                : null
+            }
         </Box>
     );
 };

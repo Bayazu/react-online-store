@@ -11,6 +11,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import dayjs from "dayjs";
 import {ordersAPI} from "../../../../api/ordersAPI";
+import {useSelector} from "react-redux";
 
 
 const OrderProfile = () => {
@@ -20,6 +21,7 @@ const OrderProfile = () => {
     const [orderData, setOrderData] = useState(null)
     const [openAlert, setOpenAlert] = useState(false)
     const [currentStatus, setCurrentStatus] = useState([]);
+    const userRole = useSelector((state) => state.user.userRole)
 
     const params = useParams()
     const orderId = params.id
@@ -32,8 +34,8 @@ const OrderProfile = () => {
     }, [orderId])
 
     const changeStatus = () => {
-        ordersAPI.changeStatusOrder(orderId,currentStatus).then((response)=>{
-            if(response.status === 200){
+        ordersAPI.changeStatusOrder(orderId, currentStatus).then((response) => {
+            if (response.status === 200) {
                 setOpenAlert(true)
             }
         })
@@ -43,8 +45,9 @@ const OrderProfile = () => {
     return (
         <Container changeResolution={changeResolution}>
             <Box sx={{display: 'flex'}}>
-                <Half changeResolution={changeResolution}>
+                <Half userRole={userRole} changeResolution={changeResolution}>
                     <OrderInfo
+                        userRole={userRole}
                         openAlert={openAlert}
                         setOpenAlert={setOpenAlert}
                         orderData={orderData}
@@ -67,7 +70,7 @@ const OrderProfile = () => {
                             Icon={CalendarMonthIcon}/>
                         <InfoContainer
                             width='360px'
-                            headerText={'Адрес клиента'}
+                            headerText={userRole === 'USER' ? 'Адрес доставки' : 'Адрес клиента'}
                             // textSecondary={'12'}
                             clientAddress={orderData?.clientAddress}
                             fontSize='20'
@@ -77,7 +80,7 @@ const OrderProfile = () => {
                             clientInfo={orderData?.clientInfo}
                             fontSize='20'
                             width='360px'
-                            headerText={'Личные данные клиента'}
+                            headerText={userRole === 'USER' ? 'Мои данные' :'Личные данные клиента'}
                             // textSecondary={'12'}
                             bigData={true}
                             Icon={AccountBoxIcon}/>
@@ -90,7 +93,7 @@ const OrderProfile = () => {
                     {/*    <FUCK/>*/}
                     {/*</InnerWrapper>*/}
                 </Half>
-        </Box>
+            </Box>
 
         </Container>
     )
@@ -110,6 +113,7 @@ const Container = styled.div`
   flex-direction: ${props => props.changeResolution ? 'column' : 'row'};
 `;
 const Half = styled.div`
+  margin-left: ${props => props.userRole === 'USER' ? '70px' : 0};
   flex-wrap: wrap;
   margin-right: 10px;
   margin-top: ${props => props.changeResolution && '5px'};

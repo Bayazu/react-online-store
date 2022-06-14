@@ -14,7 +14,7 @@ import CardContent from "@mui/material/CardContent";
 import useWindowDimensions from "../../helpers/hooks/useWindowDimensions";
 import {
     changeBasket,
-    changeBasketAC, clearBasket, createOrder,
+    clearBasket, createOrder,
     getTotalProductsPrice,
     removeProductFromBasket
 } from "../../redux/reducers/basketReducer";
@@ -235,12 +235,12 @@ const Container = styled.div`
   font-family: Roboto, Helvetica, Arial, sans-serif;
 `;
 
-const ProductInfo = styled.div`
-  //width: 300px;
-  display: flex;
-  flex-direction: column;
-
-`;
+// const ProductInfo = styled.div`
+//   //width: 300px;
+//   display: flex;
+//   flex-direction: column;
+//
+// `;
 
 const EmptyBasket = styled.div`
   display: flex;

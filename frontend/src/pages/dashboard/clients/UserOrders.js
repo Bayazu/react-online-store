@@ -6,6 +6,7 @@ import HeaderText from "../../../components/HeaderText";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import dayjs from "dayjs";
 import {useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 const UserOrders = (props) => {
 
@@ -14,11 +15,12 @@ const UserOrders = (props) => {
     } = props
 
     const navigate = useNavigate()
+    const userRole = useSelector((state) => state.user.userRole)
 
     return (
 
         <Paper sx={{padding: '5px', width: props.changeResolution ? null : '100%'}}>
-            <HeaderText text={'Заказы пользователя'}/>
+            <HeaderText text={userRole==='USER' ? 'Мои заказы' : 'Заказы пользователя'}/>
             {userOrders?.map(el => {
                 return (
                     <Line onClick={() => {
