@@ -18,6 +18,8 @@ const OrderInfo = (props) => {
         changeStatus = () => {
         },
     } = props
+
+    console.log(userRole);
     return (
         <Box
             sx={{
@@ -46,7 +48,7 @@ const OrderInfo = (props) => {
                 <TableOrderProfile orderData={orderData}/>
                 <Box sx={{color: 'success.dark', fontSize: 54, verticalAlign: 'medium'}}/>
             </Box>
-            {!userRole === 'USER'
+            {userRole === 'ADMIN'
                 ? <StatusWrapper>
                     <SelectStatuses currentStatus={currentStatus} setCurrentStatus={setCurrentStatus}/>
                     <CustomButton

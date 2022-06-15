@@ -19,7 +19,6 @@ const userReducer = (state = initialState, action) => {
         case LOGIN_USER:
             return {
                 ...state,
-                token: action.token,
                 userRole: action.role,
                 isUserAuth: true,
             }

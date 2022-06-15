@@ -4,6 +4,18 @@ import styled from "styled-components/macro";
 
 
 const InfoContainer = (props) => {
+    const changeWordToUpperCase = (word) => {
+        const splitWord = word.split('')
+        const newWord = splitWord.map((el, index) =>{
+            if(index === 0){
+                return el.toUpperCase()
+            }
+            return el
+        })
+       return newWord.join('')
+    }
+
+
     return (
         <Box
             sx={{
@@ -31,11 +43,11 @@ const InfoContainer = (props) => {
                     <>
                         <Box>
                             {
-                                props?.clientAddress?.apartment + ', '
-                                + props?.clientAddress?.building + ', '
-                                + props?.clientAddress?.city + ', '
-                                + props?.clientAddress?.country + ', '
-                                + props.clientAddress?.street
+                                changeWordToUpperCase(props?.clientAddress?.country) + ', '
+                                + changeWordToUpperCase(props?.clientAddress?.city) + ', '
+                                + changeWordToUpperCase(props.clientAddress?.street)
+                                + ', д.' + changeWordToUpperCase(props?.clientAddress?.building) + ', '
+                                + 'кв. ' + changeWordToUpperCase(props?.clientAddress?.apartment)
                             }
                         </Box>
                     </>

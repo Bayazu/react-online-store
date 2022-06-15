@@ -24,7 +24,7 @@ const UserOrders = (props) => {
             {userOrders?.map(el => {
                 return (
                     <Line onClick={() => {
-                        navigate(`/orderProfile/${el._id}`)
+                        navigate(`/orderProfileUser/${el._id}`)
                     }}>
                         <Box sx={{color: '#1b5e20', fontSize: 34, verticalAlign: 'medium'}}
                              component={AttachMoneyIcon}/>
