@@ -15,5 +15,6 @@ router.get('/ordersMonth', adminController.ordersMonths)
 router.get('/usersWeek', adminController.usersWeek)
 router.get('/summMonth', adminController.ordersSummMonths)
 router.get('/orderDelete/:id', adminController.orderDelete)
+router.get('/userOrderMonthsYear/:id', adminController.userOrderMonthsYear)
 
 module.exports = router
