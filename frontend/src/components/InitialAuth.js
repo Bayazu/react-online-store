@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch} from "react-redux";
-import {loginUser, loginUserByToken} from "../redux/reducers/userReducer";
+import {loginUserByToken} from "../redux/reducers/userReducer";
 import axios from "axios";
 
 const InitialAuth = () => {
