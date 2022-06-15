@@ -183,7 +183,7 @@ class adminController {
         }
     }
 
-    async userOrderMonthsYear(req, res) {
+    async ChartOrdersMonthsYear(req, res) {
         try {
             const MONTHS = () => {
                 const months = []
@@ -197,7 +197,7 @@ class adminController {
             }
             const dates = MONTHS()
             const filtered = await Promise.all (dates.map(async(dateItem) => {
-                const orders = await Order.find({clientId: req.params.id})
+                const orders = await Order.find({})
                 return await orders.filter((ordersItem) =>{
                 const currentYear = moment().format('Y');
                 const currentMonth = moment(dateItem).format('M')
