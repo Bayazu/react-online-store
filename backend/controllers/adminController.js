@@ -210,14 +210,17 @@ class adminController {
                 if(el.length === 0){
                     const month = i+1
                     const monthEz = month.toString()
-                    el.push(monthEz, 0)
+                    el.push(monthEz, 0, 0)
                     return el
                 }else {
                     const lengthArr = el.length
+                    const price = el.reduce((sum ,el) =>{
+                        return sum +el.priceOrder
+                    },0)
                     const month = i+1
                     const monthEz = month.toString()
                     const changed = []
-                    changed.push(monthEz, lengthArr)
+                    changed.push(monthEz, lengthArr, price)
                     return changed
                 }
             })
