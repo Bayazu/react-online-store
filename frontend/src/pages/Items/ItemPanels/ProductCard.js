@@ -10,11 +10,14 @@ import {backEndUrl} from "../../../constants";
 const ProductCard = (props) => {
     const {item} = props
 
+    console.log(item);
+
     return (
         <ItemCardWrapper>
             <Card>
                 <CardActionArea>
                     <CardMedia
+                        sx={{objectFit: 'contain'}}
                         component="img"
                         height="280"
                         //image={item.image ? item.image : adminAvatarSrc}
@@ -22,12 +25,29 @@ const ProductCard = (props) => {
                         alt="green iguana"
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                            {item.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            {item.price} руб.
-                        </Typography>
+
+                            <Typography gutterBottom variant="h5" component="div">
+                                {item.name}
+                            </Typography>
+                        <Wrap>
+                            <Typography variant="body2" color="text.secondary">
+                                {item.price} руб.
+                            </Typography>
+                            <Typography  component="div" fontWeight={'fontWeightLight'} >
+                                {/*{item.name}*/}
+                                <CircleWrapper>
+                                    <Circle>
+                                        <Number>
+                                            {item.tag}
+                                        </Number>
+                                    </Circle>
+                                </CircleWrapper>
+                            </Typography>
+
+                        </Wrap>
+
+
+
                     </CardContent>
                 </CardActionArea>
             </Card>
@@ -35,11 +55,44 @@ const ProductCard = (props) => {
 
     );
 }
+const Wrap = styled.div`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+`;
 
 const ItemCardWrapper = styled.div`
-  min-width: 250px;
-  max-width: 300px;
-  max-height: 400px;
+  width: 350px;
+`;
+
+const CircleWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 8px;
+  @media screen and (max-width: 768px) {
+    margin-top: 0;
+  }
+`;
+
+const Circle = styled.div`
+  min-height: 34px;
+  min-width: 35px;
+  padding: 5px;
+  display: flex;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 15%;
+  background: #1976d2;
+  margin-top: 3px;
+  margin-right: 8px;
+`
+
+const Number = styled.div`
+  margin: auto;
+  color: white;
+  //color: #FFFFFF;
+
+
 `;
 
 export default ProductCard

@@ -14,6 +14,7 @@ import styled from "styled-components/macro";
 import UploadIcon from '@mui/icons-material/Upload';
 import CardMedia from "@mui/material/CardMedia";
 import {backEndUrl} from "../../../constants";
+import BasicSelect from "./TagSelect";
 
 
 const ProductForm = (props) => {
@@ -36,6 +37,7 @@ const ProductForm = (props) => {
 
     const [image, setImage] = useState('')
     const [imageDisplay, setImageDisplay] = useState(null)
+    const [tagValue, setTagValue] =useState('');
 
 
     const {
@@ -58,6 +60,7 @@ const ProductForm = (props) => {
         if (isCreate) {
             const itemData = {
                 ...data,
+                tag: tagValue,
                 image
             }
             createNewItem(itemData).then((response) => {
@@ -70,6 +73,7 @@ const ProductForm = (props) => {
         } else {
             const itemData = {
                 ...data,
+                tag: tagValue,
                 image
             }
             modifyProduct(itemData)
@@ -82,8 +86,8 @@ const ProductForm = (props) => {
                 description: productData.description,
                 name: productData.name,
                 price: productData.price,
-                tag: productData.tag,
             })
+            setTagValue(productData.tag)
             setImageDisplay(productData.image)
         }
     }, [productData])
@@ -97,6 +101,8 @@ const ProductForm = (props) => {
         setImage(file)
         setImageDisplay(null)
     }
+
+
 
     return (<Container changeResolution={changeResolution}>
         <Box component={Paper} sx={{padding: 2, minWidth: 0, width: changeResolution ? '100%' : null}}>
@@ -129,7 +135,9 @@ const ProductForm = (props) => {
                         <InputWrapper changeResolution={changeResolution}>
                             <Controller
                                 //TODO переписать на селект
-                                render={({field}) => <Input
+                                render={({field}) => <BasicSelect
+                                    tagValue={tagValue}
+                                    setTagValue={setTagValue}
                                     label='Категория'
                                     {...field}
                                 />}
