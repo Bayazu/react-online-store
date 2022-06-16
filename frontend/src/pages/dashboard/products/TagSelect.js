@@ -15,12 +15,14 @@ export default function BasicSelect(props) {
     };
 
     const names = [
+        'Выберите категорию',
         'Продукты',
         'Техника',
         'Бытовая химия',
         'Одежда',
         'Напитки',
-        'Спорт'
+        'Спорт',
+
     ];
 
     const useStyles = makeStyles(theme => ({

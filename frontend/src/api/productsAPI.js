@@ -90,5 +90,32 @@ export const productsAPI = {
                     }
                 })
         )
-    }
+    },
+    sortProducts(data) {
+        return (
+            instance.post(`product/findProduct`, {name: data})
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+    sortProductsByTag(data) {
+        return (
+            instance.get(`product/listingWithTag/?tag=${data}`)
+                .then(function (response) {
+                    return response
+                })
+                .catch(err => {
+                    if (err.response) {
+                        return err.response
+                    }
+                })
+        )
+    },
+
 }

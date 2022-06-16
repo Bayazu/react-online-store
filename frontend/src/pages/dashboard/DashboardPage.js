@@ -64,6 +64,8 @@ const DashboardPage = () => {
         return formattedDataForChart
     }, [chartOrdersForYear]);
 
+    console.log(sumForMonth);
+
 
     return (
         <Container changeResolution={changeResolution}>
