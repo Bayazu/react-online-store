@@ -73,10 +73,7 @@ const Register = () => {
     })
     const password = useRef({});
     password.current = watch("password", "");
-    // console.log(password)
-    //console.log(password.current)
-    // console.log(errors)
-    console.log(errors)
+
 
     return (<Container changeResolution={changeResolution}>
         <Box component={Paper} sx={{padding: 2, minWidth: 0, width: changeResolution ? '100%' : null}}>

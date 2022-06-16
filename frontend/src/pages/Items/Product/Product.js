@@ -28,7 +28,6 @@ const Product = () => {
     const dispatch = useDispatch()
     const basket = useSelector((state) => state.basket?.basket)
 
-    console.log(basket)
 
     useEffect(() => {
         basket?.map((el) => {

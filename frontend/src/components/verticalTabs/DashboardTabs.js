@@ -21,7 +21,6 @@ export default function DashboardTabs() {
 
         navigate(foundedPage?.label)
 
-        console.log('ss')
 
     };
 
