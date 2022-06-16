@@ -65,6 +65,7 @@ const DashboardPage = () => {
     }, [chartOrdersForYear]);
 
 
+
     return (
         <Container changeResolution={changeResolution}>
             <Half changeResolution={changeResolution}>

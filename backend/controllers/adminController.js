@@ -152,7 +152,7 @@ class adminController {
                 if (currentMonth === moment(el.datePurchase).format('M')) {
                     return sum + el.priceOrder
                 } else {
-                    return null
+                    return sum + 0
                 }
             }, 0)
             res.status(200).json(filtered)

@@ -10,8 +10,6 @@ import {backEndUrl} from "../../../constants";
 const ProductCard = (props) => {
     const {item} = props
 
-    console.log(item);
-
     return (
         <ItemCardWrapper>
             <Card>

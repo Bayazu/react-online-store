@@ -19,7 +19,6 @@ const OrderInfo = (props) => {
         },
     } = props
 
-    console.log(userRole);
     return (
         <Box
             sx={{

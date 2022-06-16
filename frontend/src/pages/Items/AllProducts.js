@@ -2,16 +2,13 @@ import styled from 'styled-components/macro'
 import React, {useEffect, useState} from 'react';
 import ProductCard from "./ItemPanels/ProductCard";
 import {useDispatch, useSelector} from "react-redux";
-import {getItems, setItemsData, toggleIsFetching} from "../../redux/reducers/itemsReducer";
+import {getItems} from "../../redux/reducers/itemsReducer";
 import {useNavigate} from "react-router-dom";
 import {Search} from "@mui/icons-material";
 import Input from "../../components/controls/Input";
 import {InputAdornment} from "@mui/material";
-import Button from "@mui/material/Button";
-import AddIcon from "@material-ui/icons/Add";
 import Toolbar from "@mui/material/Toolbar";
 import {makeStyles} from "@material-ui/core/styles";
-import MultipleSelectChip from "../dashboard/ordersPage/MuiltiSelect";
 import BasicSelect from "../dashboard/products/TagSelect";
 import {productsAPI} from "../../api/productsAPI";
 
@@ -22,9 +19,8 @@ const AllProducts = () => {
     const items = useSelector((state) => state.itemsPage.items)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [tagValue, setTagValue] = useState('');
+    const [tagValue, setTagValue] = useState('Выберите категорию');
     const [products, setProducts] = useState()
-    const [filteredProducts, setFilteredProducts] = useState()
 
     useEffect(() => {
         dispatch(getItems())
@@ -37,7 +33,6 @@ const AllProducts = () => {
             }
         });
     },[])
-
 
     const onNavigate = (id) => {
         return navigate(`/product/${id}`)
@@ -55,40 +50,28 @@ const AllProducts = () => {
 
     const classes = useStyles();
 
-    // const [filterFn, setFilterFn] = useState({
-    //     fn: items => {
-    //         return items;
-    //     }
-    // })
-    //
-    // const handleSearch = e => {
-    //     let target = e.target;
-    //     setFilterFn({
-    //         fn: items => {
-    //             if (target.value === "")
-    //                 return items
-    //             else {
-    //                 return items.filter(x => x?.clientInfo?.email.toLowerCase().includes(target.value))
-    //             }
-    //         }
-    //     })
-    // }
-
-    const handleSearch = e => {
+    const handleSearch = e =>{
         let target = e.target.value;
-        if(target === ""){
-             setFilteredProducts(products)
-        }else{
-            setProducts(products.filter(x => x?.name.toLowerCase().includes(target)))
-        }
+        productsAPI.sortProducts(target).then((response)=>{
+            if (response.status ===200){
+                setProducts(response.data)
+            }
+        })
     }
 
+    useEffect(()=>{
+        if(tagValue !== 'Выберите категорию'){
+            productsAPI.sortProductsByTag(tagValue).then((response)=>{
+                setProducts(response.data)
+            })
+        }else{
+            setProducts(items)
+        }
+    },[tagValue])
 
 
     return (
-
         <Container>
-
             <Block>
                 <ContainerSearch>
                     <Toolbar>
@@ -97,7 +80,7 @@ const AllProducts = () => {
                                 label='Поиск товара'
                                 className={classes.searchInput}
                                 InputProps={{
-                                    startAdornment: (<InputAdornment position="start">
+                                    startAdornment: (<InputAdornment position=''>
                                         <Search/>
                                     </InputAdornment>)
                                 }}
@@ -109,7 +92,7 @@ const AllProducts = () => {
                         </SelectWrapper>
                     </Toolbar>
                 </ContainerSearch>
-                {filteredProducts? filteredProducts :products?.map(item => {
+                {products?.map(item => {
                     return (
                         <ItemCardWrapper key={item._id} onClick={() => onNavigate(item._id)}>
 

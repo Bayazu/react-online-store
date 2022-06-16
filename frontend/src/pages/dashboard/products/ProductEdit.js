@@ -49,9 +49,6 @@ const ProductEdit = () => {
                 {/*<InnerWrapper>*/}
                 {/*    <UserOrders changeResolution={changeResolution}/>*/}
                 {/*</InnerWrapper>*/}
-                {/*<InnerWrapper>*/}
-                {/*    <FUCK/>*/}
-                {/*</InnerWrapper>*/}
             </Half>
         </Container>
     )
