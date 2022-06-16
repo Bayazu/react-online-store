@@ -90,7 +90,7 @@ class productController{
     async findProduct(req,res){
         try {
             const {name} = req.body
-            const order = await Product.find({name :{$regex: new RegExp('^' + name, 'i')}})
+            const order = await Product.find({name :{$regex: new RegExp('.*' + name, 'i')}})
             res.status(200).json(order)
         }catch (e) {
             res.status(500).json(e)
